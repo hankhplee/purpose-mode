@@ -1,0 +1,4 @@
+/* Make all img tags grayscale and blurry. */
+img {
+  filter: grayscale(100%) blur(5px) !important;
+}
