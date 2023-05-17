@@ -1,21 +1,26 @@
 /* Make all img tags grayscale and blurry. */
 img {
-  filter: grayscale(100%) blur(5px) !important;
+  filter: grayscale(100%) blur(5px);
 }
 
 iframe {
-  filter: grayscale(100%) blur(5px) !important;
+  filter: grayscale(100%) blur(5px);
 }
 
 image {
-  filter: grayscale(100%) blur(5px) !important;
+  filter: grayscale(100%) blur(5px);
 }
 
 svg {
-  filter: grayscale(100%) blur(5px) !important;
+  filter: grayscale(100%) blur(5px);
 }
 
 /* facebook icon */
 i, data-visualcompletion {
-  filter: grayscale(100%) blur(5px) !important;
+  filter: grayscale(100%) blur(5px);
+}
+
+/* twitter div with background image */
+div[style^="background-image:"] {
+  filter: grayscale(100%) blur(5px);
 }
