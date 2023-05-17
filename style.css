@@ -2,3 +2,20 @@
 img {
   filter: grayscale(100%) blur(5px) !important;
 }
+
+iframe {
+  filter: grayscale(100%) blur(5px) !important;
+}
+
+image {
+  filter: grayscale(100%) blur(5px) !important;
+}
+
+svg {
+  filter: grayscale(100%) blur(5px) !important;
+}
+
+/* facebook icon */
+i, data-visualcompletion {
+  filter: grayscale(100%) blur(5px) !important;
+}
