@@ -1,4 +1,13 @@
-console.log("Purpose Mode's content script v3 says hello world!");
+console.log("This is Purpose Mode's content script.");
+
+function initialUpdates() {
+  console.log("Applying custom style to existing img tags.");
+  const elements = document.getElementsByTagName("img");
+  [...elements].forEach(e => {
+    e.style = "filter: grayscale(100%) blur(5px)";
+  });
+}
+
 
 // default event listener
 document.querySelectorAll("image,img,iframe,svg").forEach(function(elem) {
@@ -36,3 +45,4 @@ document.querySelectorAll("div[style^='background-image:']").forEach(function(el
 // });
 
 // document.getElementsByTagName('video')[0].removeAttribute('autoplay');
+initialUpdates()

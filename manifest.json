@@ -4,16 +4,16 @@
   "version": "0.1",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "css": ["style.css"],
-      "js": ["script.js"]
-    }
-  ]
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "ui.html"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  }
 }
