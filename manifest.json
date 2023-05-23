@@ -11,6 +11,9 @@
     "<all_urls>"
   ],
   "action": {
+    "default_icon": {
+      "128":  "icons/purpose-mode-off.png"
+    },
     "default_popup": "ui.html"
   },
   "background": {
