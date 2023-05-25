@@ -4,37 +4,49 @@ const states = [
   "reader_mode"
 ];
 
-function retrieveButtonState() {
-  chrome.storage.local.get(["state"], (result) => {
-    console.log("Setting radio buttons to state: " + result.state);
-    document.getElementById(result.state).checked = true;
-  })
+// If the user enables Purpose Mode while on a page, inject the content script
+// into the current page.
+document.getElementById("purpose_mode").addEventListener("click", onExtEnable);
+// Update state when the user enables or disables the extension.
+states.forEach(function(state) {
+  document.getElementById(state).addEventListener("click", onExtStateChange);
+})
+
+// Initialize the buttons with our previously-saved state.
+retrieveButtonState()
+
+async function onExtEnable() {
+  let queryOptions = {
+    active: true,
+    currentWindow: true
+  };
+  let tab = await chrome.tabs.query(queryOptions);
+  let url = new URL(tab[0].url);
+  let result = await chrome.storage.local.get(["supportedSites"]);
+  if (!result.supportedSites.includes(url.hostname)) {
+    console.log("Not injecting content script into unsupported site.");
+    return
+  }
+
+  await chrome.scripting.executeScript({
+    target: {
+      tabId: tab[0].id
+    },
+    files: ["script.js"]
+  });
+  console.log("Injected content script into: " + url);
 }
 
-// Install event listeners for when state is changed.
-states.forEach(function(state) {
-  document.getElementById(state).addEventListener("click", function(event) {
-    chrome.storage.local.set({"state": state}, result => {
-      console.log("Setting extension state to: " + state);
+function onExtStateChange(event) {
+  let state = event.srcElement.id;
+  chrome.storage.local.set({"state": state}).then(
+    console.log("Set extension state to: " + state)
+  )
+}
 
-      // Nothing to do here if we disabled the extension.
-      if (state === "disabled") {
-        return
-      }
-
-
-      let queryOptions = { active: true, currentWindow: true };
-      (async () => {
-        let tab = await chrome.tabs.query(queryOptions);
-        chrome.scripting.executeScript({
-          target: { tabId: tab[0].id },
-          files: ["script.js"]
-        }).then(() => console.log("Successfully injected content script into: " + tab[0].url));
-      })()
-
-    })
+function retrieveButtonState() {
+  chrome.storage.local.get(["state"], (result) => {
+    document.getElementById(result.state).checked = true;
+    console.log("Set button state to: " + result.state);
   })
-});
-
-// This function is called each time the extension's UI is opened.
-retrieveButtonState()
+}

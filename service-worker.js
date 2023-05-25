@@ -1,13 +1,21 @@
-// Initialize state at installation time.
-chrome.runtime.onInstalled.addListener(setInitialState);
+// Our extension only supports the following sites.
+const supportedSites = [
+  "facebook.com",
+  "twitter.com",
+  "youtube.com",
+];
+
+// Initialize storage variables at installation time.
+chrome.runtime.onInstalled.addListener(initStorageVars);
 // (Un)register content script and swap extension icon upon state change.
 chrome.storage.onChanged.addListener(updateState);
 
-function setInitialState() {
+function initStorageVars() {
   let state = "disabled";
-  chrome.storage.local.set({"state": state}, () => {
-    console.log("Set initial extension state to: " + state);
-  })
+  chrome.storage.local.set({"state": state})
+    .then(console.log("Set initial extension state to: " + state));
+  chrome.storage.local.set({"supportedSites": supportedSites})
+    .then(console.log("Set supported sites to: " + supportedSites));
 }
 
 function updateState(changes, area) {
@@ -18,16 +26,17 @@ function updateState(changes, area) {
 
   var extName = "Purpose Mode";
   if (changes.state.newValue === "disabled") {
-    chrome.scripting.unregisterContentScripts({ids: [extName]});
-    console.log("Unregistered content script.");
+    chrome.scripting.unregisterContentScripts({ids: [extName]})
+      .then(console.log("Unregistered content script."));
     chrome.action.setIcon({path: {"128": "icons/purpose-mode-off.png"}});
   } else {
     chrome.scripting.registerContentScripts([{
         id: extName,
-        matches: ["<all_urls>"],
+        matches: supportedSites.map((elem) => {
+          return "https://" + elem + "/*"
+        }),
         js: ["script.js"],
-    }]);
-    console.log("Registered content script.");
+    }]).then(() => console.log("Registered content script."));
     chrome.action.setIcon({path: {"128": "icons/purpose-mode-on.png"}});
   }
 }
