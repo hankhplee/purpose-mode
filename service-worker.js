@@ -1,6 +1,6 @@
 // Our extension only supports the following sites.
 const supportedSites = [
-  "facebook.com",
+  "www.facebook.com",
   "twitter.com",
   "youtube.com",
 ];
@@ -26,7 +26,7 @@ function updateState(changes, area) {
 
   var extName = "Purpose Mode";
   if (changes.state.newValue === "disabled") {
-    chrome.scripting.unregisterContentScripts({ids: [extName]})
+    chrome.scripting.unregisterContentScripts({ids: [extName]}) // check if the content script exist
       .then(console.log("Unregistered content script."));
     chrome.action.setIcon({path: {"128": "icons/purpose-mode-off.png"}});
   } else {
