@@ -1,5 +1,5 @@
 console.log("This is Purpose Mode's content script.");
-const image_size_threshold = 50 // image height threashold for image blurring 
+const image_size_threshold = 65 // image height threashold for image blurring 
 
 function initialUpdates() {
   console.log("Applying custom style to existing img tags.");
