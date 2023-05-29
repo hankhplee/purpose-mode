@@ -55,17 +55,22 @@ function twitter_blur_img(document_query){
   });
 }
 
+// remove auto play
+/*
 function stop_video_autoplay(document_query){
   document_query.querySelectorAll("video").forEach(function(elem) {
-    console.log("remove auto play");
-    console.log(elem);
+    elem.pause();
+    // console.log("remove auto play");
+    // console.log("remove auto play", elem);
+    // elem.removeAttribute("autoplay");
+    // elem.setAttribute("autostart","false");
     // Disable vidoe auto play.
-    elem.setAttribute("preload","none");
+    // elem.setAttribute("preload","none");
     // elem.setAttribute("height","50px");
-    elem.removeAttribute("autoplay");
     // elem.autoplay = false;
   }); 
 }
+*/
 
 // document.querySelectorAll("video").forEach(function(elem) {
 //   console.log("remove auto play");
@@ -82,6 +87,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
   mutations.forEach(function(mutation) {
       // console.log(mutation);
       if(mutation.type != "characterData"){
+        // console.log(mutation);
         blur_img(mutation.target);
         stop_video_autoplay(mutation.target);
       }
