@@ -1,0 +1,12 @@
+# Gray, empty bars that remain after filtering out ads.
+www.wsj.com##div:has(> div[class*=adWrapper])
+# Opinion column on landing page.
+www.wsj.com##div[id=opinion]
+# Recommended videos column.
+www.wsj.com##aside[id=recommended-videos]
+# Most popular articles column.
+www.wsj.com##aside[id=most-popular-articles]
+# "Follow" button.
+www.wsj.com##div[id*=follow-wsj]
+# Newsletter button.
+www.wsj.com##div[id=sign-up-for-newsletters-and-alerts]
