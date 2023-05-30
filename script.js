@@ -5,7 +5,7 @@ function initialUpdates() {
   console.log("Applying custom style to existing img tags.");
   blur_img(document)
   // const elements = document.getElementsByTagName("img");
-  stop_video_autoplay(document);
+  // stop_video_autoplay(document);
 }
 
 function blur_img(document_query){
@@ -89,7 +89,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
       if(mutation.type != "characterData"){
         // console.log(mutation);
         blur_img(mutation.target);
-        stop_video_autoplay(mutation.target);
+        // stop_video_autoplay(mutation.target);
       }
   });
 });
