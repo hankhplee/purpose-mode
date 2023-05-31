@@ -1,0 +1,8 @@
+# "What's happening" column on the right.
+twitter.com##div[aria-label="Timeline: Trending now"]
+# "Who to follow" column on the right.
+twitter.com##div:has(> div > aside[aria-label="Who to follow"])
+# ToS, privacy policy, etc.
+twitter.com##nav[aria-label="Footer"]
+# Blue notification circle, e.g., on top of home icon.
+twitter.com##div[aria-label="undefined unread items"]
