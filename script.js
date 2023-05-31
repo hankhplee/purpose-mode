@@ -13,8 +13,11 @@ function blur_img(document_query){
   if (current_webpage_url.includes("twitter")){
     twitter_blur_img(document_query);
   }
-  else{
+  else if(current_webpage_url.includes("facebook")){
     facebook_blur_img(document_query);
+  }
+  else if(current_webpage_url.includes("youtube")){
+    youtube_blur_img(document_query);
   }
 }
 
@@ -22,6 +25,40 @@ function facebook_blur_img(document_query){
   const elements = document_query.querySelectorAll("image,img");
   [...elements].forEach(e => {
     if(e.clientWidth>image_size_threshold){
+      e.style = "filter: grayscale(100%) blur(5px);";
+      e.style.zIndex = "1";
+      // some facebook imagse are not the top elements; attach the event listener to the top elements
+      if(e.nextElementSibling && e.nextElementSibling.nodeName == "DIV"){
+        // console.log(e.nextElementSibling);
+        sibling_e = e.nextElementSibling;
+        sibling_e.style.zIndex = "1";
+        sibling_e.addEventListener("mouseenter", (elem) => {
+          e.style.filter = "grayscale(0%) blur(0px)";
+          // console.log(e.className);
+        });
+        sibling_e.addEventListener("mouseleave", (elem) => {
+          e.style.filter = "grayscale(100%) blur(5px)";
+          // console.log(e.className);
+        });
+      }
+      e.addEventListener("mouseenter", (elem) => {
+        e.style.filter = "grayscale(0%) blur(0px)";
+        console.log(e.className);
+      });
+      e.addEventListener("mouseleave", (elem) => {
+        e.style.filter = "grayscale(100%) blur(5px)";
+        console.log(e.className);
+      });
+    }
+  });
+}
+
+function youtube_blur_img(document_query){
+  const elements = document_query.querySelectorAll("image,img");
+  [...elements].forEach(e => {
+    if(e.clientWidth>image_size_threshold && e.style.filter != "grayscale(100%) blur(5px)"){
+      // if (!(e.style.includes("filter: grayscale(100%) blur(5px)"))){
+      console.log(e.style.filter);
       e.style = "filter: grayscale(100%) blur(5px);";
       e.style.zIndex = "1";
       e.addEventListener("mouseenter", (elem) => {
@@ -72,21 +109,10 @@ function stop_video_autoplay(document_query){
 }
 */
 
-// document.querySelectorAll("video").forEach(function(elem) {
-//   console.log("remove auto play");
-//   console.log(elem);
-//   // Disable vidoe auto play.
-//   // elem.setAttribute("preload","none");
-//   // elem.setAttribute("height","50px");
-//   elem.removeAttribute("autoplay");
-// });
-
-// document.getElementsByTagName('video')[0].removeAttribute('autoplay');
-
 var mutationObserver = new MutationObserver(function(mutations) {
   mutations.forEach(function(mutation) {
       // console.log(mutation);
-      if(mutation.type != "characterData"){
+      if(mutation.type != "characterData" && mutation.type != "attributes"){
         // console.log(mutation);
         blur_img(mutation.target);
         // stop_video_autoplay(mutation.target);
