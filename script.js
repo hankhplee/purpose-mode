@@ -4,7 +4,6 @@ const image_size_threshold = 65 // image height threashold for image blurring
 function initialUpdates() {
   console.log("Applying custom style to existing img tags.");
   blur_img(document)
-  // const elements = document.getElementsByTagName("img");
   // stop_video_autoplay(document);
 }
 
@@ -29,7 +28,6 @@ function facebook_blur_img(document_query){
       e.style.zIndex = "1";
       // some facebook imagse are not the top elements; attach the event listener to the top elements
       if(e.nextElementSibling && e.nextElementSibling.nodeName == "DIV"){
-        // console.log(e.nextElementSibling);
         sibling_e = e.nextElementSibling;
         sibling_e.style.zIndex = "1";
         sibling_e.addEventListener("mouseenter", (elem) => {
@@ -43,11 +41,11 @@ function facebook_blur_img(document_query){
       }
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
-        console.log(e.className);
+        // console.log(e.className);
       });
       e.addEventListener("mouseleave", (elem) => {
         e.style.filter = "grayscale(100%) blur(5px)";
-        console.log(e.className);
+        // console.log(e.className);
       });
     }
   });
@@ -57,17 +55,15 @@ function youtube_blur_img(document_query){
   const elements = document_query.querySelectorAll("image,img");
   [...elements].forEach(e => {
     if(e.clientWidth>image_size_threshold && e.style.filter != "grayscale(100%) blur(5px)"){
-      // if (!(e.style.includes("filter: grayscale(100%) blur(5px)"))){
-      console.log(e.style.filter);
       e.style = "filter: grayscale(100%) blur(5px);";
       e.style.zIndex = "1";
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
-        console.log(e.className);
+        // console.log(e.className);
       });
       e.addEventListener("mouseleave", (elem) => {
         e.style.filter = "grayscale(100%) blur(5px)";
-        console.log(e.className);
+        // console.log(e.className);
       });
     }
   });
@@ -82,11 +78,11 @@ function twitter_blur_img(document_query){
       e.style.zIndex = "1";
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
-        console.log(e.className);
+        // console.log(e.className);
       });
       e.addEventListener("mouseleave", (elem) => {
         e.style.filter = "grayscale(100%) blur(5px)";
-        console.log(e.className);
+        // console.log(e.className);
       });
     }
   });
