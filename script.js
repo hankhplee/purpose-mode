@@ -52,19 +52,26 @@ function facebook_blur_img(document_query){
 }
 
 function youtube_blur_img(document_query){
+  // try to remove the existing mouse event on YouTube
+  
+  // document.addEventListener("hover", function (event) {
+  //       event.stopPropagation();
+  //   }, true);
   const elements = document_query.querySelectorAll("image,img");
   [...elements].forEach(e => {
     if(e.clientWidth>image_size_threshold){
-      e.style.filter = "grayscale(100%) blur(5px);";
+      e.style = "filter: grayscale(100%) blur(5px);";
       e.style.zIndex = "1";
-      e.addEventListener("mouseenter", (elem) => {
-        e.style.filter = "grayscale(0%) blur(0px)";
-        // console.log(e.className);
-      });
-      e.addEventListener("mouseleave", (elem) => {
-        e.style.filter = "grayscale(100%) blur(5px)";
-        // console.log(e.className);
-      });
+      if(e.clientWidth <= e.clientHeight){ // don't unblur for video preview teaser
+        e.addEventListener("mouseenter", (elem) => {
+          e.style.filter = "grayscale(0%) blur(0px)";
+          // console.log(e.className);
+        });
+        e.addEventListener("mouseleave", (elem) => {
+          e.style.filter = "grayscale(100%) blur(5px)";
+          // console.log(e.className);
+        });
+      }
     }
   });
 }
@@ -74,7 +81,7 @@ function twitter_blur_img(document_query){
   const twitter_elements = document_query.querySelectorAll("div[style^='background-image:']");
   [...twitter_elements].forEach(e => {
     if(e.clientWidth>image_size_threshold){
-      e.style.filter = "grayscale(100%) blur(5px)";
+      e.style = "filter: grayscale(100%) blur(5px);";
       e.style.zIndex = "1";
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
