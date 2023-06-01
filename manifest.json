@@ -10,6 +10,13 @@
   "host_permissions": [
     "<all_urls>"
   ],
+  "content_scripts": [
+    {
+      "matches": ["*://twitter.com/*"],
+      "css": ["twitter_finite_scroll_style.css"],
+      "js": ["jquery-3.4.1.slim.min.js","content-script.js"]
+    }
+  ],
   "action": {
     "default_icon": {
       "128":  "icons/purpose-mode-off.png"
