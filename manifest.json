@@ -20,6 +20,11 @@
       "matches": ["*://www.facebook.com//*"],
       "css": ["finite_scroll_style.css"],
       "js": ["jquery-3.4.1.slim.min.js","fb_content-script.js"]
+    },
+    {
+      "matches": ["*://www.youtube.com/*"],
+      "css": ["finite_scroll_style.css"],
+      "js": ["jquery-3.4.1.slim.min.js","yt_content-script.js"]
     }
   ],
   "action": {
