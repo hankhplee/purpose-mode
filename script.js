@@ -1,5 +1,5 @@
 console.log("This is Purpose Mode's content script.");
-const image_size_threshold = 65 // image height threashold for image blurring 
+const image_size_threshold = 65; // image height threashold for image blurring 
 
 function initialUpdates() {
   console.log("Applying custom style to existing img tags.");
@@ -24,7 +24,7 @@ function facebook_blur_img(document_query){
   const elements = document_query.querySelectorAll("image,img");
   [...elements].forEach(e => {
     if(e.clientWidth>image_size_threshold){
-      e.style = "filter: grayscale(100%) blur(5px);";
+      e.style.filter = "grayscale(100%) blur(5px)";
       e.style.zIndex = "1";
       // some facebook imagse are not the top elements; attach the event listener to the top elements
       if(e.nextElementSibling && (e.nextElementSibling.nodeName == "DIV" || e.nextElementSibling.nodeName == "SPAN")){
@@ -53,14 +53,14 @@ function facebook_blur_img(document_query){
 
 function youtube_blur_img(document_query){
   // try to remove the existing mouse event on YouTube
-  
+
   // document.addEventListener("hover", function (event) {
   //       event.stopPropagation();
   //   }, true);
   const elements = document_query.querySelectorAll("image,img");
   [...elements].forEach(e => {
     if(e.clientWidth>image_size_threshold){
-      e.style = "filter: grayscale(100%) blur(5px);";
+      e.style.filter = "grayscale(100%) blur(5px)";
       e.style.zIndex = "1";
       if(e.clientWidth <= e.clientHeight){ // don't unblur for video preview teaser
         e.addEventListener("mouseenter", (elem) => {
@@ -81,7 +81,7 @@ function twitter_blur_img(document_query){
   const twitter_elements = document_query.querySelectorAll("div[style^='background-image:']");
   [...twitter_elements].forEach(e => {
     if(e.clientWidth>image_size_threshold){
-      e.style = "filter: grayscale(100%) blur(5px);";
+      e.style.filter = "grayscale(100%) blur(5px)";
       e.style.zIndex = "1";
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
