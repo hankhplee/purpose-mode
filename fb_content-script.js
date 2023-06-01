@@ -43,7 +43,7 @@ const manipulateContainer = (container) => {
 
     const bgColor = $("body").css("background-color");
 
-    if (bgColor === "rgb(21, 32, 43)" || bgColor === "rgb(0, 0, 0)") {
+    if (bgColor === "rgb(24, 25, 26)") {
         button.children("button").css("color", "rgb(255, 255, 255)");
     } else {
         button.children("button").css("color", "rgb(0, 0, 0)");

@@ -19,7 +19,7 @@ const showMore = (container, button) => {
     feedHeight += showMoreIncrement;
     container.css("max-height", `${feedHeight}px`);
     container.css("min-height", `${feedHeight}px`);
-    button.css("top", `${feedHeight+container_top}px`);
+    button.css("top", `${feedHeight+container_top-100}px`);
 };
 
 const manipulateContainer = (container) => {
@@ -27,7 +27,7 @@ const manipulateContainer = (container) => {
         "max-height": `${feedHeight}px`,
         "min-height": `${feedHeight}px`,
         overflow: "hidden",
-        "margin-bottom": "100px"
+        // "margin-bottom": "100px"
     });
 
     const button = $(`
@@ -37,7 +37,7 @@ const manipulateContainer = (container) => {
     `);
     button.css({
         width: container.width(),
-        top: `${feedHeight+container_top}px`
+        top: `${feedHeight+container_top-100}px`
     });
     container.prepend(button);
 
