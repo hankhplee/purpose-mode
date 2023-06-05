@@ -52,6 +52,11 @@ const manipulateContainer = (container) => {
     button.click(() => showMore(container, button));
 };
 
+const clearManipulation = (container) => {
+    const button = $("#tisd-show-more");
+    button.parentNode.removeChild(button);
+}
+
 const isAlreadyManipulated = (container) => {
     const button = $("#tisd-show-more");
     return !!button.length;
@@ -64,15 +69,24 @@ const isCurrentPageFeed = () => {
 
 const run = () => getContainer()
     .then(container => {
-        container.css("min-height", `${feedHeight}px`);
-        var position = container.position();
-        container_top = position.top
-        if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
-            manipulateContainer(container);
-        }
-        // Keep running in case user leaves feed but returns later and we have
-        // to reinsert the show more button
-        setTimeout(run, 100);
+        chrome.storage.local.get(["state"]).then((result) => {
+            // console.log("Current state:" + result.state);
+            if(result.state == "purpose_mode"){
+                container.css("min-height", `${feedHeight}px`);
+                var position = container.position();
+                container_top = position.top
+                if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
+                    manipulateContainer(container);
+                }
+                // Keep running in case user leaves feed but returns later and we have
+                // to reinsert the show more button
+                setTimeout(run, 100);
+            }
+            // remove the "show more" button if not in purpose mode
+            else if (isCurrentPageFeed() && isAlreadyManipulated(container)){
+                clearManipulation(container);
+            }
+          });
     });
 
 let feedHeight = 2500;
