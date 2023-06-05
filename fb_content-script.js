@@ -44,9 +44,9 @@ const manipulateContainer = (container) => {
     const bgColor = $("body").css("background-color");
 
     if (bgColor === "rgb(24, 25, 26)") {
-        button.children("button").css("color", "rgb(255, 255, 255)");
+        button.children("button").css({"color": "rgb(255, 255, 255)", "background-color": "rgba(0 , 0, 0, 0.7)"});
     } else {
-        button.children("button").css("color", "rgb(0, 0, 0)");
+        button.children("button").css({"color": "rgb(0, 0, 0)", "background-color": "rgba(255 , 255, 255, 0.7)"});
     }
 
     button.click(() => showMore(container, button));
