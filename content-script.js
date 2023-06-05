@@ -33,16 +33,47 @@ const showMore = (container, button) => {
 const manipulateContainer = (container) => {
     // remove infinite scrolling
     removeInfiniteScrolling(container);
-
-    // remove distracting contents
-    if(currentPage == "Twitter"){
-        removeTwitterDistractions(container);
-    }
 };
+
+const removeYouTubeDistractions= (container) => {
+    // recommendation tags on top of the page
+    const recc_tag = $('#scroll-container');
+    recc_tag.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+
+    // video ad on the home page
+    const home_page_video_ad = $('div#masthead-ad');
+    home_page_video_ad.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+
+    // remove notifications button on the top right
+    const home_notification_video = $('ytd-topbar-menu-button-renderer:has(> div > a > yt-icon-button > button[aria-label="Create"])');
+    home_notification_video.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+
+    const home_notification_noti = $('ytd-notification-topbar-button-renderer');
+    home_notification_noti.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+
+    // shorts
+    const shorts = $('ytd-rich-shelf-renderer[is-shorts]');
+    shorts.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+}
 
 const removeTwitterDistractions = (container) => {
     // "What's happening" column on the right.
-    const col_what = $('div[aria-label="Timeline: Trending now"');
+    const col_what = $('div[aria-label="Timeline: Trending now"]');
     col_what.css({
         "display": "none",
         "visibility": "hidden"
@@ -65,6 +96,13 @@ const removeTwitterDistractions = (container) => {
     // Blue notification circle, e.g., on top of home icon.
     const home_notification = $('div[aria-label="undefined unread items"]');
     home_notification.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+
+    // Blue button that promotes new tweets, i.e., on top of the page
+    const tweet_notification = $('div[aria-label="New Tweets are available. Push the period key to go to the them."]');
+    tweet_notification.css({
         "display": "none",
         "visibility": "hidden"
     })
@@ -171,8 +209,18 @@ const checkBackgroundColorDark = () => {
 const run = () => getContainer()
     .then(container => {
         container.css("min-height", `${feedHeight}px`);
+        container.css("max-height", `${feedHeight}px`);
         var position = container.position();
         container_top = position.top
+
+        // remove distracting contents
+        if(currentPage == "Twitter"){
+            removeTwitterDistractions(container);
+        }
+        else if(currentPage == "YouTube"){
+            removeYouTubeDistractions(container);
+        }
+
         if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
             manipulateContainer(container);
         }
@@ -186,4 +234,9 @@ let container_top = 0;
 const showMoreIncrement = 2500;
 const currentPage = getCurrentPage();
 
-run();
+// a quick switch to turn on/off the content script for demo purpose
+chrome.storage.local.get(["state"]).then((result) => {
+    if(result.state == "purpose_mode"){
+        run();
+    }
+});
