@@ -31,6 +31,10 @@ const showMore = (container, button) => {
 };
 
 const manipulateContainer = (container) => {
+    removeInfiniteScrolling(container);
+};
+
+const removeInfiniteScrolling = (container) => {
     container.css({
         "max-height": `${feedHeight}px`,
         "min-height": `${feedHeight}px`,
@@ -57,7 +61,7 @@ const manipulateContainer = (container) => {
     }
 
     button.click(() => showMore(container, button));
-};
+}
 
 const isAlreadyManipulated = (container) => {
     const button = $("#tisd-show-more");
