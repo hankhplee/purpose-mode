@@ -31,8 +31,44 @@ const showMore = (container, button) => {
 };
 
 const manipulateContainer = (container) => {
+    // remove infinite scrolling
     removeInfiniteScrolling(container);
+
+    // remove distracting contents
+    if(currentPage == "Twitter"){
+        removeTwitterDistractions(container);
+    }
 };
+
+const removeTwitterDistractions = (container) => {
+    // "What's happening" column on the right.
+    const col_what = $('div[aria-label="Timeline: Trending now"');
+    col_what.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+
+    // "Who to follow" column on the right.
+    const col_who = $('div:has(> div > aside[aria-label="Who to follow"])');
+    col_who.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+
+    // ToS, privacy policy, etc.
+    const col_footer = $('nav[aria-label="Footer"]');
+    col_footer.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+
+    // Blue notification circle, e.g., on top of home icon.
+    const home_notification = $('div[aria-label="undefined unread items"]');
+    home_notification.css({
+        "display": "none",
+        "visibility": "hidden"
+    })
+}
 
 const removeInfiniteScrolling = (container) => {
     container.css({
