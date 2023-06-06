@@ -26,12 +26,14 @@ function blur_img(document_query){
 function facebook_blur_img(document_query){
   const elements = document_query.querySelectorAll("image,img");
   [...elements].forEach(e => {
-    if(e.clientWidth>image_size_threshold){
+    if(e.clientWidth>image_size_threshold && e.clientHeight>image_size_threshold){
       e.style.filter = "grayscale(100%) blur(5px)";
-      // e.style.zIndex = "1";
+      e.style.zIndex = "1";
       // some facebook imagse are not the top elements; attach the event listener to the top elements
       var siblingNode = e.nextElementSibling;
       var siblingLink = e.parentElement.parentElement.getElementsByTagName("a")[0];
+      var siblingLink_con2 = e.parentElement.parentElement.parentElement.getElementsByTagName("a")[0];
+      var siblingLink_con3 = e.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.getElementsByTagName("a")[0];
       if(siblingNode && (siblingNode.nodeName == "DIV" || siblingNode.nodeName == "SPAN")){
         sibling_e = e.nextElementSibling;
         sibling_e.style.zIndex = "1";
@@ -44,6 +46,7 @@ function facebook_blur_img(document_query){
           // console.log(e.className);
         });
       }
+      // check if the image is embeded with a link
       if(siblingLink){
         siblingLink.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
@@ -54,6 +57,27 @@ function facebook_blur_img(document_query){
           // console.log(e.className);
         });
       }
+      else if(siblingLink_con2){
+        siblingLink_con2.addEventListener("mouseenter", (elem) => {
+          e.style.filter = "grayscale(0%) blur(0px)";
+          // console.log(e.className);
+        });
+        siblingLink_con2.addEventListener("mouseleave", (elem) => {
+          e.style.filter = "grayscale(100%) blur(5px)";
+          // console.log(e.className);
+        });
+      }
+      else if(siblingLink_con3){
+        siblingLink_con3.addEventListener("mouseenter", (elem) => {
+          e.style.filter = "grayscale(0%) blur(0px)";
+          // console.log(e.className);
+        });
+        siblingLink_con3.addEventListener("mouseleave", (elem) => {
+          e.style.filter = "grayscale(100%) blur(5px)";
+          // console.log(e.className);
+        });
+      }
+
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
         // console.log(e.className);
