@@ -2,7 +2,8 @@
 const supportedSites = [
   "www.facebook.com",
   "twitter.com",
-  "www.youtube.com/",
+  "www.youtube.com",
+  "www.linkedin.com"
 ];
 
 // Initialize storage variables at installation time.

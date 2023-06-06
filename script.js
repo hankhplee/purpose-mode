@@ -9,14 +9,17 @@ function initialUpdates() {
 
 function blur_img(document_query){
   var current_webpage_url = window.top.location.href;
-  if (current_webpage_url.includes("twitter")){
+  if (current_webpage_url.includes("twitter.com")){
     twitter_blur_img(document_query);
   }
-  else if(current_webpage_url.includes("facebook")){
+  else if(current_webpage_url.includes("facebook.com")){
     facebook_blur_img(document_query);
   }
-  else if(current_webpage_url.includes("youtube")){
+  else if(current_webpage_url.includes("youtube.com")){
     youtube_blur_img(document_query);
+  }
+  else if(current_webpage_url.includes("linkedin.com")){
+    linkedin_blur_img(document_query);
   }
 }
 
@@ -91,6 +94,49 @@ function twitter_blur_img(document_query){
         e.style.filter = "grayscale(100%) blur(5px)";
         // console.log(e.className);
       });
+    }
+  });
+}
+
+function linkedin_blur_img(document_query){
+  const elements = document_query.querySelectorAll("image,img,div[style^='background-image:']");
+  [...elements].forEach(e => {
+    if(e.clientWidth>image_size_threshold && e.clientHeight>image_size_threshold){
+      e.style.filter = "grayscale(100%) blur(5px)";
+      // e.style.zIndex = "1";
+      var parentNode = e.parentElement.parentElement.parentElement;
+      var siblingNode = e.parentElement.parentElement.parentNode.parentNode.getElementsByTagName('button')[0];
+      // check if the figures are embeded with a button or a link
+      if (parentNode.nodeName == "A" || parentNode.nodeName == "BUTTON"){
+        parentNode.addEventListener("mouseenter", (elem) => {
+          e.style.filter = "grayscale(0%) blur(0px)";
+          // console.log(e.className);
+        });
+        parentNode.addEventListener("mouseleave", (elem) => {
+          e.style.filter = "grayscale(100%) blur(5px)";
+          // console.log(e.className);
+        });
+      }
+      else if(siblingNode){
+        siblingNode.addEventListener("mouseenter", (elem) => {
+          e.style.filter = "grayscale(0%) blur(0px)";
+          // console.log(e.className);
+        });
+        siblingNode.addEventListener("mouseleave", (elem) => {
+          e.style.filter = "grayscale(100%) blur(5px)";
+          // console.log(e.className);
+        });
+      }
+      else{
+        e.addEventListener("mouseenter", (elem) => {
+          e.style.filter = "grayscale(0%) blur(0px)";
+          // console.log(e.className);
+        });
+        e.addEventListener("mouseleave", (elem) => {
+          e.style.filter = "grayscale(100%) blur(5px)";
+          // console.log(e.className);
+        });
+      }
     }
   });
 }
