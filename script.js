@@ -12,6 +12,9 @@ function removeDynamicContentUpdate(document_query){
   if (current_webpage_url.includes("twitter.com")){
     removeDynamicTwitterContent(document_query);
   }
+  else if(current_webpage_url.includes("linkedin.com")){
+    removeDynamicLinkedInContent(document_query);
+  }
 }
 
 function removeDynamicTwitterContent(document_query){
@@ -21,6 +24,16 @@ function removeDynamicTwitterContent(document_query){
     home_notification.style.display = "none";
     home_notification.style.visibility = "hidden";
     console.log("remove home notification!");
+  }
+
+  function removeDynamicLinkedInContent(document_query){
+    const notifications = document_query.querySelector('span.notification-badge--show');
+    [...notifications].forEach(n => {
+      n.css({
+        "display": "none",
+        "visibility": "hidden"
+      });
+    });  
   }
 
   // Blue button that promotes new tweets, i.e., on top of the page

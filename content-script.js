@@ -112,6 +112,51 @@ const removeTwitterDistractions = (container) => {
     });
 }
 
+const removeLinkedInDistractions = (container) => {
+    // LinkedIn News
+    const newsColumn = $('aside[aria-label="LinkedIn News"]');
+    newsColumn.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // Messaging
+    const messaging = $('aside#msg-overlay');
+    messaging.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // “Discover more” box on the left
+    const discoverMore = $('section[aria-labelledby]').parent().parent().parent().parent();
+    discoverMore.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // LinkedIn Premium ads (left)
+    const premuimAdLeft = $('li-icon[type="premium-chip"]').parent().parent();
+    premuimAdLeft.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // LinkedIn Premium ads (upper right)
+    const premuimAdRight = $('div.premium-upsell-link').parent();
+    premuimAdRight.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // "red dot" notifications
+    $('span.notification-badge--show').each(function() {
+        $( this ).css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    });
+}
+
 const removeFacebookDistractions = (container) => {
     // “Stories” and “Reels” video section
     const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
@@ -266,7 +311,12 @@ const checkBackgroundColorDark = () => {
     }
     else if (currentPage == "LinkedIn"){
         const bgColor = $("body").css("background-color");
-        console.log(bgColor);
+        if (bgColor.includes("rgb(0, 0, 0)")){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     else{
         console.error("Unknown page to enable purpose mode!");
@@ -294,6 +344,9 @@ const run = () => getContainer()
         }
         else if(currentPage == "Facebook"){
             removeFacebookDistractions(container);
+        }
+        else if(currentPage == "LinkedIn"){
+            removeLinkedInDistractions(container);
         }
 
         if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
