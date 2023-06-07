@@ -45,34 +45,34 @@ const removeYouTubeDistractions= (container) => {
     recc_tag.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 
     // video ad on the home page
     const home_page_video_ad = $('div#masthead-ad');
     home_page_video_ad.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 
     // remove notifications button on the top right
     const home_notification_video = $('ytd-topbar-menu-button-renderer:has(> div > a > yt-icon-button > button[aria-label="Create"])');
     home_notification_video.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 
     const home_notification_noti = $('ytd-notification-topbar-button-renderer');
     home_notification_noti.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 
     // shorts
     const shorts = $('ytd-rich-shelf-renderer[is-shorts]');
     shorts.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 }
 
 const removeTwitterDistractions = (container) => {
@@ -81,35 +81,88 @@ const removeTwitterDistractions = (container) => {
     col_what.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 
     // "Who to follow" column on the right.
     const col_who = $('div:has(> div > aside[aria-label="Who to follow"])');
     col_who.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 
     // ToS, privacy policy, etc.
     const col_footer = $('nav[aria-label="Footer"]');
     col_footer.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 
     // Blue notification circle, e.g., on top of home icon.
     const home_notification = $('div[aria-label="undefined unread items"]');
     home_notification.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
 
     // Blue button that promotes new tweets, i.e., on top of the page
     const tweet_notification = $('div[aria-label="New Tweets are available. Push the period key to go to the them."]');
     tweet_notification.css({
         "display": "none",
         "visibility": "hidden"
-    })
+    });
+}
+
+const removeFacebookDistractions = (container) => {
+    // “Stories” and “Reels” video section
+    const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
+    storiesBar.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // the whole right column, e.g., your pages and profiles, contacts etc.
+    const rightColum = $('div[role="complementary"]');
+    rightColum.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // Buttons on top of the home page
+    // home button
+    const homeButton = $('a[aria-label="Home"]').parent().parent().parent();
+    homeButton.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // watch button
+    const watchButton = $('a[aria-label="Watch"]').parent().parent().parent();
+    watchButton.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // marketplace button
+    const marketButton = $('a[aria-label="Marketplace"]').parent().parent().parent();
+    marketButton.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // groups button
+    const groupsButton = $('a[aria-label="Groups"]').parent().parent().parent();
+    groupsButton.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // gaming button
+    const gameButton = $('a[aria-label="Gaming"]').parent().parent().parent();
+    gameButton.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
 }
 
 const removeInfiniteScrolling = (container) => {
@@ -238,6 +291,9 @@ const run = () => getContainer()
         }
         else if(currentPage == "YouTube"){
             removeYouTubeDistractions(container);
+        }
+        else if(currentPage == "Facebook"){
+            removeFacebookDistractions(container);
         }
 
         if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
