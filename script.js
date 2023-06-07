@@ -64,10 +64,12 @@ function facebook_blur_img(document_query){
         sibling_e.style.zIndex = "1";
         sibling_e.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
         sibling_e.addEventListener("mouseleave", (elem) => {
           e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
       }
@@ -75,40 +77,48 @@ function facebook_blur_img(document_query){
       if(siblingLink){
         siblingLink.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
         siblingLink.addEventListener("mouseleave", (elem) => {
           e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
       }
       else if(siblingLink_con2){
         siblingLink_con2.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
         siblingLink_con2.addEventListener("mouseleave", (elem) => {
           e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
       }
       else if(siblingLink_con3){
         siblingLink_con3.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
         siblingLink_con3.addEventListener("mouseleave", (elem) => {
           e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
       }
 
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
+        e.style.transition = "0.5s filter linear";
         // console.log(e.className);
       });
       e.addEventListener("mouseleave", (elem) => {
         e.style.filter = "grayscale(100%) blur(5px)";
+        e.style.transition = "0.5s filter linear";
         // console.log(e.className);
       });
     }
@@ -129,10 +139,12 @@ function youtube_blur_img(document_query){
       if(e.clientWidth <= e.clientHeight){ // don't unblur for video preview teaser
         e.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
         e.addEventListener("mouseleave", (elem) => {
           e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
       }
@@ -150,12 +162,12 @@ function twitter_blur_img(document_query){
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
         e.style.transition = "0.5s filter linear";
-        // console.log(e.className);
+        // console.log("IN:",e.className);
       });
       e.addEventListener("mouseleave", (elem) => {
         e.style.filter = "grayscale(100%) blur(5px)";
         e.style.transition = "0.5s filter linear";
-        // console.log(e.className);
+        // console.log("OUT:",e.className);
       });
     }
   });
@@ -173,30 +185,36 @@ function linkedin_blur_img(document_query){
       if (parentNode.nodeName == "A" || parentNode.nodeName == "BUTTON"){
         parentNode.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
         parentNode.addEventListener("mouseleave", (elem) => {
           e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
       }
       else if(siblingNode){
         siblingNode.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
         siblingNode.addEventListener("mouseleave", (elem) => {
           e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
       }
       else{
         e.addEventListener("mouseenter", (elem) => {
           e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
         e.addEventListener("mouseleave", (elem) => {
           e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
           // console.log(e.className);
         });
       }
