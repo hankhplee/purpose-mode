@@ -7,6 +7,31 @@ function initialUpdates() {
   // stop_video_autoplay(document);
 }
 
+function removeDynamicContentUpdate(document_query){
+  var current_webpage_url = window.top.location.href;
+  if (current_webpage_url.includes("twitter.com")){
+    removeDynamicTwitterContent(document_query);
+  }
+}
+
+function removeDynamicTwitterContent(document_query){
+  // Blue notification circle, e.g., on top of home icon.
+  const home_notification = document_query.querySelector('div[aria-label="undefined unread items"]');
+  if(home_notification){
+    home_notification.style.display = "none";
+    home_notification.style.visibility = "hidden";
+    console.log("remove home notification!");
+  }
+
+  // Blue button that promotes new tweets, i.e., on top of the page
+  const tweet_notification = document_query.querySelector('div[aria-label="New Tweets are available. Push the period key to go to the them."]');
+  if(tweet_notification){
+    tweet_notification.style.display = "none";
+    tweet_notification.style.visibility = "hidden";
+    console.log("remove tweets promotion update!");
+  }
+}
+
 function blur_img(document_query){
   var current_webpage_url = window.top.location.href;
   if (current_webpage_url.includes("twitter.com")){
@@ -124,10 +149,12 @@ function twitter_blur_img(document_query){
       e.style.zIndex = "1";
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
+        e.style.transition = "0.5s filter linear";
         // console.log(e.className);
       });
       e.addEventListener("mouseleave", (elem) => {
         e.style.filter = "grayscale(100%) blur(5px)";
+        e.style.transition = "0.5s filter linear";
         // console.log(e.className);
       });
     }
@@ -198,6 +225,7 @@ function stop_video_autoplay(document_query){
 var mutationObserver = new MutationObserver(function(mutations) {
   mutations.forEach(function(mutation) {
     blur_img(mutation.target);
+    removeDynamicContentUpdate(mutation.target);
     // stop_video_autoplay(mutation.target);
   });
 });
