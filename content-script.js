@@ -18,6 +18,10 @@ const getContainer = () => new Promise((resolve) => {
         const y = $("#content");
         resolve(y);
     }
+    else if (currentPage == "LinkedIn"){
+        const y = $('main[aria-label]');
+        resolve(y);
+    }
     else{
         console.error("Unknown page to enable purpose mode.");
     }
@@ -152,6 +156,9 @@ const isCurrentPageFeed = () => {
     else if(currentPage == "YouTube"){
         return window.location.href == "https://www.youtube.com/";
     }
+    else if(currentPage == "LinkedIn"){
+        return window.location.href.includes("feed");
+    }
     else{
         console.error("Unknown page to enable purpose mode!");
     }
@@ -167,6 +174,9 @@ const getCurrentPage = () => {
     }
     else if(currentWindowURL.includes("youtube.com")){
         return "YouTube";
+    }
+    else if(currentWindowURL.includes("linkedin.com")){
+        return "LinkedIn";
     }
     else{
         return "NA";
@@ -201,6 +211,10 @@ const checkBackgroundColorDark = () => {
             return false;
         }
     }
+    else if (currentPage == "LinkedIn"){
+        const bgColor = $("body").css("background-color");
+        console.log(bgColor);
+    }
     else{
         console.error("Unknown page to enable purpose mode!");
     }
@@ -210,8 +224,13 @@ const run = () => getContainer()
     .then(container => {
         container.css("min-height", `${feedHeight}px`);
         container.css("max-height", `${feedHeight}px`);
-        var position = container.position();
-        container_top = position.top
+        if(container){
+            var position = container.position();
+            container_top = position.top;
+        }
+        else{
+            container_top = 0;
+        }
 
         // remove distracting contents
         if(currentPage == "Twitter"){

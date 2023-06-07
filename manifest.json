@@ -12,7 +12,7 @@
   ],
   "content_scripts": [
     {
-      "matches": ["*://twitter.com/*","*://www.facebook.com/*","*://www.youtube.com/*"],
+      "matches": ["*://twitter.com/*","*://www.facebook.com/*","*://www.youtube.com/*","*://www.linkedin.com/*"],
       "css": ["finite_scroll_style.css"],
       "js": ["jquery-3.4.1.slim.min.js","content-script.js"]
     }
