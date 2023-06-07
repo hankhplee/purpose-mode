@@ -47,5 +47,8 @@ function updateState(changes, area) {
         js: ["script.js"],
     }]).then(() => console.log("Registered content script."));
     chrome.action.setIcon({path: {"128": "icons/purpose-mode-on.png"}});
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.reload(tabs[0].id);
+    });
   }
 }
