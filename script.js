@@ -174,6 +174,21 @@ function twitter_blur_img(document_query){
     if(e.clientWidth>image_size_threshold){
       e.style.filter = "grayscale(100%) blur(5px)";
       e.style.zIndex = "1";
+
+      // for images that are embeded with a link
+      var playNote = e.parentElement.parentElement.parentElement.parentElement.querySelector('div[aria-label="Play"]');
+      if(playNote){
+        playNote.parentElement.addEventListener("mouseenter", (elem) => {
+          e.style.filter = "grayscale(0%) blur(0px)";
+          e.style.transition = "0.5s filter linear";
+          // console.log("IN:",e.className);
+        });
+        playNote.parentElement.addEventListener("mouseleave", (elem) => {
+          e.style.filter = "grayscale(100%) blur(5px)";
+          e.style.transition = "0.5s filter linear";
+          // console.log("OUT:",e.className);
+        });
+      }
       e.addEventListener("mouseenter", (elem) => {
         e.style.filter = "grayscale(0%) blur(0px)";
         e.style.transition = "0.5s filter linear";
