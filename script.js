@@ -15,6 +15,20 @@ function removeDynamicContentUpdate(document_query){
   else if(current_webpage_url.includes("linkedin.com")){
     removeDynamicLinkedInContent(document_query);
   }
+  else if(current_webpage_url.includes("facebook.com")){
+    removeDynamicFacebookContent(document_query);
+  }
+}
+
+function removeDynamicFacebookContent(document_query){
+  const notifications = document_query.querySelectorAll('div[aria-label*="Notifications"]');
+  // console.log(notifications);
+  if (notifications){
+    [...notifications].forEach(n => {
+      n.style.display = "none";
+      n.style.visibility = "hidden";
+    });
+  } 
 }
 
 function removeDynamicTwitterContent(document_query){

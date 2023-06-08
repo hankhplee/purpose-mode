@@ -208,6 +208,14 @@ const removeFacebookDistractions = (container) => {
         "visibility": "hidden"
     });
 
+    // "red dot" notifications
+    $('div[aria-label*="Notifications"]').each(function() {
+        $( this ).css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    });
+
 }
 
 const removeInfiniteScrolling = (container) => {
