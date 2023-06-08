@@ -45,18 +45,19 @@ function removeDynamicTwitterContent(document_query){
   }
 }
 
+// blur image only run on home page
 function blur_img(document_query){
   var current_webpage_url = window.top.location.href;
-  if (current_webpage_url.includes("twitter.com")){
+  if (current_webpage_url == "https://twitter.com/home"){
     twitter_blur_img(document_query);
   }
-  else if(current_webpage_url.includes("facebook.com")){
+  else if(current_webpage_url == "https://www.facebook.com/"){
     facebook_blur_img(document_query);
   }
-  else if(current_webpage_url.includes("youtube.com")){
+  else if(current_webpage_url == "https://www.youtube.com/"){
     youtube_blur_img(document_query);
   }
-  else if(current_webpage_url.includes("linkedin.com")){
+  else if(current_webpage_url == "https://www.linkedin.com/feed/"){
     linkedin_blur_img(document_query);
   }
 }
