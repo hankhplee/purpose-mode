@@ -24,17 +24,7 @@ function removeDynamicTwitterContent(document_query){
     home_notification.style.display = "none";
     home_notification.style.visibility = "hidden";
     console.log("remove home notification!");
-  }
-
-  function removeDynamicLinkedInContent(document_query){
-    const notifications = document_query.querySelector('span.notification-badge--show');
-    [...notifications].forEach(n => {
-      n.css({
-        "display": "none",
-        "visibility": "hidden"
-      });
-    });  
-  }
+  }  
 
   // Blue button that promotes new tweets, i.e., on top of the page
   const tweet_notification = document_query.querySelector('div[aria-label="New Tweets are available. Push the period key to go to the them."]');
@@ -43,6 +33,17 @@ function removeDynamicTwitterContent(document_query){
     tweet_notification.style.visibility = "hidden";
     console.log("remove tweets promotion update!");
   }
+}
+
+function removeDynamicLinkedInContent(document_query){
+  const notifications = document_query.querySelectorAll('span.notification-badge--show');
+  // console.log(notifications);
+  if (notifications){
+    [...notifications].forEach(n => {
+      n.style.display = "none";
+      n.style.visibility = "hidden";
+    });
+  } 
 }
 
 // blur image only run on home page

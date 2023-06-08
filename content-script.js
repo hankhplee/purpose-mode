@@ -34,10 +34,10 @@ const showMore = (container, button) => {
     button.css("top", `${feedHeight+container_top-100}px`);
 };
 
-const manipulateContainer = (container) => {
-    // remove infinite scrolling
-    removeInfiniteScrolling(container);
-};
+// const manipulateContainer = (container) => {
+//     // remove infinite scrolling
+//     removeInfiniteScrolling(container);
+// };
 
 const removeYouTubeDistractions= (container) => {
     // recommendation tags on top of the page
@@ -281,6 +281,16 @@ const getCurrentPage = () => {
     } 
 }
 
+const isHomePage = () => {
+    const currentWindowURL = window.location.href;
+    if (currentWindowURL == "https://twitter.com/home" || currentWindowURL == "https://www.facebook.com/" || currentWindowURL == "https://www.youtube.com/" || currentWindowURL == "https://www.linkedin.com/feed/"){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 const checkBackgroundColorDark = () => {
     if(currentPage == "Twitter"){
         const bgColor = $("body").css("background-color");
@@ -325,15 +335,6 @@ const checkBackgroundColorDark = () => {
 
 const run = () => getContainer()
     .then(container => {
-        container.css("min-height", `${feedHeight}px`);
-        container.css("max-height", `${feedHeight}px`);
-        if(container){
-            var position = container.position();
-            container_top = position.top;
-        }
-        else{
-            container_top = 0;
-        }
 
         // remove distracting contents
         if(currentPage == "Twitter"){
@@ -348,9 +349,20 @@ const run = () => getContainer()
         else if(currentPage == "LinkedIn"){
             removeLinkedInDistractions(container);
         }
+        
+        // remove inifite scrolling only on home page
+        if (isHomePage){ 
+            container.css("min-height", `${feedHeight}px`);
+            container.css("max-height", `${feedHeight}px`);
+            container_top = 0;
+            if(container){
+                var position = container.position();
+                if (position){container_top = position.top;}
+            }
 
-        if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
-            manipulateContainer(container);
+            if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
+                removeInfiniteScrolling(container);
+            }
         }
         // Keep running in case user leaves feed but returns later and we have
         // to reinsert the show more button
