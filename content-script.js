@@ -62,6 +62,24 @@ const removeYouTubeDistractions= (container) => {
             "display": "none",
             "visibility": "hidden"
         });
+
+        // Recommended Primetime movies
+        const primetimeMovie = $('a[title="Recommended Primetime movies"]');
+        if(primetimeMovie){
+            primetimeMovie.closest('ytd-rich-section-renderer').css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
+
+        // Top news
+        const topNews = $('span[id="title"]:contains("Top news")');
+        if(topNews){
+            topNews.closest('ytd-rich-section-renderer').css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
     }
 
     // remove notifications button on the top right
