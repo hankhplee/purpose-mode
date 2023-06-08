@@ -40,19 +40,29 @@ const showMore = (container, button) => {
 // };
 
 const removeYouTubeDistractions= (container) => {
-    // recommendation tags on top of the page
-    const recc_tag = $('#scroll-container');
-    recc_tag.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
 
-    // video ad on the home page
-    const home_page_video_ad = $('div#masthead-ad');
-    home_page_video_ad.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
+    if(isHomePage){ // distraction removal applied to the home page only
+        // recommendation tags on top of the page
+        const recc_tag = $('#scroll-container');
+        recc_tag.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+
+        // video ad on the home page
+        const home_page_video_ad = $('div#masthead-ad');
+        home_page_video_ad.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+
+        // shorts
+        const shorts = $('ytd-rich-shelf-renderer[is-shorts]');
+        shorts.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
 
     // remove notifications button on the top right
     const home_notification_video = $('ytd-topbar-menu-button-renderer:has(> div > a > yt-icon-button > button[aria-label="Create"])');
@@ -63,13 +73,6 @@ const removeYouTubeDistractions= (container) => {
 
     const home_notification_noti = $('ytd-notification-topbar-button-renderer');
     home_notification_noti.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // shorts
-    const shorts = $('ytd-rich-shelf-renderer[is-shorts]');
-    shorts.css({
         "display": "none",
         "visibility": "hidden"
     });
@@ -158,21 +161,24 @@ const removeLinkedInDistractions = (container) => {
 }
 
 const removeFacebookDistractions = (container) => {
-    // “Stories” and “Reels” video section
-    const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
-    storiesBar.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
 
-    // the whole right column, e.g., your pages and profiles, contacts etc.
-    const rightColum = $('div[role="complementary"]');
-    rightColum.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
+    if (isHomePage){ // distraction removal applied to only the home page
+        // “Stories” and “Reels” video section
+        const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
+        storiesBar.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
 
-    // Buttons on top of the home page
+        // the whole right column, e.g., your pages and profiles, contacts etc.
+        const rightColum = $('div[role="complementary"]');
+        rightColum.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+
+    // Buttons on top of the page
     // home button
     const homeButton = $('a[aria-label="Home"]').parent().parent().parent();
     homeButton.css({
