@@ -240,6 +240,13 @@ const removeFacebookDistractions = (container) => {
         });
     });
 
+    // "red dot" notifications for Messenger
+    const messengerNotification = $('div[aria-label*="Messenger"][tabindex="-1"]');
+    messengerNotification.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
 }
 
 const removeInfiniteScrolling = (container) => {

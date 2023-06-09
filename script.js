@@ -21,14 +21,21 @@ function removeDynamicContentUpdate(document_query){
 }
 
 function removeDynamicFacebookContent(document_query){
+  // "red dot" notifications
   const notifications = document_query.querySelectorAll('div[aria-label*="Notifications"]');
-  // console.log(notifications);
   if (notifications){
     [...notifications].forEach(n => {
       n.style.display = "none";
       n.style.visibility = "hidden";
     });
   } 
+
+  // "red dot" notifications for Messenger
+  const messengerNotification = $('div[aria-label*="Messenger"][tabindex="-1"]');
+  messengerNotification.css({
+      "display": "none",
+      "visibility": "hidden"
+  });
 }
 
 function removeDynamicTwitterContent(document_query){
