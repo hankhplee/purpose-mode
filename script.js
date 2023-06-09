@@ -21,14 +21,19 @@ function removeDynamicContentUpdate(document_query){
 }
 
 function removeDynamicFacebookContent(document_query){
-  // "red dot" notifications
-  const notifications = document_query.querySelectorAll('div[aria-label*="Notifications"]');
-  if (notifications){
-    [...notifications].forEach(n => {
-      n.style.display = "none";
-      n.style.visibility = "hidden";
-    });
-  } 
+  // "red dot" update notifications
+  // const notifications = document_query.querySelectorAll('div[aria-label*="Notifications"]');
+  // if (notifications){
+  //   [...notifications].forEach(n => {
+  //     n.style.display = "none";
+  //     n.style.visibility = "hidden";
+  //   });
+  // }
+  const updateNotification = $('div[aria-label*="Notifications"][tabindex="-1"]');
+  updateNotification.css({
+      "display": "none",
+      "visibility": "hidden"
+  }); 
 
   // "red dot" notifications for Messenger
   const messengerNotification = $('div[aria-label*="Messenger"][tabindex="-1"]');
@@ -36,6 +41,17 @@ function removeDynamicFacebookContent(document_query){
       "display": "none",
       "visibility": "hidden"
   });
+
+  // // promoted posts
+  // const promotedPosts = document_query.querySelectorAll('a[href*="ads"][href*="about"][href*="cft"]');
+  // if (promotedPosts){
+  //   [...promotedPosts].forEach(n => {
+  //     post = n.closest('span[dir="auto"]').closest('div:has(>div>div>div>div>div>div>div>div)');
+  //     post.style.display = "none";
+  //     post.style.visibility = "hidden";
+  //   });
+  // }
+
 }
 
 function removeDynamicTwitterContent(document_query){

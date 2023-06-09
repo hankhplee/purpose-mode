@@ -263,12 +263,17 @@ const removeFacebookDistractions = (container) => {
         "visibility": "hidden"
     });
 
-    // "red dot" notifications
-    $('div[aria-label*="Notifications"]').each(function() {
-        $( this ).css({
-            "display": "none",
-            "visibility": "hidden"
-        });
+    // "red dot" update notifications
+    // $('div[aria-label*="Notifications"]').each(function() {
+    //     $( this ).css({
+    //         "display": "none",
+    //         "visibility": "hidden"
+    //     });
+    // });
+    const updateNotification = $('div[aria-label*="Notifications"][tabindex="-1"]');
+    updateNotification.css({
+        "display": "none",
+        "visibility": "hidden"
     });
 
     // "red dot" notifications for Messenger
