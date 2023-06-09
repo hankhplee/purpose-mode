@@ -118,6 +118,21 @@ const removeTwitterDistractions = (container) => {
         "visibility": "hidden"
     });
 
+    // "Get Verified" promotion
+    const col_verify = $('div:has(> aside[aria-label="Get Verified"])');
+    col_verify.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // DM
+    const DM = $('div[data-testid="DMDrawer"]');
+    DM.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+    
+
     // Blue notification circle, e.g., on top of home icon.
     const home_notification = $('div[aria-label="undefined unread items"]');
     home_notification.css({
