@@ -80,6 +80,14 @@ const removeYouTubeDistractions= (container) => {
                 "visibility": "hidden"
             });
         }
+        // Breaking news
+        const breakingNews = $('span[id="title"]:contains("Breaking news")');
+        if(breakingNews){
+            breakingNews.closest('ytd-rich-section-renderer').css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
     }
 
     // remove notifications button on the top right
@@ -209,6 +217,14 @@ const removeFacebookDistractions = (container) => {
             "display": "none",
             "visibility": "hidden"
         });
+
+        // // remove sponsored posts
+        // $('a[href*="ads"][href*="about"][href*="cft"]').each(function() {
+        //     $( this ).closest('span[dir="auto"]').closest('div:has(>div>div>div>div>div>div>div>div)').css({
+        //         "display": "none",
+        //         "visibility": "hidden"
+        //     });
+        // });
     }
 
     // Buttons on top of the page
