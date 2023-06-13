@@ -11,7 +11,8 @@ const getContainer = () => new Promise((resolve) => {
         resolve(y);
     }
     else if(currentPage == "Facebook"){
-        const y = $('h3:contains("News Feed posts")').parent();
+        // const y = $('h3:contains("News Feed posts")').parent();
+        const y = $('div[role="main"]');
         resolve(y);
     }
     else if (currentPage == "YouTube"){
@@ -30,8 +31,12 @@ const getContainer = () => new Promise((resolve) => {
 const showMore = (container, button) => {
     feedHeight += showMoreIncrement;
     container.css("max-height", `${feedHeight}px`);
-    container.css("min-height", `${feedHeight}px`);
+    if (currentPage == "Facebook" && parseInt(container.css('height'))<feedHeight){
+        updateFacebookShowMore(container);
+    }
+    if(currentPage == "Twitter"){ container.css("min-height", `${feedHeight}px`);}
     button.css("top", `${feedHeight+container_top-100}px`);
+    // button.css("top", `${parseInt(container.css('height'))-100}px`);
 };
 
 // const manipulateContainer = (container) => {
@@ -288,10 +293,10 @@ const removeFacebookDistractions = (container) => {
 const removeInfiniteScrolling = (container) => {
     container.css({
         "max-height": `${feedHeight}px`,
-        "min-height": `${feedHeight}px`,
         overflow: "hidden",
         // "margin-bottom": "200px"
     });
+    if(currentPage == "Twitter"){ container.css("min-height", `${feedHeight}px`); }
 
     const button = $(`
         <div id="tisd-show-more">
@@ -301,6 +306,7 @@ const removeInfiniteScrolling = (container) => {
     button.css({
         width: container.width(),
         top: `${feedHeight+container_top-100}px`
+        // top: `${parseInt(container.css('height'))-100}px`
     });
     container.prepend(button);
 
@@ -318,6 +324,13 @@ const isAlreadyManipulated = (container) => {
     const button = $("#tisd-show-more");
     return !!button.length;
 };
+
+const updateFacebookShowMore = (container) => {
+    const button = $("#tisd-show-more");
+    feedHeight = parseInt(container.css('height'));
+    container.css("max-height", `${feedHeight}px`);
+    button.css("top", `${feedHeight+container_top-100}px`);
+}
 
 const isCurrentPageFeed = () => {
     if(currentPage == "Twitter"){
@@ -426,15 +439,21 @@ const run = () => getContainer()
         }
         
         // remove inifite scrolling only on home page
-        if (isHomePage){ 
-            container.css("min-height", `${feedHeight}px`);
+        if (isHomePage){
+            if(currentPage == "Twitter"){ container.css("min-height", `${feedHeight}px`); }
             container.css("max-height", `${feedHeight}px`);
+            if (currentPage == "Facebook" && parseInt(container.css('height'))<feedHeight){
+                updateFacebookShowMore(container);
+            }
             container_top = 0;
             if(container){
                 var position = container.position();
                 if (position){container_top = position.top;}
             }
 
+            // console.log('Min:', container.css('min-height'));
+            // console.log('Max:', container.css('max-height'));
+            // console.log('current height:', container.css('height'));
             if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
                 removeInfiniteScrolling(container);
             }
