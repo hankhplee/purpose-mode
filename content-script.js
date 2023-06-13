@@ -39,11 +39,6 @@ const showMore = (container, button) => {
     // button.css("top", `${parseInt(container.css('height'))-100}px`);
 };
 
-// const manipulateContainer = (container) => {
-//     // remove infinite scrolling
-//     removeInfiniteScrolling(container);
-// };
-
 const removeYouTubeDistractions= (container) => {
 
     if(isHomePage){ // distraction removal applied to the home page only
@@ -432,6 +427,282 @@ function spoofWindowSize() {
     window.dispatchEvent(new Event('resize'));
 }
 
+
+function initialUpdates() {
+    console.log("Applying custom style to existing img tags.");
+    blur_img(document);
+}
+  
+function removeDynamicContentUpdate(document_query){
+    var current_webpage_url = window.top.location.href;
+    if (current_webpage_url.includes("twitter.com")){
+        removeDynamicTwitterContent(document_query);
+    }
+    else if(current_webpage_url.includes("linkedin.com")){
+        removeDynamicLinkedInContent(document_query);
+    }
+    else if(current_webpage_url.includes("facebook.com")){
+        removeDynamicFacebookContent(document_query);
+    }
+}
+  
+function removeDynamicFacebookContent(document_query){
+    // "red dot" update notifications
+    const updateNotification = $('div[aria-label*="Notifications"][tabindex="-1"]');
+    updateNotification.css({
+        "display": "none",
+        "visibility": "hidden"
+    }); 
+
+    // "red dot" notifications for Messenger
+    const messengerNotification = $('div[aria-label*="Messenger"][tabindex="-1"]');
+    messengerNotification.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // // promoted posts
+    // const promotedPosts = document_query.querySelectorAll('a[href*="ads"][href*="about"][href*="cft"]');
+    // if (promotedPosts){
+    //   [...promotedPosts].forEach(n => {
+    //     post = n.closest('span[dir="auto"]').closest('div:has(>div>div>div>div>div>div>div>div)');
+    //     post.style.display = "none";
+    //     post.style.visibility = "hidden";
+    //   });
+    // }
+
+}
+
+function removeDynamicTwitterContent(document_query){
+    // Blue notification circle, e.g., on top of home icon.
+    const home_notification = document_query.querySelector('div[aria-label="undefined unread items"]');
+    if(home_notification){
+        home_notification.style.display = "none";
+        home_notification.style.visibility = "hidden";
+        console.log("remove home notification!");
+    }  
+
+    // Blue button that promotes new tweets, i.e., on top of the page
+    const tweet_notification = document_query.querySelector('div[aria-label="New Tweets are available. Push the period key to go to the them."]');
+    if(tweet_notification){
+        tweet_notification.style.display = "none";
+        tweet_notification.style.visibility = "hidden";
+        console.log("remove tweets promotion update!");
+    }
+}
+  
+function removeDynamicLinkedInContent(document_query){
+    const notifications = document_query.querySelectorAll('span.notification-badge--show');
+    // console.log(notifications);
+    if (notifications){
+        [...notifications].forEach(n => {
+        n.style.display = "none";
+        n.style.visibility = "hidden";
+        });
+    } 
+}
+  
+function blur_img(document_query){
+    // blur image only run on home page
+    var current_webpage_url = window.top.location.href;
+    if (current_webpage_url == "https://twitter.com/home"){
+        twitter_blur_img(document_query);
+    }
+    else if(current_webpage_url == "https://www.facebook.com/"){
+        facebook_blur_img(document_query);
+    }
+    else if(current_webpage_url == "https://www.youtube.com/"){
+        youtube_blur_img(document_query);
+    }
+    else if(current_webpage_url == "https://www.linkedin.com/feed/"){
+        linkedin_blur_img(document_query);
+    }
+}
+  
+function facebook_blur_img(document_query){
+    const elements = document_query.querySelectorAll("image,img");
+    [...elements].forEach(e => {
+        if(e.clientWidth>image_size_threshold && e.clientHeight>image_size_threshold){
+        e.style.filter = "grayscale(100%) blur(5px)";
+        e.style.zIndex = "1";
+        // some facebook imagse are not the top elements; attach the event listener to the top elements
+        var siblingNode = e.nextElementSibling;
+        var siblingLink = e.parentElement.parentElement.getElementsByTagName("a")[0];
+        var siblingLink_con2 = e.parentElement.parentElement.parentElement.getElementsByTagName("a")[0];
+        var siblingLink_con3 = e.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.getElementsByTagName("a")[0];
+        if(siblingNode && (siblingNode.nodeName == "DIV" || siblingNode.nodeName == "SPAN")){
+            var sibling_e = e.nextElementSibling;
+            sibling_e.style.zIndex = "1";
+            sibling_e.addEventListener("mouseenter", (elem) => {
+            e.style.filter = "grayscale(0%) blur(0px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+            });
+            sibling_e.addEventListener("mouseleave", (elem) => {
+            e.style.filter = "grayscale(100%) blur(5px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+            });
+        }
+        // check if the image is embeded with a link
+        if(siblingLink){
+            siblingLink.addEventListener("mouseenter", (elem) => {
+            e.style.filter = "grayscale(0%) blur(0px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+            });
+            siblingLink.addEventListener("mouseleave", (elem) => {
+            e.style.filter = "grayscale(100%) blur(5px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+            });
+        }
+        else if(siblingLink_con2){
+            siblingLink_con2.addEventListener("mouseenter", (elem) => {
+            e.style.filter = "grayscale(0%) blur(0px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+            });
+            siblingLink_con2.addEventListener("mouseleave", (elem) => {
+            e.style.filter = "grayscale(100%) blur(5px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+            });
+        }
+        else if(siblingLink_con3){
+            siblingLink_con3.addEventListener("mouseenter", (elem) => {
+            e.style.filter = "grayscale(0%) blur(0px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+            });
+            siblingLink_con3.addEventListener("mouseleave", (elem) => {
+            e.style.filter = "grayscale(100%) blur(5px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+            });
+        }
+
+        e.addEventListener("mouseenter", (elem) => {
+            e.style.filter = "grayscale(0%) blur(0px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+        });
+        e.addEventListener("mouseleave", (elem) => {
+            e.style.filter = "grayscale(100%) blur(5px)";
+            e.style.transition = "0.5s filter linear";
+            // console.log(e.className);
+        });
+        }
+    });
+}
+  
+function youtube_blur_img(document_query){
+    const elements = document_query.querySelectorAll("image,img");
+    [...elements].forEach(e => {
+        if(e.clientWidth>image_size_threshold){
+            e.style.filter = "grayscale(100%) blur(5px)";
+            e.style.zIndex = "1";
+            if(e.clientWidth <= e.clientHeight){ // don't unblur for video preview teaser
+                e.addEventListener("mouseenter", (elem) => {
+                e.style.filter = "grayscale(0%) blur(0px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+                e.addEventListener("mouseleave", (elem) => {
+                e.style.filter = "grayscale(100%) blur(5px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+            }
+        }
+    });
+}
+  
+function twitter_blur_img(document_query){
+    // twitter custom style
+    const twitter_elements = document_query.querySelectorAll("div[style^='background-image:']");
+    [...twitter_elements].forEach(e => {
+        if(e.clientWidth>image_size_threshold){
+            e.style.filter = "grayscale(100%) blur(5px)";
+            e.style.zIndex = "1";
+
+            // for images that are embeded with a link
+            var playNote = e.parentElement.parentElement.parentElement.parentElement.querySelector('div[aria-label="Play"]');
+            if(playNote){
+                playNote.parentElement.addEventListener("mouseenter", (elem) => {
+                e.style.filter = "grayscale(0%) blur(0px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log("IN:",e.className);
+                });
+                playNote.parentElement.addEventListener("mouseleave", (elem) => {
+                e.style.filter = "grayscale(100%) blur(5px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log("OUT:",e.className);
+                });
+            }
+            e.addEventListener("mouseenter", (elem) => {
+                e.style.filter = "grayscale(0%) blur(0px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log("IN:",e.className);
+            });
+            e.addEventListener("mouseleave", (elem) => {
+                e.style.filter = "grayscale(100%) blur(5px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log("OUT:",e.className);
+            });
+        }
+    });
+}
+  
+function linkedin_blur_img(document_query){
+    const elements = document_query.querySelectorAll("image,img,div[style^='background-image:']");
+    [...elements].forEach(e => {
+        if(e.clientWidth>image_size_threshold && e.clientHeight>image_size_threshold){
+            e.style.filter = "grayscale(100%) blur(5px)";
+            // e.style.zIndex = "1";
+            var parentNode = e.parentElement.parentElement.parentElement;
+            var siblingNode = e.parentElement.parentElement.parentNode.parentNode.getElementsByTagName('button')[0];
+            // check if the figures are embeded with a button or a link
+            if (parentNode.nodeName == "A" || parentNode.nodeName == "BUTTON"){
+                parentNode.addEventListener("mouseenter", (elem) => {
+                e.style.filter = "grayscale(0%) blur(0px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+                parentNode.addEventListener("mouseleave", (elem) => {
+                e.style.filter = "grayscale(100%) blur(5px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+            }
+            else if(siblingNode){
+                siblingNode.addEventListener("mouseenter", (elem) => {
+                e.style.filter = "grayscale(0%) blur(0px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+                siblingNode.addEventListener("mouseleave", (elem) => {
+                e.style.filter = "grayscale(100%) blur(5px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+            }
+            else{
+                e.addEventListener("mouseenter", (elem) => {
+                e.style.filter = "grayscale(0%) blur(0px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+                e.addEventListener("mouseleave", (elem) => {
+                e.style.filter = "grayscale(100%) blur(5px)";
+                e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+            }
+        }
+    });
+}
+
 const run = () => getContainer()
     .then(container => {
 
@@ -484,10 +755,32 @@ window.addEventListener('resize', spoofWindowSize)
 document.addEventListener('visibilitychange', spoofWindowSize)
 spoofWindowSize();
 
-// a quick switch to turn on/off the content script for demo purpose
-// chrome.storage.local.get(["state"]).then((result) => {
-//     if(result.state == "purpose_mode"){
-//         run();
-//     }
-// });
+/*content removing and finite scrolling*/
 run();
+
+/*blur & nblur images and remove dynamic distracting content update on pages*/
+const image_size_threshold = 65; // image height threashold (px) for image blurring 
+
+// Listen to page change based on sites
+var mutationObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        blur_img(mutation.target);
+        removeDynamicContentUpdate(mutation.target);
+    });
+});
+  
+// Starts listening for changes in the root HTML element of the page.
+mutationObserver.observe(document.documentElement, {
+    attributes: false,
+    characterData: false,
+    childList: true,
+    subtree: true,
+    // attributeOldValue: true,
+    // characterDataOldValue: true
+});
+
+// Takes all changes which haven’t been fired so far.
+var changes = mutationObserver.takeRecords();
+
+// main
+initialUpdates();
