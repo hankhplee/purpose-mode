@@ -41,10 +41,11 @@ function updateState(changes, area) {
   } else {
     chrome.scripting.registerContentScripts([{
         id: extName,
+        world: 'MAIN', /* Necessary for monkey patching the 'window' object. */
         matches: supportedSites.map((elem) => {
           return "https://" + elem + "/*"
         }),
-        js: ["script.js"],
+        js: ["content-script.js"],
     }]).then(() => console.log("Registered content script."));
     chrome.action.setIcon({path: {"128": "icons/purpose-mode-on.png"}});
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {

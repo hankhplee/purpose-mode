@@ -421,6 +421,17 @@ const checkBackgroundColorDark = () => {
     }
 }
 
+function spoofWindowSize() {
+    console.log("Monkey patching 'window' and 'document' properties.");
+    const width = Math.min(document.documentElement.offsetWidth || 800, 800)
+    if (window.innerWidth === width && document.documentElement.clientWidth === width) {
+        return
+    }
+    window.__defineGetter__('innerWidth', () => width);
+    document.documentElement.__defineGetter__('clientWidth', () => width)
+    window.dispatchEvent(new Event('resize'));
+}
+
 const run = () => getContainer()
     .then(container => {
 
@@ -467,6 +478,11 @@ let feedHeight = 2500;
 let container_top = 0;
 const showMoreIncrement = 2500;
 const currentPage = getCurrentPage();
+
+window.addEventListener('load', spoofWindowSize)
+window.addEventListener('resize', spoofWindowSize)
+document.addEventListener('visibilitychange', spoofWindowSize)
+spoofWindowSize();
 
 // a quick switch to turn on/off the content script for demo purpose
 chrome.storage.local.get(["state"]).then((result) => {

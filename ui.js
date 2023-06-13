@@ -32,7 +32,7 @@ async function onExtEnable() {
     target: {
       tabId: tab[0].id
     },
-    files: ["script.js"]
+    files: ["content-script.js"]
   });
   console.log("Injected content script into: " + url);
 }
