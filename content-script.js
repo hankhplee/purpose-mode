@@ -485,8 +485,9 @@ document.addEventListener('visibilitychange', spoofWindowSize)
 spoofWindowSize();
 
 // a quick switch to turn on/off the content script for demo purpose
-chrome.storage.local.get(["state"]).then((result) => {
-    if(result.state == "purpose_mode"){
-        run();
-    }
-});
+// chrome.storage.local.get(["state"]).then((result) => {
+//     if(result.state == "purpose_mode"){
+//         run();
+//     }
+// });
+run();
