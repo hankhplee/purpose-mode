@@ -424,6 +424,8 @@ function spoofWindowSize() {
     }
     window.__defineGetter__('innerWidth', () => width);
     document.documentElement.__defineGetter__('clientWidth', () => width)
+    // Object.defineProperty(window,'innerWidth', width);
+    // Object.defineProperty(document.documentElement,'clientWidth', width);
     window.dispatchEvent(new Event('resize'));
 }
 
@@ -750,10 +752,12 @@ let container_top = 0;
 const showMoreIncrement = 2500;
 const currentPage = getCurrentPage();
 
-window.addEventListener('load', spoofWindowSize)
-window.addEventListener('resize', spoofWindowSize)
-document.addEventListener('visibilitychange', spoofWindowSize)
-spoofWindowSize();
+if(currentPage == "Twitter"){
+    window.addEventListener('load', spoofWindowSize)
+    window.addEventListener('resize', spoofWindowSize)
+    document.addEventListener('visibilitychange', spoofWindowSize)
+    spoofWindowSize();
+}
 
 /*content removing and finite scrolling*/
 run();
