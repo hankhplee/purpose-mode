@@ -330,7 +330,8 @@ const removeInfiniteScrolling = (container) => {
 const resetInfiniteScrolling = (container) => {
     container.css({
         "max-height": "auto",
-        "min-height": "auto"
+        "min-height": "auto",
+        overflow: "auto"
     });
 
     const button = $("#tisd-show-more");
