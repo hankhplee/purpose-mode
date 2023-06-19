@@ -13,14 +13,26 @@ const getContainer = () => new Promise((resolve) => {
     else if(currentPage == "Facebook"){
         // const y = $('h3:contains("News Feed posts")').parent();
         const y = $('div[role="main"]');
+        if (y.length === 0) {
+            setTimeout(() => { resolve(getContainer()); }, 100);
+            return;
+        }
         resolve(y);
     }
     else if (currentPage == "YouTube"){
         const y = $("#content");
+        if (y.length === 0) {
+            setTimeout(() => { resolve(getContainer()); }, 100);
+            return;
+        }
         resolve(y);
     }
     else if (currentPage == "LinkedIn"){
         const y = $('main[aria-label]');
+        if (y.length === 0) {
+            setTimeout(() => { resolve(getContainer()); }, 100);
+            return;
+        }
         resolve(y);
     }
     else{
@@ -41,7 +53,7 @@ const showMore = (container, button) => {
 
 const removeYouTubeDistractions= (container) => {
 
-    if(isHomePage){ // distraction removal applied to the home page only
+    if(isHomePage()){ // distraction removal applied to the home page only
         // recommendation tags on top of the page
         const recc_tag = $('#scroll-container');
         recc_tag.css({
@@ -203,7 +215,7 @@ const removeLinkedInDistractions = (container) => {
 
 const removeFacebookDistractions = (container) => {
 
-    if (isHomePage){ // distraction removal applied to only the home page
+    if (isHomePage()){ // distraction removal applied to only the home page
         // “Stories” and “Reels” video section
         const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
         storiesBar.css({
@@ -315,6 +327,19 @@ const removeInfiniteScrolling = (container) => {
     button.click(() => showMore(container, button));
 }
 
+const resetInfiniteScrolling = (container) => {
+    container.css({
+        "max-height": "auto",
+        "min-height": "auto"
+    });
+
+    const button = $("#tisd-show-more");
+    if(button){
+        button.remove();
+    }
+    feedHeight = 2500;
+}
+
 const isAlreadyManipulated = (container) => {
     const button = $("#tisd-show-more");
     return !!button.length;
@@ -366,7 +391,7 @@ const getCurrentPage = () => {
 
 const isHomePage = () => {
     const currentWindowURL = window.location.href;
-    if (currentWindowURL == "https://twitter.com/home" || currentWindowURL == "https://www.facebook.com/" || currentWindowURL == "https://www.youtube.com/" || currentWindowURL == "https://www.linkedin.com/feed/"){
+    if (currentWindowURL === "https://twitter.com/home" || currentWindowURL === "https://www.facebook.com/" || currentWindowURL === "https://www.youtube.com/" || currentWindowURL === "https://www.linkedin.com/feed/"){
         return true;
     }
     else{
@@ -507,16 +532,16 @@ function removeDynamicLinkedInContent(document_query){
 function blur_img(document_query){
     // blur image only run on home page
     var current_webpage_url = window.top.location.href;
-    if (current_webpage_url == "https://twitter.com/home"){
+    if (current_webpage_url === "https://twitter.com/home"){
         twitter_blur_img(document_query);
     }
-    else if(current_webpage_url == "https://www.facebook.com/"){
+    else if(current_webpage_url === "https://www.facebook.com/"){
         facebook_blur_img(document_query);
     }
-    else if(current_webpage_url == "https://www.youtube.com/"){
+    else if(current_webpage_url === "https://www.youtube.com/"){
         youtube_blur_img(document_query);
     }
-    else if(current_webpage_url == "https://www.linkedin.com/feed/"){
+    else if(current_webpage_url === "https://www.linkedin.com/feed/"){
         linkedin_blur_img(document_query);
     }
 }
@@ -613,6 +638,28 @@ function youtube_blur_img(document_query){
                 e.addEventListener("mouseleave", (elem) => {
                 e.style.filter = "grayscale(100%) blur(5px)";
                 e.style.transition = "0.5s filter linear";
+                // console.log(e.className);
+                });
+            }
+        }
+    });
+}
+
+function youtube_unblur_img(document_query){
+    const elements = document_query.querySelectorAll("image,img");
+    [...elements].forEach(e => {
+        if(e.clientWidth>image_size_threshold){
+            e.style.filter = "grayscale(0%) blur(0px)";
+            e.style.zIndex = "1";
+            if(e.clientWidth <= e.clientHeight){
+                e.addEventListener("mouseenter", (elem) => {
+                e.style.filter = "grayscale(0%) blur(0px)";
+                e.style.transition = "";
+                // console.log(e.className);
+                });
+                e.addEventListener("mouseleave", (elem) => {
+                e.style.filter = "grayscale(0%) blur(0px)";
+                e.style.transition = "";
                 // console.log(e.className);
                 });
             }
@@ -723,7 +770,8 @@ const run = () => getContainer()
         }
         
         // remove inifite scrolling only on home page
-        if (isHomePage){
+        if(isHomePage()){
+            // console.log("current page is home page");
             if(currentPage == "Twitter"){ container.css("min-height", `${feedHeight}px`); }
             container.css("max-height", `${feedHeight}px`);
             if (currentPage == "Facebook" && parseInt(container.css('height'))<feedHeight){
@@ -738,8 +786,17 @@ const run = () => getContainer()
             // console.log('Min:', container.css('min-height'));
             // console.log('Max:', container.css('max-height'));
             // console.log('current height:', container.css('height'));
-            if (isCurrentPageFeed() && !isAlreadyManipulated(container)) {
+            if (!isAlreadyManipulated(container)) {
+                // console.log("remove INfinite scrolling!");
                 removeInfiniteScrolling(container);
+            }
+        }
+        else{
+            // console.log("current page is NOT YouTube home page!");
+            if(currentPage == "YouTube" && isAlreadyManipulated(container)){
+                // console.log("remove YouTube FInite scrolling!");
+                resetInfiniteScrolling(container); 
+                // youtube_unblur_img(container); 
             }
         }
         // Keep running in case user leaves feed but returns later and we have
