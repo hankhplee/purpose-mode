@@ -295,6 +295,28 @@ const removeFacebookDistractions = (container) => {
         "visibility": "hidden"
     });
 
+    // messenger box
+    // normal box
+    $('div[aria-label*="Open chat"').each(function() {
+        $( this ).css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    });
+
+    // additional chat box
+    const additionalMessage = $('div[aria-label*="additional chats"');
+    additionalMessage.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // edit new message box
+    const newMessage = $('div[aria-label="New message"');
+    newMessage.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
 }
 
 const removeInfiniteScrolling = (container) => {
@@ -485,6 +507,29 @@ function removeDynamicFacebookContent(document_query){
     // "red dot" notifications for Messenger
     const messengerNotification = $('div[aria-label*="Messenger"][tabindex="-1"]');
     messengerNotification.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // messenger box
+    // normal box
+    $('div[aria-label*="Open chat"').each(function() {
+        $( this ).css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    });
+
+    // additional chat box
+    const additionalMessage = $('div[aria-label*="additional chats"');
+    additionalMessage.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // edit new message box
+    const newMessage = $('div[aria-label="New message"');
+    newMessage.css({
         "display": "none",
         "visibility": "hidden"
     });

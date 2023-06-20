@@ -1,7 +1,7 @@
 const states = [
   "disabled",
-  "purpose_mode",
-  "reader_mode"
+  "purpose_mode"
+  // "reader_mode"
 ];
 
 // If the user enables Purpose Mode while on a page, inject the content script
