@@ -52,7 +52,6 @@ const showMore = (container, button) => {
 };
 
 const removeYouTubeDistractions= (container) => {
-    console.log("remove YouTube distractions");
 
     if(isHomePage()){ // distraction removal applied to the home page only
         // recommendation tags on top of the page
