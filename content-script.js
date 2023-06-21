@@ -317,6 +317,20 @@ const removeFacebookDistractions = (container) => {
         "display": "none",
         "visibility": "hidden"
     });
+
+    // Reels and short video recommendations
+    const reels = $('div[aria-label="Reels"]').parent().parent().parent().parent();
+    reels.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // People You May Know
+    const friendRec = $('span:contains("People You May Know")').parent().parent().parent().parent().parent();
+    friendRec.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
 }
 
 const removeInfiniteScrolling = (container) => {
@@ -530,6 +544,20 @@ function removeDynamicFacebookContent(document_query){
     // edit new message box
     const newMessage = $('div[aria-label="New message"');
     newMessage.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // Reels and short video recommendations
+    const reels = $('div[aria-label="Reels"]').parent().parent().parent().parent();
+    reels.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    // People You May Know
+    const friendRec = $('span:contains("People You May Know")').parent().parent().parent().parent().parent();
+    friendRec.css({
         "display": "none",
         "visibility": "hidden"
     });
