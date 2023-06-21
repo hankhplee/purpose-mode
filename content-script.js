@@ -52,6 +52,7 @@ const showMore = (container, button) => {
 };
 
 const removeYouTubeDistractions= (container) => {
+    console.log("remove YouTube distractions");
 
     if(isHomePage()){ // distraction removal applied to the home page only
         // recommendation tags on top of the page
@@ -100,6 +101,25 @@ const removeYouTubeDistractions= (container) => {
                 "visibility": "hidden"
             });
         }
+    }
+    
+    // in the watch page
+    // video recommendation
+    const relatedVideos = $('div#secondary-inner');
+    if(relatedVideos){
+        relatedVideos.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+
+    // comments
+    const comments = $("ytd-comments#comments");
+    if(comments){
+        comments.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
     }
 
     // remove notifications button on the top right
