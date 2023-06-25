@@ -101,7 +101,14 @@ const removeYouTubeDistractions= (container) => {
             });
         }
     }
-    
+    // whole site
+    // condense UI
+    const hamburgerUI = $('div#guide-content');
+    hamburgerUI.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
     // in the watch page
     // video recommendation
     const relatedVideos = $('div#secondary-inner');
