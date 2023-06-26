@@ -802,7 +802,7 @@ function facebook_blur_img(document_query){
             // console.log(e.className);
             });
         }
-        else if(siblingLink_con3){
+        else if(siblingLink_con3 && e.clientWidth < 200 && e.clientHeight < 200){
             siblingLink_con3.addEventListener("mouseenter", (elem) => {
             e.style.filter = "grayscale(0%) blur(0px)";
             e.style.transition = "0.5s filter linear";
