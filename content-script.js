@@ -347,6 +347,13 @@ const removeFacebookDistractions = () => {
             "visibility": "hidden"
         });
 
+        // hamburger menu on the left
+        const leftColum = $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))');
+        leftColum.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+
         // // remove sponsored posts
         // $('a[href*="ads"][href*="about"][href*="cft"]').each(function() {
         //     $( this ).closest('span[dir="auto"]').closest('div:has(>div>div>div>div>div>div>div>div)').css({
