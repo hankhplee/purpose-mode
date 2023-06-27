@@ -283,6 +283,15 @@ const removeTwitterDistractions = () => {
         "display": "none",
         "visibility": "hidden"
     });
+
+    // notifications
+    const notifications = $('div[aria-label*="unread"]');
+    if (notifications){
+        [...notifications].forEach(n => {
+            n.style.display = "none";
+            n.style.visibility = "hidden";
+        });
+    } 
 }
 
 const removeLinkedInDistractions = () => {
