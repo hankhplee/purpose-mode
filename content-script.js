@@ -28,12 +28,18 @@ const getContainer = () => new Promise((resolve) => {
         resolve(y);
     }
     else if (currentPage == "LinkedIn"){
-        const y = $('main[aria-label]');
-        if (y.length === 0) {
-            setTimeout(() => { resolve(getContainer()); }, 100);
-            return;
+        if(isHomePage()){
+            const y = $('main[aria-label]');
+            if (y.length === 0) {
+                setTimeout(() => { resolve(getContainer()); }, 100);
+                return;
+            }
+            resolve(y);
         }
-        resolve(y);
+        else{
+            const y = document;
+            resolve(y);
+        }
     }
     else{
         console.error("Unknown page to enable purpose mode.");
@@ -337,6 +343,16 @@ const removeLinkedInDistractions = () => {
             "visibility": "hidden"
         });
     });
+
+    // notifications
+    const notifications = document_query.querySelectorAll('span.notification-badge--show');
+    // console.log(notifications);
+    if (notifications){
+        [...notifications].forEach(n => {
+        n.style.display = "none";
+        n.style.visibility = "hidden";
+        });
+    } 
 }
 
 const removeFacebookDistractions = () => {
@@ -549,6 +565,7 @@ const isCurrentPageFeed = () => {
 
 const getCurrentPage = () => {
     const currentWindowURL = window.location.href;
+    console.log("current url", currentWindowURL);
     if (currentWindowURL.includes("twitter.com")){
         return "Twitter";
     }
