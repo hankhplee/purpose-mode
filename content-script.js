@@ -315,6 +315,14 @@ const removeLinkedInDistractions = () => {
         "visibility": "hidden"
     });
 
+    // left column
+    const infoClumn = $('div.scaffold-layout__sidebar');
+    infoClumn.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
+    /*
     // “Discover more” box on the left
     const discoverMore = $('section[aria-labelledby]').parent().parent().parent().parent();
     discoverMore.css({
@@ -328,6 +336,7 @@ const removeLinkedInDistractions = () => {
         "display": "none",
         "visibility": "hidden"
     });
+    */
 
     // LinkedIn Premium ads (upper right)
     const premuimAdRight = $('div.premium-upsell-link').parent();
