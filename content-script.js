@@ -73,7 +73,7 @@ function removeDistractions(){
 }
 
 const removeYouTubeDistractions= () => {
-    // console.log("content removal on the whole site");
+
     // whole site
     // condense UI
     const hamburgerUI = $('div#guide-content');
@@ -82,6 +82,7 @@ const removeYouTubeDistractions= () => {
         "visibility": "hidden"
     });
 
+    /*
     // remove notifications button on the top right
     const home_notification_video = $('ytd-topbar-menu-button-renderer:has(> div > a > yt-icon-button > button[aria-label="Create"])');
     home_notification_video.css({
@@ -94,31 +95,47 @@ const removeYouTubeDistractions= () => {
         "display": "none",
         "visibility": "hidden"
     });
+    */
 
     const currentPage = window.top.location.href;
 
     if(currentPage === "https://www.youtube.com/"){ // distraction removal applied to the home page only
+        
         // recommendation tags on top of the page
-        // console.log("Content removal on home page");
         const recc_tag = $('div#scroll-container');
-        recc_tag.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
+            if(recc_tag){
+            recc_tag.css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
+
+        // "Next" button of the recommendation tags
+        const nextReccTag = $('button[aria-label="Next"]');
+        if(nextReccTag){
+            nextReccTag.css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
 
         // video ad on the home page
         const home_page_video_ad = $('div#masthead-ad');
-        home_page_video_ad.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
+        if(home_page_video_ad){
+            home_page_video_ad.css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
 
         // shorts
         const shorts = $('ytd-rich-shelf-renderer[is-shorts]');
-        shorts.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
+        if(shorts){
+            shorts.css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
 
         // Recommended Primetime movies
         const primetimeMovie = $('a[title="Recommended Primetime movies"]');
@@ -137,10 +154,29 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
+
         // Breaking news
         const breakingNews = $('span[id="title"]:contains("Breaking news")');
         if(breakingNews){
             breakingNews.closest('ytd-rich-section-renderer').css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
+
+        // Latest YouTube posts
+        const latestPosts = $('span[id="title"]:contains("Latest YouTube posts")');
+        if(latestPosts){
+            latestPosts.closest('ytd-rich-section-renderer').css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
+
+        // Discover your next favorite movie
+        const nextFavoriteMovie = $('yt-formatted-string[id="item-title"]:contains("Discover your next favorite movie")');
+        if(nextFavoriteMovie){
+            nextFavoriteMovie.closest('ytd-rich-section-renderer').css({
                 "display": "none",
                 "visibility": "hidden"
             });
@@ -373,35 +409,33 @@ const removeLinkedInDistractions = () => {
 
 const removeFacebookDistractions = () => {
 
-    if (isHomePage()){ // distraction removal applied to only the home page
-        // “Stories” and “Reels” video section
-        const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
+    // mainly on Home page
+    // “Stories” and “Reels” video section
+    const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
+    if(storiesBar){
         storiesBar.css({
             "display": "none",
             "visibility": "hidden"
         });
+    }
 
-        // the whole right column, e.g., your pages and profiles, contacts etc.
-        const rightColum = $('div[role="complementary"]');
+    // the whole right column, e.g., your pages and profiles, contacts etc.
+    const rightColum = $('div[role="complementary"]');
+    if(rightColum){
         rightColum.css({
             "display": "none",
             "visibility": "hidden"
         });
-
-        // hamburger menu on the left
-        const leftColum = $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))');
+    }
+    
+    // whole site
+    // hamburger menu on the left
+    const leftColum = $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))');
+    if(leftColum){
         leftColum.css({
             "display": "none",
             "visibility": "hidden"
         });
-
-        // // remove sponsored posts
-        // $('a[href*="ads"][href*="about"][href*="cft"]').each(function() {
-        //     $( this ).closest('span[dir="auto"]').closest('div:has(>div>div>div>div>div>div>div>div)').css({
-        //         "display": "none",
-        //         "visibility": "hidden"
-        //     });
-        // });
     }
 
     // Buttons on top of the page
@@ -601,7 +635,10 @@ const getCurrentPage = () => {
 
 const isHomePage = () => {
     const currentWindowURL = window.location.href;
-    if (currentWindowURL === "https://twitter.com/home" || currentWindowURL === "https://www.facebook.com/" || currentWindowURL === "https://www.youtube.com/" || currentWindowURL === "https://www.linkedin.com/feed/"){
+    if (currentWindowURL === "https://twitter.com/home" || 
+        currentWindowURL === "https://www.facebook.com/" || 
+        currentWindowURL === "https://www.youtube.com/" || 
+        currentWindowURL === "https://www.linkedin.com/feed/"){
         return true;
     }
     else{
