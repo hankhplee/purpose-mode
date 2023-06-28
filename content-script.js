@@ -786,17 +786,21 @@ function removeDynamicLinkedInContent(document_query){
   
 function blur_img(document_query){
     // blur image only run on home page
-    var current_webpage_url = window.top.location.href;
-    if (current_webpage_url === "https://twitter.com/home"){
+    // var current_webpage_url = window.top.location.href;
+    // if (current_webpage_url === "https://twitter.com/home"){
+    if (currentPage == "Twitter"){
         twitter_blur_img(document_query);
     }
-    else if(current_webpage_url === "https://www.facebook.com/"){
+    // else if(current_webpage_url === "https://www.facebook.com/"){
+    else if(currentPage == "Facebook"){
         facebook_blur_img(document_query);
     }
-    else if(current_webpage_url === "https://www.youtube.com/"){
+    // else if(current_webpage_url === "https://www.youtube.com/"){
+    else if(currentPage == "YouTube"){
         youtube_blur_img(document_query);
     }
-    else if(current_webpage_url === "https://www.linkedin.com/feed/"){
+    // else if(current_webpage_url === "https://www.linkedin.com/feed/"){
+        else if(currentPage == "LinkedIn"){
         linkedin_blur_img(document_query);
     }
 }
