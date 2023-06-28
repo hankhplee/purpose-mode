@@ -345,6 +345,13 @@ const removeLinkedInDistractions = () => {
         "visibility": "hidden"
     });
 
+    // "For Business" button
+    const forBusinessButton = $('li.global-nav__primary-item:has(> button > span[title="For Business"])')
+    forBusinessButton.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+
     // "red dot" notifications
     $('span.notification-badge--show').each(function() {
         $( this ).css({
@@ -353,15 +360,15 @@ const removeLinkedInDistractions = () => {
         });
     });
 
-    // notifications
-    const notifications = document_query.querySelectorAll('span.notification-badge--show');
-    // console.log(notifications);
-    if (notifications){
-        [...notifications].forEach(n => {
-        n.style.display = "none";
-        n.style.visibility = "hidden";
+    if(!isHomePage()){
+        // recommendations
+        // remove recommendations on the left column of the profile page
+        const profileRecommendations = $('aside.scaffold-layout__aside');
+        profileRecommendations.css({
+            "display": "none",
+            "visibility": "hidden"
         });
-    } 
+    }
 }
 
 const removeFacebookDistractions = () => {
