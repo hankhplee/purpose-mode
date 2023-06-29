@@ -88,12 +88,6 @@ function TwitterSwitches() {
         checked={hideClutter}
         update={setHideClutter}
       />
-      <ToggleSwitch
-        label="bla bla bla"
-        storage_var="TwitterHideClutter"
-        checked={hideClutter}
-        update={setHideClutter}
-      />
     <hr />
     </div>
   )
