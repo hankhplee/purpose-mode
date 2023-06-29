@@ -1,0 +1,88 @@
+.container {
+  text-align: center;
+}
+
+hr {
+  border: 1px solid gray;
+}
+
+.container-child {
+  /* Constrain width to 50%, so both divs can float side by side. */
+  width: 50%;
+  float: left;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 37px;
+  display: inline-block;
+  text-align: left;
+  top: 4px;
+}
+
+.checkbox {
+  display: none;
+}
+
+.label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 0 solid #bbb;
+  border-radius: 10px;
+}
+
+.inner {
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
+}
+
+.inner:before, .inner:after {
+  float: left;
+  width: 50%;
+  height: 18px;
+  padding: 0;
+  line-height: 18px;
+  color: #fff;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.inner:before {
+  content: "";
+  padding-left: 5px;
+  background-color: rgba(0, 0, 220, 0.7);
+  color: #fff;
+}
+
+.inner:after {
+  content: "";
+  padding-right: 5px;
+  background-color: #bbb;
+  color: #fff;
+  text-align: right;
+}
+
+.switch {
+  display: block;
+  width: 12px;
+  margin: 3px;
+  background: #fff;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 20px;
+  border: 0 solid #bbb;
+  border-radius: 10px;
+  transition: all 0.3s ease-in 0s;
+}
+
+.checkbox:checked + .label .inner {
+  margin-left: 0;
+}
+
+.checkbox:checked + .label .switch {
+  right: 0px;
+}

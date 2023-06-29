@@ -1,0 +1,36 @@
+{
+  "name": "purpose-mode",
+  "displayName": "Purpose mode",
+  "version": "0.0.1",
+  "description": "Browse the Web with purpose",
+  "author": "phw",
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "package": "plasmo package"
+  },
+  "dependencies": {
+    "@plasmohq/messaging": "^0.4.0",
+    "@plasmohq/storage": "^1.6.1",
+    "@types/jquery": "^3.5.16",
+    "jquery": "^3.7.0",
+    "plasmo": "0.77.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "use-chrome-storage": "^1.2.1"
+  },
+  "devDependencies": {
+    "@plasmohq/prettier-plugin-sort-imports": "3.6.4",
+    "@types/chrome": "0.0.237",
+    "@types/node": "20.2.4",
+    "@types/react": "18.2.7",
+    "@types/react-dom": "18.2.4",
+    "prettier": "2.8.8",
+    "typescript": "5.0.4"
+  },
+  "manifest": {
+    "host_permissions": [
+      "https://*/*"
+    ]
+  }
+}
