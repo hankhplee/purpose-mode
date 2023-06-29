@@ -2,10 +2,13 @@ import $ from "jquery";
 
 const extName = "Purpose Mode";
 const settingToHandler = {
-    "Enable":          onToggleEnable,
-    "Desaturate":      onToggleDesaturate,
-    "Compact":         onToggleCompact,
-    "TwitterReadOnly": onToggleTwitterReadOnly
+    "Enable":            onToggleEnable,
+    "Desaturate":        onToggleDesaturate,
+    "Compact":           onToggleCompact,
+    "TwitterReadOnly":   onToggleTwitterReadOnly,
+    "LinkedInDeclutter": onToggleLinkedInDeclutter,
+    "LinkedInRecomms":   onToggleLinkedInRecomms,
+    "LinkedInNotif":     onToggleLinkedInNotif,
 }
 
 function onToggleEnable(toggled: boolean) {
@@ -36,6 +39,54 @@ function onToggleEnable(toggled: boolean) {
                 settingToHandler[key](result[key]);
             })
         }
+    }
+}
+
+function onToggleLinkedInDeclutter(toggled: boolean) {
+    console.log("onToggleLinkedInDeclutter: " + toggled);
+
+    let elements = [
+        // Messaging.
+        $('aside#msg-overlay'),
+        // Left column profile and links.
+        $('div.scaffold-layout__sidebar'),
+        // LinkedIn Premium ads (upper right).
+        $('div.premium-upsell-link'),
+        // "For Business" button.
+        $('li.global-nav__primary-item:has(> button > span[title="For Business"])'),
+    ];
+    if (toggled) {
+        for (const e of elements) { e.hide() }
+    } else {
+        for (const e of elements) { e.show() }
+    }
+}
+
+function onToggleLinkedInNotif(toggled: boolean) {
+    console.log("onToggleLinkedInNotif: " + toggled);
+
+    // "Red dot" notification icon.
+    let e = $('span.notification-badge--show');
+    if (toggled) {
+        e.hide();
+    } else {
+        e.show();
+    }
+}
+
+function onToggleLinkedInRecomms(toggled: boolean) {
+    console.log("onToggleLinkedInRecomms: " + toggled);
+
+    let elements = [
+        // LinkedIn news.
+        $('aside[aria-label="LinkedIn News"]'),
+        // Profile recommendations.
+        $('aside.scaffold-layout__aside'),
+    ];
+    if (toggled) {
+        for (const e of elements) { e.hide() }
+    } else {
+        for (const e of elements) { e.show() }
     }
 }
 

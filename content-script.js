@@ -305,64 +305,7 @@ const removeTwitterDistractions = () => {
 }
 
 const removeLinkedInDistractions = () => {
-    /* Notification removal */
-    // "red dot" notifications
-    $('span.notification-badge--show').each(function() {
-        $( this ).css({
-            "display": "none",
-            "visibility": "hidden"
-        });
-    });
-
-    /* De-cluttered UI */
-    // Messaging
-    const messaging = $('aside#msg-overlay');
-    messaging.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-    // Left column profile and links
-    const infoClumn = $('div.scaffold-layout__sidebar');
-    infoClumn.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-    // LinkedIn Premium ads (upper right)
-    const premuimAdRight = $('div.premium-upsell-link').parent();
-    if(premuimAdRight){
-        premuimAdRight.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
-    }
-    // "For Business" button
-    const forBusinessButton = $('li.global-nav__primary-item:has(> button > span[title="For Business"])')
-    if(forBusinessButton){
-        forBusinessButton.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
-    }
-
-    /* Recommendation removal */
-    // LinkedIn News
-    const newsColumn = $('aside[aria-label="LinkedIn News"]');
-    if(newsColumn){
-        newsColumn.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
-    }
-
-    if(!isHomePage()){ // remove recommendations on the right column of the profile page
-        const profileRecommendations = $('aside.scaffold-layout__aside');
-        if(profileRecommendations){
-            profileRecommendations.css({
-                "display": "none",
-                "visibility": "hidden"
-            });
-        }
-    }
+    // Moved to content.ts.
 }
 
 const removeFacebookDistractions = () => {

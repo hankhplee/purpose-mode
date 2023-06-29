@@ -67,6 +67,40 @@ function GlobalSwitches() {
   );
 }
 
+function LinkedInSwitches() {
+  const [declutter, setDeclutter] =
+    useChromeStorageLocal("LinkedInDeclutter", false);
+  const [recomms, setRecomms] =
+    useChromeStorageLocal("LinkedInRecomms", false);
+  const [notif, setNotif] =
+    useChromeStorageLocal("LinkedInNotif", false);
+
+  return (
+    <div>
+      <h3>LinkedIn</h3>
+      <ToggleSwitch
+        label="Declutter"
+        storage_var="LinkedInDeclutter"
+        checked={declutter}
+        update={setDeclutter}
+      />
+      <ToggleSwitch
+       label="No recommendations"
+       storage_var="LinkedInRecomms"
+       checked={recomms}
+       update={setRecomms}
+      />
+      <ToggleSwitch
+       label="No notifications"
+       storage_var="LinkedInNotif"
+       checked={notif}
+       update={setNotif}
+      />
+    <hr />
+    </div>
+  )
+}
+
 function TwitterSwitches() {
   const [readOnly, setReadOnly] =
     useChromeStorageLocal("TwitterReadOnly", false);
@@ -75,7 +109,7 @@ function TwitterSwitches() {
 
   return (
     <div>
-      Twitter:
+      <h3>Twitter</h3>
       <ToggleSwitch
         label="Read only"
         storage_var="TwitterReadOnly"
@@ -113,7 +147,14 @@ function IndexPopup() {
         checked={enabled}
         update={setEnabled}
       />
-      { enabled && <div><GlobalSwitches /> <TwitterSwitches /></div>}
+      {
+        enabled &&
+        <div>
+          <GlobalSwitches />
+          <TwitterSwitches />
+          <LinkedInSwitches />
+        </div>
+      }
 
       <a href="https://github.com/brave-experiments/purpose-mode"
          target="_blank">
