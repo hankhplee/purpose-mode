@@ -82,6 +82,15 @@ const removeYouTubeDistractions= () => {
         "visibility": "hidden"
     });
 
+    // notification
+    const updateNotification = $("div.yt-spec-icon-badge-shape__badge");
+        if(updateNotification){
+        updateNotification.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+
     /*
     // remove notifications button on the top right
     const home_notification_video = $('ytd-topbar-menu-button-renderer:has(> div > a > yt-icon-button > button[aria-label="Create"])');
