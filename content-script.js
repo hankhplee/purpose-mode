@@ -74,15 +74,15 @@ function removeDistractions(){
 
 const removeYouTubeDistractions= () => {
 
-    // whole site
-    // condense UI
+    /* De-cluttered UI */
+    // Hamburger menu removal
     const hamburgerUI = $('div#guide-content');
     hamburgerUI.css({
         "display": "none",
         "visibility": "hidden"
     });
 
-    // notification
+    /* Notifications removal */
     const updateNotification = $("div.yt-spec-icon-badge-shape__badge");
         if(updateNotification){
         updateNotification.css({
@@ -91,24 +91,9 @@ const removeYouTubeDistractions= () => {
         });
     }
 
-    /*
-    // remove notifications button on the top right
-    const home_notification_video = $('ytd-topbar-menu-button-renderer:has(> div > a > yt-icon-button > button[aria-label="Create"])');
-    home_notification_video.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    const home_notification_noti = $('ytd-notification-topbar-button-renderer');
-    home_notification_noti.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-    */
-
+    /* Recommendation removal */
     const currentPage = window.top.location.href;
-
-    if(currentPage === "https://www.youtube.com/"){ // distraction removal applied to the home page only
+    if(currentPage === "https://www.youtube.com/"){ // home page-only recommendations
         
         // recommendation tags on top of the page
         const recc_tag = $('div#scroll-container');
@@ -118,7 +103,6 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
-
         // "Next" button of the recommendation tags
         const nextReccTag = $('button[aria-label="Next"]');
         if(nextReccTag){
@@ -127,7 +111,6 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
-
         // video ad on the home page
         const home_page_video_ad = $('div#masthead-ad');
         if(home_page_video_ad){
@@ -136,7 +119,6 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
-
         // shorts
         const shorts = $('ytd-rich-shelf-renderer[is-shorts]');
         if(shorts){
@@ -145,7 +127,6 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
-
         // Recommended Primetime movies
         const primetimeMovie = $('a[title="Recommended Primetime movies"]');
         if(primetimeMovie){
@@ -154,7 +135,6 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
-
         // Top news
         const topNews = $('span[id="title"]:contains("Top news")');
         if(topNews){
@@ -163,7 +143,6 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
-
         // Breaking news
         const breakingNews = $('span[id="title"]:contains("Breaking news")');
         if(breakingNews){
@@ -172,7 +151,6 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
-
         // Latest YouTube posts
         const latestPosts = $('span[id="title"]:contains("Latest YouTube posts")');
         if(latestPosts){
@@ -181,7 +159,6 @@ const removeYouTubeDistractions= () => {
                 "visibility": "hidden"
             });
         }
-
         // Discover your next favorite movie
         const nextFavoriteMovie = $('yt-formatted-string[id="item-title"]:contains("Discover your next favorite movie")');
         if(nextFavoriteMovie){
@@ -191,8 +168,7 @@ const removeYouTubeDistractions= () => {
             });
         }
     }
-    // on the watch page
-    else if (currentPage.includes("www.youtube.com/watch?")){
+    else if (currentPage.includes("www.youtube.com/watch?")){ // Watch page-only recommendations
         // video recommendation
         const relatedVideos = $('div#secondary-inner');
         if(relatedVideos){
@@ -210,10 +186,7 @@ const removeYouTubeDistractions= () => {
             });
         }
     }
-    // on search page
-    else if (window.top.location.href.includes("results?search_query")){
-        // console.log("content removal on search page");
-
+    else if (window.top.location.href.includes("results?search_query")){ // Search page-only recommendations
         // "People also watched"
         const peopleAlsoWatched = $('span[id="title"]:contains("People also watched")');
         if(peopleAlsoWatched){
@@ -221,9 +194,7 @@ const removeYouTubeDistractions= () => {
                 "display": "none",
                 "visibility": "hidden"
             });
-            // console.log("removed People also watched");
         }
-
         // shorts
         /*
         const shorts = $('span[id="title"]:contains("Shorts")');
@@ -241,17 +212,15 @@ const removeYouTubeDistractions= () => {
         // const shorts = $('span[id="title"]:contains("Shorts")').get(0);
         // shorts.closest('ytd-shelf-renderer').remove();
 
-        // Channels new to you
+        // "Channels new to you"
         const channelsNewToYou = $('span[id="title"]:contains("Channels new to you")');
         if(channelsNewToYou){
             channelsNewToYou.closest('ytd-shelf-renderer').css({
                 "display": "none",
                 "visibility": "hidden"
             });
-            // console.log("removed Channels new to you");
         }
-
-        // For you
+        // "For you"
         const forYou = $('span[id="title"]:contains("For you")');
         if(forYou){
             forYou.closest('ytd-shelf-renderer').css({
@@ -260,59 +229,51 @@ const removeYouTubeDistractions= () => {
             });
             // console.log("removed For you");
         }
-
-        // Previously watched
+        // "Previously watched"
         const perviouslyWatched = $('span[id="title"]:contains("Previously watched")');
         if(perviouslyWatched){
             perviouslyWatched.closest('ytd-shelf-renderer').css({
                 "display": "none",
                 "visibility": "hidden"
             });
-            // console.log("removed Previously watched");
         }
-
-        // From related searches
+        // "From related searches"
         const relatedSearch = $('span[id="title"]:contains("From related searches")');
         if(relatedSearch){
             relatedSearch.closest('ytd-shelf-renderer').css({
                 "display": "none",
                 "visibility": "hidden"
             });
-            // console.log("removed Related Search");
         }
     }
-    // console.log("finish content removal on YouTube");
 }
 
 const removeTwitterDistractions = () => {
+    /*Clean feed view*/
     // "What's happening" column on the right.
     const col_what = $('div[aria-label="Timeline: Trending now"]');
     col_what.css({
         "display": "none",
         "visibility": "hidden"
     });
-
     // "Who to follow" column on the right.
     const col_who = $('div:has(> div > aside[aria-label="Who to follow"])');
     col_who.css({
         "display": "none",
         "visibility": "hidden"
     });
-
     // ToS, privacy policy, etc.
     const col_footer = $('nav[aria-label="Footer"]');
     col_footer.css({
         "display": "none",
         "visibility": "hidden"
     });
-
     // "Get Verified" promotion
     const col_verify = $('div:has(> aside[aria-label="Get Verified"])');
     col_verify.css({
         "display": "none",
         "visibility": "hidden"
     });
-
     // DM
     const DM = $('div[data-testid="DMDrawer"]');
     DM.css({
@@ -320,21 +281,19 @@ const removeTwitterDistractions = () => {
         "visibility": "hidden"
     });
     
-
+    /* Notifications removal */
     // Blue notification circle, e.g., on top of home icon.
     const home_notification = $('div[aria-label="undefined unread items"]');
     home_notification.css({
         "display": "none",
         "visibility": "hidden"
     });
-
     // Blue button that promotes new tweets, i.e., on top of the page
     const tweet_notification = $('div[aria-label="New Tweets are available. Push the period key to go to the them."]');
     tweet_notification.css({
         "display": "none",
         "visibility": "hidden"
     });
-
     // notifications
     const notifications = $('div[aria-label*="unread"]');
     if (notifications){
@@ -346,57 +305,7 @@ const removeTwitterDistractions = () => {
 }
 
 const removeLinkedInDistractions = () => {
-    // LinkedIn News
-    const newsColumn = $('aside[aria-label="LinkedIn News"]');
-    newsColumn.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // Messaging
-    const messaging = $('aside#msg-overlay');
-    messaging.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // left column
-    const infoClumn = $('div.scaffold-layout__sidebar');
-    infoClumn.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    /*
-    // “Discover more” box on the left
-    const discoverMore = $('section[aria-labelledby]').parent().parent().parent().parent();
-    discoverMore.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // LinkedIn Premium ads (left)
-    const premuimAdLeft = $('li-icon[type="premium-chip"]').parent().parent();
-    premuimAdLeft.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-    */
-
-    // LinkedIn Premium ads (upper right)
-    const premuimAdRight = $('div.premium-upsell-link').parent();
-    premuimAdRight.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // "For Business" button
-    const forBusinessButton = $('li.global-nav__primary-item:has(> button > span[title="For Business"])')
-    forBusinessButton.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
+    /* Notification removal */
     // "red dot" notifications
     $('span.notification-badge--show').each(function() {
         $( this ).css({
@@ -405,91 +314,60 @@ const removeLinkedInDistractions = () => {
         });
     });
 
-    if(!isHomePage()){
-        // recommendations
-        // remove recommendations on the left column of the profile page
-        const profileRecommendations = $('aside.scaffold-layout__aside');
-        profileRecommendations.css({
+    /* De-cluttered UI */
+    // Messaging
+    const messaging = $('aside#msg-overlay');
+    messaging.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+    // Left column profile and links
+    const infoClumn = $('div.scaffold-layout__sidebar');
+    infoClumn.css({
+        "display": "none",
+        "visibility": "hidden"
+    });
+    // LinkedIn Premium ads (upper right)
+    const premuimAdRight = $('div.premium-upsell-link').parent();
+    if(premuimAdRight){
+        premuimAdRight.css({
             "display": "none",
             "visibility": "hidden"
         });
+    }
+    // "For Business" button
+    const forBusinessButton = $('li.global-nav__primary-item:has(> button > span[title="For Business"])')
+    if(forBusinessButton){
+        forBusinessButton.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+
+    /* Recommendation removal */
+    // LinkedIn News
+    const newsColumn = $('aside[aria-label="LinkedIn News"]');
+    if(newsColumn){
+        newsColumn.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+
+    if(!isHomePage()){ // remove recommendations on the right column of the profile page
+        const profileRecommendations = $('aside.scaffold-layout__aside');
+        if(profileRecommendations){
+            profileRecommendations.css({
+                "display": "none",
+                "visibility": "hidden"
+            });
+        }
     }
 }
 
 const removeFacebookDistractions = () => {
-
-    // mainly on Home page
-    // “Stories” and “Reels” video section
-    const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
-    if(storiesBar){
-        storiesBar.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
-    }
-
-    // the whole right column, e.g., your pages and profiles, contacts etc.
-    const rightColum = $('div[role="complementary"]');
-    if(rightColum){
-        rightColum.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
-    }
-    
-    // whole site
-    // hamburger menu on the left
-    const leftColum = $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))');
-    if(leftColum){
-        leftColum.css({
-            "display": "none",
-            "visibility": "hidden"
-        });
-    }
-
-    // Buttons on top of the page
-    // home button
-    const homeButton = $('a[aria-label="Home"]').parent().parent().parent();
-    homeButton.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // watch button
-    const watchButton = $('a[aria-label="Watch"]').parent().parent().parent();
-    watchButton.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // marketplace button
-    const marketButton = $('a[aria-label="Marketplace"]').parent().parent().parent();
-    marketButton.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // groups button
-    const groupsButton = $('a[aria-label="Groups"]').parent().parent().parent();
-    groupsButton.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // gaming button
-    const gameButton = $('a[aria-label="Gaming"]').parent().parent().parent();
-    gameButton.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
+    /* Notifications removal */
     // "red dot" update notifications
-    // $('div[aria-label*="Notifications"]').each(function() {
-    //     $( this ).css({
-    //         "display": "none",
-    //         "visibility": "hidden"
-    //     });
-    // });
     const updateNotification = $('div[aria-label*="Notifications"][tabindex="-1"]');
     updateNotification.css({
         "display": "none",
@@ -503,49 +381,113 @@ const removeFacebookDistractions = () => {
         "visibility": "hidden"
     });
 
-    // messenger box
-    // normal box
-    $('div[aria-label*="Open chat"').each(function() {
-        $( this ).css({
+    /* Recommendation removal */
+    // “Stories” and “Reels” videos on the top
+    const storiesBar = $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent();
+    if(storiesBar){
+        storiesBar.css({
             "display": "none",
             "visibility": "hidden"
         });
-    });
-
-    // additional chat box
-    const additionalMessage = $('div[aria-label*="additional chats"');
-    additionalMessage.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // edit new message box
-    const newMessage = $('div[aria-label="New message"');
-    newMessage.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
+    }
     // Reels and short video recommendations
     const reels = $('div[aria-label="Reels"]').parent().parent().parent().parent();
-    reels.css({
-        "display": "none",
-        "visibility": "hidden"
-    });
-
-    // People You May Know
+    if(reels){
+        reels.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+    // "People You May Know"
     const friendRec = $('span:contains("People You May Know")').parent().parent().parent().parent().parent();
     friendRec.css({
         "display": "none",
         "visibility": "hidden"
     });
-
     // Suggested groups
     const groupRec = $('span:contains("Suggested groups")').parent().parent().parent().parent().parent();
-    groupRec.css({
-        "display": "none",
-        "visibility": "hidden"
+    if(groupRec){
+        groupRec.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+
+    /* De-cluttered UI */
+    // the whole right column, e.g., your pages and profiles, contacts etc.
+    const rightColum = $('div[role="complementary"]');
+    if(rightColum){
+        rightColum.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+    // hamburger menu on the left
+    const leftColum = $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))');
+    if(leftColum){
+        leftColum.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+    // Buttons on top of the page
+    const homeButton = $('a[aria-label="Home"]').parent().parent().parent(); // home button
+    if(homeButton){
+        homeButton.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+    const watchButton = $('a[aria-label="Watch"]').parent().parent().parent(); // watch button
+    if(watchButton){
+        watchButton.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+    const marketButton = $('a[aria-label="Marketplace"]').parent().parent().parent(); // marketplace button
+    if(marketButton){
+        marketButton.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+    const groupsButton = $('a[aria-label="Groups"]').parent().parent().parent(); // groups button
+    if(groupsButton){
+        groupsButton.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+    const gameButton = $('a[aria-label="Gaming"]').parent().parent().parent(); // gaming button
+    if(gameButton){
+        gameButton.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+
+    // messenger boxes
+    $('div[aria-label*="Open chat"').each(function() { // normal boxes
+        $( this ).css({
+            "display": "none",
+            "visibility": "hidden"
+        });
     });
+    const additionalMessage = $('div[aria-label*="additional chats"'); // additional chat boxes
+    if(additionalMessage){
+        additionalMessage.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
+    const newMessage = $('div[aria-label="New message"'); // edit new message box
+    if(newMessage){
+        newMessage.css({
+            "display": "none",
+            "visibility": "hidden"
+        });
+    }
 }
 
 const removeInfiniteScrolling = (container) => {
@@ -603,24 +545,6 @@ const updateFacebookShowMore = (container) => {
     container.css("max-height", `${feedHeight}px`);
     button.css("top", `${feedHeight+container_top-100}px`);
 }
-
-const isCurrentPageFeed = () => {
-    if(currentPage == "Twitter"){
-        return window.location.href.includes("home");
-    }
-    else if(currentPage == "Facebook"){
-        return window.location.href == "https://www.facebook.com/";
-    }
-    else if(currentPage == "YouTube"){
-        return window.location.href == "https://www.youtube.com/";
-    }
-    else if(currentPage == "LinkedIn"){
-        return window.location.href.includes("feed");
-    }
-    else{
-        console.error("Unknown page to enable purpose mode!");
-    }
-};
 
 const getCurrentPage = () => {
     const currentWindowURL = window.location.href;
