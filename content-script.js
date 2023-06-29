@@ -701,11 +701,16 @@ function spoofWindowSize() {
     window.dispatchEvent(new Event('resize'));
 }
 
-
+/* comment out to replace blur with saturate
 function initialUpdates() {
     console.log("Applying custom style to existing img tags.");
     blur_img(document);
-    // removeDistractions(document);
+}
+*/
+
+function desaturate(){
+    let e = $("html");
+    e.css({"filter": "saturate(10%)"});
 }
   
 function blur_img(document_query){
@@ -940,6 +945,9 @@ const run = () => getContainer()
 
         // remove distracting contents
         removeDistractions();
+
+        // desaturate page view
+        desaturate();
         
         // remove inifite scrolling only on home page
         if(isHomePage()){
@@ -988,10 +996,12 @@ if(currentPage == "Twitter"){
     spoofWindowSize();
 }
 
-/*content removing and finite scrolling*/
+// content removing and finite scrolling
 run();
 
-/*blur & nblur images and remove dynamic distracting content update on pages*/
+/* comment out to replace blur with saturate
+
+// blur & nblur images and remove dynamic distracting content update on pages
 const image_size_threshold = 65; // image height threashold (px) for image blurring 
 
 // Listen to page change based on sites
@@ -1014,6 +1024,7 @@ mutationObserver.observe(document.documentElement, {
 
 // Takes all changes which haven’t been fired so far.
 var changes = mutationObserver.takeRecords();
+*/
 
 // main
-initialUpdates();
+// initialUpdates();
