@@ -48,7 +48,7 @@ function GlobalSwitches() {
 
   return (
     <div>
-    <hr />
+    <h3>Global options</h3>
     <ToggleSwitch
       label="Desaturate"
       storage_var="Desaturate"
@@ -142,12 +142,15 @@ function IndexPopup() {
 
       <h2>{extName}</h2>
 
+      <div>
       <ToggleSwitch
         label="Enable"
         storage_var="Enable"
         checked={enabled}
         update={setEnabled}
       />
+      <hr />
+      </div>
       {
         enabled &&
         <div>
