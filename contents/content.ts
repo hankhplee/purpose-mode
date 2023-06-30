@@ -4,7 +4,7 @@ const extName = "Purpose Mode";
 const settingToHandler = {
     "Enable":            onToggleEnable,
     "Desaturate":        onToggleDesaturate,
-    "Compact":           onToggleCompact,
+    "TwitterCompact":    onToggleTwitterCompact,
     "TwitterReadOnly":   onToggleTwitterReadOnly,
     "LinkedInDeclutter": onToggleLinkedInDeclutter,
     "LinkedInRecomms":   onToggleLinkedInRecomms,
@@ -130,8 +130,7 @@ function onToggleTwitterReadOnly(toggled: boolean, node: Node) {
     }
 }
 
-function onToggleCompact(toggled: boolean) {
-    console.log("onToggleCompact: " + toggled);
+function onToggleTwitterCompact(toggled: boolean) {
     // Send a message to the second content script, which runs in the main
     // world.  Upon receiving this message, the script is going to
     // monkey-patch the window and document API.

@@ -44,8 +44,7 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
 function GlobalSwitches() {
   const [desaturate, setDesaturate] =
     useChromeStorageLocal("Desaturate", false);
-  const [compact, setCompact] =
-    useChromeStorageLocal("Compact", false);
+
 
   return (
     <div>
@@ -55,12 +54,6 @@ function GlobalSwitches() {
       storage_var="Desaturate"
       checked={desaturate}
       update={setDesaturate}
-    />
-    <ToggleSwitch
-      label="Compact"
-      storage_var="Compact"
-      checked={compact}
-      update={setCompact}
     />
     <hr />
     </div>
@@ -104,6 +97,8 @@ function LinkedInSwitches() {
 function TwitterSwitches() {
   const [readOnly, setReadOnly] =
     useChromeStorageLocal("TwitterReadOnly", false);
+  const [compact, setCompact] =
+    useChromeStorageLocal("TwitterCompact", false);
   const [hideClutter, setHideClutter] =
     useChromeStorageLocal("hide-clutter", false);
 
@@ -115,6 +110,12 @@ function TwitterSwitches() {
         storage_var="TwitterReadOnly"
         checked={readOnly}
         update={setReadOnly}
+      />
+      <ToggleSwitch
+       label="Compact layout"
+       storage_var="TwitterCompact"
+       checked={compact}
+       update={setCompact}
       />
       <ToggleSwitch
         label="Hide clutter"
