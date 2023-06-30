@@ -11,6 +11,33 @@ const settingToHandler = {
     "LinkedInNotif":     onToggleLinkedInNotif,
 }
 
+var mutationObserver = new MutationObserver(function(mutations) {
+    let keys = [
+        "TwitterReadOnly",
+    ];
+    // For each page mutation, invoke relevant toggle functions if enabled.
+    mutations.forEach(function(mutation) {
+        for (const key of keys) {
+            chrome.storage.local.get(key, (result) => {
+                if (result[key] === true) {
+                    settingToHandler[key](result[key], mutation.target);
+                }
+            });
+        }
+    });
+});
+
+// Starts listening for changes in the root HTML element of the page.
+mutationObserver.observe(document.documentElement, {
+    attributes: false,
+    characterData: false,
+    childList: true,
+    subtree: true,
+});
+
+// Takes all changes which haven’t been fired so far.
+var changes = mutationObserver.takeRecords();
+
 function onToggleEnable(toggled: boolean) {
     console.log("onToggleEnable: " + toggled);
 
@@ -90,14 +117,14 @@ function onToggleLinkedInRecomms(toggled: boolean) {
     }
 }
 
-function onToggleTwitterReadOnly(toggled: boolean) {
-    console.log("onToggleTwitterReadOnly: " + toggled);
+function onToggleTwitterReadOnly(toggled: boolean, node: Node) {
+    let s = "div[aria-label*=Reply]";
     if (toggled) {
-        $("div[aria-label*=Reply]").each(function(i) {
+        $(s, node).each(function(i) {
             $(this).parent().parent().hide();
         });
     } else {
-        $("div[aria-label*=Reply]").each(function(i) {
+        $(s).each(function(i) {
             $(this).parent().parent().show();
         });
     }
