@@ -118,15 +118,19 @@ function onToggleLinkedInRecomms(toggled: boolean) {
 }
 
 function onToggleTwitterReadOnly(toggled: boolean, node: Node) {
-    let s = "div[aria-label*=Reply]";
+    let selectors = [
+        $("div[aria-label*=Reply]", node).parent().parent(),
+        $("div[role=progressbar]", node).parent(),
+        $("a[aria-label=Tweet]", node),
+    ];
     if (toggled) {
-        $(s, node).each(function(i) {
-            $(this).parent().parent().hide();
-        });
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
     } else {
-        $(s).each(function(i) {
-            $(this).parent().parent().show();
-        });
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
     }
 }
 
