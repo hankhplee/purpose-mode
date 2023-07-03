@@ -10,6 +10,7 @@ hr {
   /* Constrain width to 50%, so both divs can float side by side. */
   width: 50%;
   float: left;
+  text-align: left;
 }
 
 .toggle-switch {
