@@ -45,19 +45,34 @@ function GlobalSwitches() {
   const [desaturate, setDesaturate] =
     useChromeStorageLocal("Desaturate", false);
 
-
   return (
     <div>
-    <h3>Global options</h3>
+    <h3>All sites</h3>
     <ToggleSwitch
       label="Desaturate"
       storage_var="Desaturate"
       checked={desaturate}
       update={setDesaturate}
     />
-    <hr />
     </div>
   );
+}
+
+function FacebookSwitches() {
+  const [finite, setFinite] =
+    useChromeStorageLocal("FacebookInfinite", false)
+
+  return (
+    <div>
+      <h3>Facebook</h3>
+      <ToggleSwitch
+       label="Finite scrolling"
+       storage_var="FacebookInfinite"
+       checked={finite}
+       update={setFinite}
+      />
+    </div>
+  )
 }
 
 function LinkedInSwitches() {
@@ -67,6 +82,8 @@ function LinkedInSwitches() {
     useChromeStorageLocal("LinkedInRecomms", false);
   const [notif, setNotif] =
     useChromeStorageLocal("LinkedInNotif", false);
+  const [finite, setFinite] =
+    useChromeStorageLocal("LinkedInInfinite", false)
 
   return (
     <div>
@@ -89,7 +106,29 @@ function LinkedInSwitches() {
        checked={notif}
        update={setNotif}
       />
-    <hr />
+      <ToggleSwitch
+       label="Finite scrolling"
+       storage_var="LinkedInInfinite"
+       checked={finite}
+       update={setFinite}
+      />
+    </div>
+  )
+}
+
+function YouTubeSwitches() {
+  const [finite, setFinite] =
+    useChromeStorageLocal("YouTubeInfinite", false)
+
+  return (
+    <div>
+      <h3>YouTube</h3>
+      <ToggleSwitch
+        label="Finite scrolling"
+        storage_var="YouTubeInfinite"
+        checked={finite}
+        update={setFinite}
+      />
     </div>
   )
 }
@@ -101,6 +140,8 @@ function TwitterSwitches() {
     useChromeStorageLocal("TwitterCompact", false);
   const [hideClutter, setHideClutter] =
     useChromeStorageLocal("hide-clutter", false);
+  const [finite, setFinite] =
+    useChromeStorageLocal("TwitterInfinite", false)
 
   return (
     <div>
@@ -118,12 +159,17 @@ function TwitterSwitches() {
        update={setCompact}
       />
       <ToggleSwitch
+        label="Finite scrolling"
+        storage_var="TwitterInfinite"
+        checked={finite}
+        update={setFinite}
+      />
+      <ToggleSwitch
         label="Hide clutter"
         storage_var="TwitterHideClutter"
         checked={hideClutter}
         update={setHideClutter}
       />
-    <hr />
     </div>
   )
 }
@@ -149,7 +195,6 @@ function IndexPopup() {
         checked={enabled}
         update={setEnabled}
       />
-      <hr />
       </div>
       {
         enabled &&
@@ -157,6 +202,8 @@ function IndexPopup() {
           <GlobalSwitches />
           <TwitterSwitches />
           <LinkedInSwitches />
+          <FacebookSwitches />
+          <YouTubeSwitches />
         </div>
       }
 
