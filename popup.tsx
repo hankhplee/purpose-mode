@@ -20,8 +20,8 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
       <div className="toggle-switch">
         <input type="checkbox"
                className="checkbox"
-               name={label}
-               id={label}
+               name={storage_var}
+               id={storage_var}
                checked={checked}
                onChange={(e) => {
                  update(e.target.checked);
@@ -32,7 +32,7 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
                 })
                }} />
 
-        <label className="label" htmlFor={label}>
+        <label className="label" htmlFor={storage_var}>
           <span className="inner" />
           <span className="switch" />
         </label>
