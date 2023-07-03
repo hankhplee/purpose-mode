@@ -9,7 +9,9 @@ const settingToHandler = {
 
     "TwitterCompact":    onToggleTwitterCompact,
     "TwitterReadOnly":   onToggleTwitterReadOnly,
+    "TwitterClutter":    onToggleTwitterClutter,
     "TwitterInfinite":   onToggleTwitterInfinite,
+    "TwitterNotif":      onToggleTwitterNotif,
 
     "LinkedInDeclutter": onToggleLinkedInDeclutter,
     "LinkedInRecomms":   onToggleLinkedInRecomms,
@@ -17,14 +19,32 @@ const settingToHandler = {
     "LinkedInNotif":     onToggleLinkedInNotif,
 
     "FacebookInfinite":  onToggleFacebookInfinite,
+    "FacebookDeclutter": onToggleFacebookDeclutter,
+    "FacebookRecomms":   onToggleFacebookRecomms,
+    "FacebookNotif":     onToggleFacebookNotif,
 
     "YouTubeInfinite":   onToggleYouTubeInfinite,
+    "YouTubeRecomm":     onToggleYouTubeRecomm,
+    "YouTubeNotif":      onToggleYouTubeNotif,
+    "YouTubeDeclutter":  onToggleYouTubeDeclutter,
 }
 
 let isEnabled = false;
 let feedHeight = 2500;
 let containerTop = 0;
 const showMoreIncrement = 2500;
+
+function hideSelectors(selectors: Array<JQuery>) {
+    for (const s of selectors) {
+        s.each(() => { s.hide() });
+    }
+}
+
+function showSelectors(selectors: Array<JQuery>) {
+    for (const s of selectors) {
+        s.each(() => { s.show() });
+    }
+}
 
 function getCurrentPage(): string {
     const currentWindowURL = window.location.href;
@@ -359,6 +379,49 @@ function onToggleTwitterInfinite(toggled: boolean) {
     toggleInfScrolling(toggled);
 }
 
+function onToggleTwitterNotif(toggled: boolean) {
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+    const selectors = [
+        // Blue notification circle on top of home icon.
+        $('div[aria-label="undefined unread items"]'),
+        // Blue button that promotes new tweets.
+        $('div[aria-label="New Tweets are available. Push the period key to go to the them."]'),
+        // Notifications.
+        $('div[aria-label*="unread"]'),
+    ]
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
+}
+
+function onToggleTwitterClutter(toggled: boolean) {
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+
+    const selectors = [
+        // "What's happening" column on the right.
+        $('div[aria-label="Timeline: Trending now"]'),
+        // "Who to follow" column on the right.
+        $('div:has(> div > aside[aria-label="Who to follow"])'),
+        // ToS, privacy policy, etc.
+        $('nav[aria-label="Footer"]'),
+        // "Get verified" promotion.
+        $('div:has(> aside[aria-label="Get Verified"])'),
+        // DM.
+        $('div[data-testid="DMDrawer"]'),
+    ];
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
+}
+
 function onToggleFacebookInfinite(toggled: boolean) {
     if (getCurrentPage() !== "Facebook") {
         return;
@@ -366,11 +429,196 @@ function onToggleFacebookInfinite(toggled: boolean) {
     toggleInfScrolling(toggled);
 }
 
+function onToggleFacebookDeclutter(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+
+    const selectors = [
+        // Right column.
+        $('div[role="complementary"]'),
+        // Hamburger menu on the left.
+        $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))'),
+        // Buttons at the top of the page.
+        $('a[aria-label="Home"]').parent().parent().parent(),
+        // Watch button.
+        $('a[aria-label="Watch"]').parent().parent().parent(),
+        // Marketplace button.
+        $('a[aria-label="Marketplace"]').parent().parent().parent(),
+        // Groups button.
+        $('a[aria-label="Groups"]').parent().parent().parent(),
+        // Gaming button.
+        $('a[aria-label="Gaming"]').parent().parent().parent(),
+        // Additional chat boxes.
+        $('div[aria-label*="additional chats"'),
+        // New message box.
+        $('div[aria-label="New message"'),
+        // Messenger box.
+        $('div[aria-label*="Open chat"'),
+    ];
+    if (toggled) {
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+    }
+}
+
+function onToggleFacebookRecomms(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+
+    const selectors = [
+        // "Stories" and "reels" videos at the top.
+        $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent(),
+        // "Reels" and short video recommendations.
+        $('div[aria-label="Reels"]').parent().parent().parent().parent(),
+        // "People you may know".
+        $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
+        // Suggested groups.
+        $('span:contains("Suggested groups")').parent().parent().parent().parent().parent(),
+    ];
+    if (toggled) {
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+    }
+}
+
+function onToggleFacebookNotif(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+
+    const selectors = [
+        // "Red dot" update notification.
+        $('div[aria-label*="Notifications"][tabindex="-1"]'),
+        // "Red dot" notification for Messenger.
+        $('div[aria-label*="Messenger"][tabindex="-1"]'),
+    ];
+    if (toggled) {
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+    }
+}
+
 function onToggleYouTubeInfinite(toggled: boolean) {
     if (getCurrentPage() !== "YouTube") {
         return;
     }
     toggleInfScrolling(toggled);
+}
+
+function onToggleYouTubeRecomm(toggled: boolean) {
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+
+    let selectors = [];
+    const currentPage = window.top.location.href;
+    // Landing page.
+    if (currentPage === "https://www.youtube.com/") {
+        selectors = selectors.concat([
+            // All recommended videos on the landing page.
+            $('div[id=contents]'),
+            // Recommendation tags on top of the page.
+            $('div#scroll-container'),
+            // "Next" button of the recommendation tags.
+            $('button[aria-label="Next"]'),
+            // VIdeo ad on the home page.
+            $('div#masthead-ad'),
+            // Shorts.
+            $('ytd-rich-shelf-renderer[is-shorts]'),
+            // Recommended primetime movies.
+            $('a[title="Recommended Primetime movies"]').closest('ytd-rich-section-renderer'),
+            // Top news.
+            $('span[id="title"]:contains("Top news")').closest('ytd-rich-section-renderer'),
+            // Breaking news.
+            $('span[id="title"]:contains("Breaking news")').closest('ytd-rich-section-renderer'),
+            // Latest YouTube posts.
+            $('span[id="title"]:contains("Latest YouTube posts")').closest('ytd-rich-section-renderer'),
+            // "Discover your next favorite movie".
+            $('yt-formatted-string[id="item-title"]:contains("Discover your next favorite movie")').closest('ytd-rich-section-renderer'),
+        ]);
+    // Recommendations on the "watch" page.
+    } else if (currentPage.includes("https://www.youtube.com/watch?")) {
+        selectors = selectors.concat([
+            // Video recommendations.
+            $('div#secondary-inner'),
+            // Comments.
+            $("ytd-comments#comments"),
+        ]);
+    } else if (currentPage.includes("results?search_query")) {
+        selectors = selectors.concat([
+            // "People also watched".
+            $('span[id="title"]:contains("People also watched")').closest('ytd-shelf-renderer'),
+            // "Channels new to you".
+            $('span[id="title"]:contains("Channels new to you")').closest('ytd-shelf-renderer'),
+            // "For you".
+            $('span[id="title"]:contains("For you")').closest('ytd-shelf-renderer'),
+            // "Previously watched".
+            $('span[id="title"]:contains("Previously watched")').closest('ytd-shelf-renderer'),
+            // "From related searches".
+            $('span[id="title"]:contains("From related searches")').closest('ytd-shelf-renderer'),
+        ]);
+    }
+
+    if (toggled) {
+        hideSelectors(selectors)
+    } else {
+        showSelectors(selectors)
+    }
+}
+
+function onToggleYouTubeNotif(toggled: boolean) {
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+
+    const selectors = [
+        // Notification icons.
+        $("div.yt-spec-icon-badge-shape__badge"),
+        // "Newness" dot.
+        $("div[id=newness-dot]"),
+    ]
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        // Only show the first selector. Showing the second selector results
+        // in every category incorrectly displaying a notification icon. To fix
+        // this, we would have to remember which categories originally had a
+        // notification.
+        showSelectors([selectors.pop()]);
+    }
+}
+
+function onToggleYouTubeDeclutter(toggled: boolean) {
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+
+    const selectors = [
+        // Hamburger menu.
+        $('div#guide-content'),
+    ]
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
 }
 
 function onToggleDesaturate(toggled: boolean) {

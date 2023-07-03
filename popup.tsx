@@ -61,15 +61,39 @@ function GlobalSwitches() {
 function FacebookSwitches() {
   const [finite, setFinite] =
     useChromeStorageLocal("FacebookInfinite", false)
+  const [declutter, setDeclutter] =
+    useChromeStorageLocal("FacebookDeclutter", false)
+  const [recomms, setRecomms] =
+    useChromeStorageLocal("FacebookRecomms", false)
+  const [notif, setNotif] =
+    useChromeStorageLocal("FacebookNotif", false)
 
   return (
     <div>
       <h3>Facebook</h3>
       <ToggleSwitch
+       label="Declutter"
+       storage_var="FacebookDeclutter"
+       checked={declutter}
+       update={setDeclutter}
+      />
+      <ToggleSwitch
        label="Finite scrolling"
        storage_var="FacebookInfinite"
        checked={finite}
        update={setFinite}
+      />
+      <ToggleSwitch
+       label="Hide notifications"
+       storage_var="FacebookNotif"
+       checked={notif}
+       update={setNotif}
+      />
+      <ToggleSwitch
+       label="Hide recommendations"
+       storage_var="FacebookRecomms"
+       checked={recomms}
+       update={setRecomms}
       />
     </div>
   )
@@ -95,39 +119,63 @@ function LinkedInSwitches() {
         update={setDeclutter}
       />
       <ToggleSwitch
-       label="No recommendations"
-       storage_var="LinkedInRecomms"
-       checked={recomms}
-       update={setRecomms}
+       label="Finite scrolling"
+       storage_var="LinkedInInfinite"
+       checked={finite}
+       update={setFinite}
       />
       <ToggleSwitch
-       label="No notifications"
+       label="Hide notifications"
        storage_var="LinkedInNotif"
        checked={notif}
        update={setNotif}
       />
       <ToggleSwitch
-       label="Finite scrolling"
-       storage_var="LinkedInInfinite"
-       checked={finite}
-       update={setFinite}
+       label="Hide recommendations"
+       storage_var="LinkedInRecomms"
+       checked={recomms}
+       update={setRecomms}
       />
     </div>
   )
 }
 
 function YouTubeSwitches() {
+  const [declutter, setDeclutter] =
+    useChromeStorageLocal("YouTubeDeclutter", false)
   const [finite, setFinite] =
     useChromeStorageLocal("YouTubeInfinite", false)
+  const [recomm, setRecomm] =
+    useChromeStorageLocal("YouTubeRecomm", false)
+  const [notif, setNotif] =
+    useChromeStorageLocal("YouTubeNotif", false);
 
   return (
     <div>
       <h3>YouTube</h3>
       <ToggleSwitch
+       label="Declutter"
+       storage_var="YouTubeDeclutter"
+       checked={declutter}
+       update={setDeclutter}
+      />
+      <ToggleSwitch
         label="Finite scrolling"
         storage_var="YouTubeInfinite"
         checked={finite}
         update={setFinite}
+      />
+      <ToggleSwitch
+        label="Hide notifications"
+        storage_var="YouTubeNotif"
+        checked={notif}
+        update={setNotif}
+      />
+      <ToggleSwitch
+       label="Hide Recommendations"
+       storage_var="YouTubeRecomm"
+       checked={recomm}
+       update={setRecomm}
       />
     </div>
   )
@@ -138,10 +186,12 @@ function TwitterSwitches() {
     useChromeStorageLocal("TwitterReadOnly", false);
   const [compact, setCompact] =
     useChromeStorageLocal("TwitterCompact", false);
-  const [hideClutter, setHideClutter] =
-    useChromeStorageLocal("hide-clutter", false);
   const [finite, setFinite] =
     useChromeStorageLocal("TwitterInfinite", false)
+  const [notif, setNotif] =
+    useChromeStorageLocal("TwitterNotif", false)
+  const [clutter, setClutter] =
+    useChromeStorageLocal("TwitterClutter", false);
 
   return (
     <div>
@@ -159,16 +209,22 @@ function TwitterSwitches() {
        update={setCompact}
       />
       <ToggleSwitch
+        label="Declutter"
+        storage_var="TwitterClutter"
+        checked={clutter}
+        update={setClutter}
+      />
+      <ToggleSwitch
         label="Finite scrolling"
         storage_var="TwitterInfinite"
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
-        label="Hide clutter"
-        storage_var="TwitterHideClutter"
-        checked={hideClutter}
-        update={setHideClutter}
+       label="Hide notifications"
+       storage_var="TwitterNotif"
+       checked={notif}
+       update={setNotif}
       />
     </div>
   )
@@ -200,17 +256,12 @@ function IndexPopup() {
         enabled &&
         <div>
           <GlobalSwitches />
-          <TwitterSwitches />
-          <LinkedInSwitches />
           <FacebookSwitches />
+          <LinkedInSwitches />
+          <TwitterSwitches />
           <YouTubeSwitches />
         </div>
       }
-
-      <a href="https://github.com/brave-experiments/purpose-mode"
-         target="_blank">
-        GitHub
-      </a>
     </div>
   )
 }
