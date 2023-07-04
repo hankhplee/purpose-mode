@@ -1,17 +1,256 @@
 import $ from "jquery";
+import "../finite_scroll_style.css";
 
 const extName = "Purpose Mode";
 const settingToHandler = {
-    "Enable":          onToggleEnable,
-    "Desaturate":      onToggleDesaturate,
-    "Compact":         onToggleCompact,
-    "TwitterReadOnly": onToggleTwitterReadOnly
+    "Enable":            onToggleEnable,
+
+    "Desaturate":        onToggleDesaturate,
+
+    "TwitterCompact":    onToggleTwitterCompact,
+    "TwitterReadOnly":   onToggleTwitterReadOnly,
+    "TwitterClutter":    onToggleTwitterClutter,
+    "TwitterInfinite":   onToggleTwitterInfinite,
+    "TwitterNotif":      onToggleTwitterNotif,
+
+    "LinkedInDeclutter": onToggleLinkedInDeclutter,
+    "LinkedInRecomms":   onToggleLinkedInRecomms,
+    "LinkedInInfinite":  onToggleLinkedInInfinite,
+    "LinkedInNotif":     onToggleLinkedInNotif,
+
+    "FacebookInfinite":  onToggleFacebookInfinite,
+    "FacebookDeclutter": onToggleFacebookDeclutter,
+    "FacebookRecomms":   onToggleFacebookRecomms,
+    "FacebookNotif":     onToggleFacebookNotif,
+
+    "YouTubeInfinite":   onToggleYouTubeInfinite,
+    "YouTubeRecomm":     onToggleYouTubeRecomm,
+    "YouTubeNotif":      onToggleYouTubeNotif,
+    "YouTubeDeclutter":  onToggleYouTubeDeclutter,
 }
 
-function onToggleEnable(toggled: boolean) {
-    console.log("onToggleEnable: " + toggled);
+let isEnabled = false;
+let feedHeight = 2500;
+let containerTop = 0;
+const showMoreIncrement = 2500;
 
+function hideSelectors(selectors: Array<JQuery>) {
+    for (const s of selectors) {
+        s.each(() => { s.hide() });
+    }
+}
+
+function showSelectors(selectors: Array<JQuery>) {
+    for (const s of selectors) {
+        s.each(() => { s.show() });
+    }
+}
+
+function getCurrentPage(): string {
+    const currentWindowURL = window.location.href;
+    console.log("current url", currentWindowURL);
+    if (currentWindowURL.includes("twitter.com")){
+        return "Twitter";
+    }
+    else if (currentWindowURL.includes("facebook.com")){
+        return "Facebook";
+    }
+    else if (currentWindowURL.includes("youtube.com")){
+        return "YouTube";
+    }
+    else if (currentWindowURL.includes("linkedin.com")){
+        return "LinkedIn";
+    } else {
+        return "NA";
+    }
+}
+
+function isHomePage(): boolean {
+    const currentWindowURL = window.location.href;
+    if (currentWindowURL === "https://twitter.com/home" ||
+        currentWindowURL === "https://www.facebook.com/" ||
+        currentWindowURL === "https://www.youtube.com/" ||
+        currentWindowURL === "https://www.linkedin.com/feed/"){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const currentPage = getCurrentPage();
+function getContainer() {
+    return new Promise((resolve) => {
+        if (currentPage == "Twitter") {
+            const x = $('section[aria-labelledby]');
+            if (x.length === 0 || x.find("article").length === 0) {
+                setTimeout(() => { resolve(getContainer()); }, 100);
+                return;
+            }
+            const y = x.children("div[aria-label]").first().children().first();
+            resolve(y);
+        } else if (currentPage == "Facebook") {
+            const y = $('div[role="main"]');
+            if (y.length === 0) {
+                setTimeout(() => { resolve(getContainer()); }, 100);
+                return;
+            }
+            resolve(y);
+        } else if (currentPage == "YouTube") {
+            const y = $("#content");
+            if (y.length === 0) {
+                setTimeout(() => { resolve(getContainer()); }, 100);
+                return;
+            }
+            resolve(y);
+        } else if (currentPage == "LinkedIn") {
+            if (isHomePage()) {
+                const y = $('main[aria-label]');
+                if (y.length === 0) {
+                    setTimeout(() => { resolve(getContainer()); }, 100);
+                    return;
+                }
+                resolve(y);
+            } else {
+                const y = document;
+                resolve(y);
+            }
+        } else {
+            console.error("Unknown page to enable purpose mode.");
+        }
+    });
+}
+
+function isAlreadyManipulated(container: JQuery<HTMLElement>) {
+    const button = $("#tisd-show-more");
+    return !!button.length;
+};
+
+const updateFacebookShowMore = (container) => {
+    const button = $("#tisd-show-more");
+    feedHeight = parseInt(container.css('height'));
+    container.css("max-height", `${feedHeight}px`);
+    button.css("top", `${feedHeight+containerTop-100}px`);
+}
+
+function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
+    feedHeight += showMoreIncrement;
+    container.css("max-height", `${feedHeight}px`);
+    if (currentPage == "Facebook"
+        && parseInt(container.css('height')) < feedHeight) {
+        const button = $("#tisd-show-more");
+        feedHeight = parseInt(container.css('height'));
+        container.css("max-height", `${feedHeight}px`);
+        button.css("top", `${feedHeight+containerTop-100}px`);
+    }
+    if (currentPage == "Twitter") {
+        container.css("min-height", `${feedHeight}px`);
+    }
+    button.css("top", `${feedHeight+containerTop-100}px`);
+};
+
+var mutationObserver = new MutationObserver(function(mutations) {
+    let keys = [
+        "TwitterReadOnly",
+    ];
+    // For each page mutation, invoke relevant toggle functions if enabled.
+    mutations.forEach(function(mutation) {
+        if (!isEnabled) {
+            return;
+        }
+        for (const key of keys) {
+            chrome.storage.local.get(key, (result) => {
+                if (result[key] === true) {
+                    settingToHandler[key](result[key], mutation.target);
+                }
+            });
+        }
+    });
+});
+
+function toggleInfScrolling(toggled: boolean) {
+    getContainer().then((container: JQuery<HTMLElement>) => {
+        if (!toggled) {
+            resetInfScrolling(container);
+        } else {
+            stopInfScrolling(container);
+        }
+    });
+}
+
+function resetInfScrolling(container: JQuery<HTMLElement>) {
+    container.css({
+        "max-height": "none",
+        "min-height": "auto",
+        overflow: "auto"
+    });
+
+    const button = $("#tisd-show-more");
+    if(button){
+        button.remove();
+    }
+    feedHeight = 2500;
+}
+
+function stopInfScrolling(container: JQuery<HTMLElement>) {
+    if (!isHomePage()) {
+        return;
+    }
+
+    if (currentPage === "Twitter") {
+        container.css("min-height", `${feedHeight}px`);
+    }
+    container.css("max-height", `${feedHeight}px`);
+    if (currentPage === "Facebook"
+        && parseInt(container.css('height')) < feedHeight) {
+        updateFacebookShowMore(container);
+    }
+    containerTop = 0;
+    if (container){
+        var position = container.position();
+        if (position){containerTop = position.top;}
+    }
+
+    if (isAlreadyManipulated(container)) {
+        return;
+    }
+
+    container.css({
+        "max-height": `${feedHeight}px`,
+        "overflow":   "hidden",
+    });
+    if (currentPage === "Twitter") {
+        container.css("min-height", `${feedHeight}px`);
+    }
+
+    const button = $(`
+        <div id="tisd-show-more">
+            <button type="button">Show more</button>
+        </div>
+    `);
+    button.css({
+        width: container.width(),
+        top: `${feedHeight+containerTop-100}px`
+    });
+    container.prepend(button);
+
+    button.click(() => showMore(container, button));
+}
+
+// Starts listening for changes in the root HTML element of the page.
+mutationObserver.observe(document.documentElement, {
+    attributes: false,
+    characterData: false,
+    childList: true,
+    subtree: true,
+});
+
+// Takes all changes which haven’t been fired so far.
+var changes = mutationObserver.takeRecords();
+
+function onToggleEnable(toggled: boolean) {
+    isEnabled = toggled;
     chrome.storage.local.get(null, (result) => {
+        console.log(extName + " configuration: ");
         console.log(result);
     });
 
@@ -32,28 +271,98 @@ function onToggleEnable(toggled: boolean) {
                 continue;
             }
             chrome.storage.local.get(key, (result) => {
-                console.log("Setting '" + key + "' to '" + result[key] + "'.");
-                settingToHandler[key](result[key]);
+                if (result.hasOwnProperty(key)) {
+                    if (key === "Desaturate") {
+                        return;
+                    }
+                    console.log("Running handler for '" + key + "' = '" + result[key] + "'.");
+                    settingToHandler[key](result[key]);
+                }
             })
         }
     }
 }
 
-function onToggleTwitterReadOnly(toggled: boolean) {
-    console.log("onToggleTwitterReadOnly: " + toggled);
+function onToggleLinkedInDeclutter(toggled: boolean) {
+    console.log("onToggleLinkedInDeclutter: " + toggled);
+
+    let elements = [
+        // Messaging.
+        $('aside#msg-overlay'),
+        // Left column profile and links.
+        $('div.scaffold-layout__sidebar'),
+        // LinkedIn Premium ads (upper right).
+        $('div.premium-upsell-link'),
+        // "For Business" button.
+        $('li.global-nav__primary-item:has(> button > span[title="For Business"])'),
+    ];
     if (toggled) {
-        $("div[aria-label*=Reply]").each(function(i) {
-            $(this).parent().parent().hide();
-        });
+        for (const e of elements) { e.hide() }
     } else {
-        $("div[aria-label*=Reply]").each(function(i) {
-            $(this).parent().parent().show();
-        });
+        for (const e of elements) { e.show() }
     }
 }
 
-function onToggleCompact(toggled: boolean) {
-    console.log("onToggleCompact: " + toggled);
+function onToggleLinkedInNotif(toggled: boolean) {
+    console.log("onToggleLinkedInNotif: " + toggled);
+
+    // "Red dot" notification icon.
+    let e = $('span.notification-badge--show');
+    if (toggled) {
+        e.hide();
+    } else {
+        e.show();
+    }
+}
+
+function onToggleLinkedInRecomms(toggled: boolean) {
+    console.log("onToggleLinkedInRecomms: " + toggled);
+
+    let elements = [
+        // LinkedIn news.
+        $('aside[aria-label="LinkedIn News"]'),
+        // Profile recommendations.
+        $('aside.scaffold-layout__aside'),
+    ];
+    if (toggled) {
+        for (const e of elements) { e.hide() }
+    } else {
+        for (const e of elements) { e.show() }
+    }
+}
+
+function onToggleLinkedInInfinite(toggled: boolean) {
+    if (getCurrentPage() !== "LinkedIn") {
+        return;
+    }
+    toggleInfScrolling(toggled);
+}
+
+function onToggleTwitterReadOnly(toggled: boolean, node: Node) {
+    if (getCurrentPage() != "Twitter") {
+        return;
+    }
+    let selectors = [
+        $("div[aria-label*=Reply]", node).parent().parent(),
+        $("div[role=progressbar]", node).parent(),
+        $("a[aria-label=Tweet]", node),
+    ];
+    if (toggled) {
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+    }
+}
+
+function onToggleTwitterCompact(toggled: boolean) {
+    if (getCurrentPage() != "Twitter") {
+        return;
+    }
+
     // Send a message to the second content script, which runs in the main
     // world.  Upon receiving this message, the script is going to
     // monkey-patch the window and document API.
@@ -63,14 +372,266 @@ function onToggleCompact(toggled: boolean) {
     }, "*");
 }
 
+function onToggleTwitterInfinite(toggled: boolean) {
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+    toggleInfScrolling(toggled);
+}
+
+function onToggleTwitterNotif(toggled: boolean) {
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+    const selectors = [
+        // Blue notification circle on top of home icon.
+        $('div[aria-label="undefined unread items"]'),
+        // Blue button that promotes new tweets.
+        $('div[aria-label="New Tweets are available. Push the period key to go to the them."]'),
+        // Notifications.
+        $('div[aria-label*="unread"]'),
+    ]
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
+}
+
+function onToggleTwitterClutter(toggled: boolean) {
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+
+    const selectors = [
+        // "What's happening" column on the right.
+        $('div[aria-label="Timeline: Trending now"]'),
+        // "Who to follow" column on the right.
+        $('div:has(> div > aside[aria-label="Who to follow"])'),
+        // ToS, privacy policy, etc.
+        $('nav[aria-label="Footer"]'),
+        // "Get verified" promotion.
+        $('div:has(> aside[aria-label="Get Verified"])'),
+        // DM.
+        $('div[data-testid="DMDrawer"]'),
+    ];
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
+}
+
+function onToggleFacebookInfinite(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+    toggleInfScrolling(toggled);
+}
+
+function onToggleFacebookDeclutter(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+
+    const selectors = [
+        // Right column.
+        $('div[role="complementary"]'),
+        // Hamburger menu on the left.
+        $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))'),
+        // Buttons at the top of the page.
+        $('a[aria-label="Home"]').parent().parent().parent(),
+        // Watch button.
+        $('a[aria-label="Watch"]').parent().parent().parent(),
+        // Marketplace button.
+        $('a[aria-label="Marketplace"]').parent().parent().parent(),
+        // Groups button.
+        $('a[aria-label="Groups"]').parent().parent().parent(),
+        // Gaming button.
+        $('a[aria-label="Gaming"]').parent().parent().parent(),
+        // Additional chat boxes.
+        $('div[aria-label*="additional chats"'),
+        // New message box.
+        $('div[aria-label="New message"'),
+        // Messenger box.
+        $('div[aria-label*="Open chat"'),
+    ];
+    if (toggled) {
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+    }
+}
+
+function onToggleFacebookRecomms(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+
+    const selectors = [
+        // "Stories" and "reels" videos at the top.
+        $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent(),
+        // "Reels" and short video recommendations.
+        $('div[aria-label="Reels"]').parent().parent().parent().parent(),
+        // "People you may know".
+        $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
+        // Suggested groups.
+        $('span:contains("Suggested groups")').parent().parent().parent().parent().parent(),
+    ];
+    if (toggled) {
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+    }
+}
+
+function onToggleFacebookNotif(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+
+    const selectors = [
+        // "Red dot" update notification.
+        $('div[aria-label*="Notifications"][tabindex="-1"]'),
+        // "Red dot" notification for Messenger.
+        $('div[aria-label*="Messenger"][tabindex="-1"]'),
+    ];
+    if (toggled) {
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+    }
+}
+
+function onToggleYouTubeInfinite(toggled: boolean) {
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+    toggleInfScrolling(toggled);
+}
+
+function onToggleYouTubeRecomm(toggled: boolean) {
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+
+    let selectors = [];
+    const currentPage = window.top.location.href;
+    // Landing page.
+    if (currentPage === "https://www.youtube.com/") {
+        selectors = selectors.concat([
+            // All recommended videos on the landing page.
+            $('div[id=contents]'),
+            // Recommendation tags on top of the page.
+            $('div#scroll-container'),
+            // "Next" button of the recommendation tags.
+            $('button[aria-label="Next"]'),
+            // VIdeo ad on the home page.
+            $('div#masthead-ad'),
+            // Shorts.
+            $('ytd-rich-shelf-renderer[is-shorts]'),
+            // Recommended primetime movies.
+            $('a[title="Recommended Primetime movies"]').closest('ytd-rich-section-renderer'),
+            // Top news.
+            $('span[id="title"]:contains("Top news")').closest('ytd-rich-section-renderer'),
+            // Breaking news.
+            $('span[id="title"]:contains("Breaking news")').closest('ytd-rich-section-renderer'),
+            // Latest YouTube posts.
+            $('span[id="title"]:contains("Latest YouTube posts")').closest('ytd-rich-section-renderer'),
+            // "Discover your next favorite movie".
+            $('yt-formatted-string[id="item-title"]:contains("Discover your next favorite movie")').closest('ytd-rich-section-renderer'),
+        ]);
+    // Recommendations on the "watch" page.
+    } else if (currentPage.includes("https://www.youtube.com/watch?")) {
+        selectors = selectors.concat([
+            // Video recommendations.
+            $('div#secondary-inner'),
+            // Comments.
+            $("ytd-comments#comments"),
+        ]);
+    } else if (currentPage.includes("results?search_query")) {
+        selectors = selectors.concat([
+            // "People also watched".
+            $('span[id="title"]:contains("People also watched")').closest('ytd-shelf-renderer'),
+            // "Channels new to you".
+            $('span[id="title"]:contains("Channels new to you")').closest('ytd-shelf-renderer'),
+            // "For you".
+            $('span[id="title"]:contains("For you")').closest('ytd-shelf-renderer'),
+            // "Previously watched".
+            $('span[id="title"]:contains("Previously watched")').closest('ytd-shelf-renderer'),
+            // "From related searches".
+            $('span[id="title"]:contains("From related searches")').closest('ytd-shelf-renderer'),
+        ]);
+    }
+
+    if (toggled) {
+        hideSelectors(selectors)
+    } else {
+        showSelectors(selectors)
+    }
+}
+
+function onToggleYouTubeNotif(toggled: boolean) {
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+
+    const selectors = [
+        // Notification icons.
+        $("div.yt-spec-icon-badge-shape__badge"),
+        // "Newness" dot.
+        $("div[id=newness-dot]"),
+    ]
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        // Only show the first selector. Showing the second selector results
+        // in every category incorrectly displaying a notification icon. To fix
+        // this, we would have to remember which categories originally had a
+        // notification.
+        showSelectors([selectors.pop()]);
+    }
+}
+
+function onToggleYouTubeDeclutter(toggled: boolean) {
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+
+    const selectors = [
+        // Hamburger menu.
+        $('div#guide-content'),
+    ]
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
+}
+
 function onToggleDesaturate(toggled: boolean) {
     console.log("onToggleDesaturate: " + toggled);
     let e = $("html");
     if (toggled) {
-        // TODO: This does not work on Reddit.
-        e.css({"cssText": "filter: saturate(10%) !important"});
+        // TODO: This does not work on Reddit. It also breaks the style on
+        // YouTube.
+        console.log("Existing CSS:");
+        console.log(e.css("filter"));
+        e.css({"cssText": "filter: saturate(10%)"});
     } else {
-        e.css({"cssText": "filter: saturate(100%) !important"});
+        e.css({"cssText": "filter: saturate(100%)"});
     }
 }
 
@@ -85,13 +646,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 })
 
 function run() {
-    // Iterate over local state and enable whatever feature is set.
-    for (const key in settingToHandler) {
-        chrome.storage.local.get(key, (result) => {
-            console.log("Setting '" + key + "' to '" + result[key] + "'.");
-            settingToHandler[key](result[key]);
-        })
-    }
+    const key = "Enable";
+    chrome.storage.local.get(key, (result) => {
+        if (!result.hasOwnProperty(key)) {
+            console.error("'" + key + "' property unset in configuration.");
+            return
+        }
+        onToggleEnable(result.Enable);
+    });
 }
 
 console.log(__filename + " running.");
