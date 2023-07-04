@@ -172,7 +172,7 @@ function YouTubeSwitches() {
         update={setNotif}
       />
       <ToggleSwitch
-       label="Hide Recommendations"
+       label="Hide recommendations"
        storage_var="YouTubeRecomm"
        checked={recomm}
        update={setRecomm}
@@ -182,8 +182,8 @@ function YouTubeSwitches() {
 }
 
 function TwitterSwitches() {
-  const [readOnly, setReadOnly] =
-    useChromeStorageLocal("TwitterReadOnly", false);
+  // const [readOnly, setReadOnly] =
+  //   useChromeStorageLocal("TwitterReadOnly", false);
   const [compact, setCompact] =
     useChromeStorageLocal("TwitterCompact", false);
   const [finite, setFinite] =
@@ -192,16 +192,18 @@ function TwitterSwitches() {
     useChromeStorageLocal("TwitterNotif", false)
   const [clutter, setClutter] =
     useChromeStorageLocal("TwitterClutter", false);
+  const [recomm, setRecomm] =
+    useChromeStorageLocal("TwitterRecomm", false)
 
   return (
     <div>
       <h3>Twitter</h3>
-      <ToggleSwitch
+      {/* <ToggleSwitch
         label="Read only"
         storage_var="TwitterReadOnly"
         checked={readOnly}
         update={setReadOnly}
-      />
+      /> */}
       <ToggleSwitch
        label="Compact layout"
        storage_var="TwitterCompact"
@@ -225,6 +227,12 @@ function TwitterSwitches() {
        storage_var="TwitterNotif"
        checked={notif}
        update={setNotif}
+      />
+      <ToggleSwitch
+       label="Hide recommendations"
+       storage_var="TwitterRecomm"
+       checked={recomm}
+       update={setRecomm}
       />
     </div>
   )

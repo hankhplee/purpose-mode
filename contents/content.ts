@@ -12,6 +12,7 @@ const settingToHandler = {
     "TwitterClutter":    onToggleTwitterClutter,
     "TwitterInfinite":   onToggleTwitterInfinite,
     "TwitterNotif":      onToggleTwitterNotif,
+    "TwitterRecomm":     onToggleTwitterRecomm,
 
     "LinkedInDeclutter": onToggleLinkedInDeclutter,
     "LinkedInRecomms":   onToggleLinkedInRecomms,
@@ -67,7 +68,7 @@ function getCurrentPage(): string {
 
 function isHomePage(): boolean {
     const currentWindowURL = window.location.href;
-    if (currentWindowURL === "https://twitter.com/home" ||
+    if (currentWindowURL.includes("https://twitter.com/home") ||
         currentWindowURL === "https://www.facebook.com/" ||
         currentWindowURL === "https://www.youtube.com/" ||
         currentWindowURL === "https://www.linkedin.com/feed/"){
@@ -388,9 +389,33 @@ function onToggleTwitterNotif(toggled: boolean) {
         $('div[aria-label="undefined unread items"]'),
         // Blue button that promotes new tweets.
         $('div[aria-label="New Tweets are available. Push the period key to go to the them."]'),
-        // Notifications.
-        $('div[aria-label*="unread"]'),
     ]
+    if (toggled) {
+        hideSelectors(selectors);
+        // Notifications.
+        $('div[aria-label*="unread"]').each(function(){
+            $( this ).hide();
+        });
+    } else {
+        showSelectors(selectors);
+        // Notifications.
+        $('div[aria-label*="unread"]').each(function(){
+            $( this ).show();
+        });
+    }
+}
+
+function onToggleTwitterRecomm(toggled: boolean) {
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+
+    const selectors = [
+        // "What's happening" column on the right.
+        $('div[aria-label="Timeline: Trending now"]'),
+        // "Who to follow" column on the right.
+        $('div:has(> div > aside[aria-label="Who to follow"])'),
+    ];
     if (toggled) {
         hideSelectors(selectors);
     } else {
@@ -404,16 +429,14 @@ function onToggleTwitterClutter(toggled: boolean) {
     }
 
     const selectors = [
-        // "What's happening" column on the right.
-        $('div[aria-label="Timeline: Trending now"]'),
-        // "Who to follow" column on the right.
-        $('div:has(> div > aside[aria-label="Who to follow"])'),
         // ToS, privacy policy, etc.
         $('nav[aria-label="Footer"]'),
         // "Get verified" promotion.
         $('div:has(> aside[aria-label="Get Verified"])'),
         // DM.
         $('div[data-testid="DMDrawer"]'),
+        // Search
+        $('form[aria-label="Search Twitter"]'),
     ];
     if (toggled) {
         hideSelectors(selectors);
