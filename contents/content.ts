@@ -440,30 +440,36 @@ function onToggleFacebookDeclutter(toggled: boolean) {
         // Hamburger menu on the left.
         $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))'),
         // Buttons at the top of the page.
-        $('a[aria-label="Home"]').parent().parent().parent(),
+        $('a[aria-label="Home"]'),
         // Watch button.
-        $('a[aria-label="Watch"]').parent().parent().parent(),
+        $('a[aria-label="Watch"]'),
         // Marketplace button.
-        $('a[aria-label="Marketplace"]').parent().parent().parent(),
+        $('a[aria-label="Marketplace"]'),
         // Groups button.
-        $('a[aria-label="Groups"]').parent().parent().parent(),
+        $('a[aria-label="Groups"]'),
         // Gaming button.
-        $('a[aria-label="Gaming"]').parent().parent().parent(),
+        $('a[aria-label="Gaming"]'),
         // Additional chat boxes.
-        $('div[aria-label*="additional chats"'),
+        $('div[aria-label*="additional chats"]'),
         // New message box.
         $('div[aria-label="New message"'),
-        // Messenger box.
-        $('div[aria-label*="Open chat"'),
     ];
     if (toggled) {
         for (const s of selectors) {
             s.each(() => { s.hide() });
         }
+        // Messenger boxes.
+        $('div[aria-label*="Open chat"').each(function(){
+            $( this ).hide();
+        });
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
         }
+        // Messenger boxes.
+        $('div[aria-label*="Open chat"').each(function(){
+            $( this ).show();
+        });
     }
 }
 
@@ -474,13 +480,15 @@ function onToggleFacebookRecomms(toggled: boolean) {
 
     const selectors = [
         // "Stories" and "reels" videos at the top.
-        $('div[aria-label="Stories"]').parent().parent().parent().parent().parent().parent(),
+        $('div[aria-label="Stories"]').parent().parent(),
+        // “Stories” and “Reels” buttons
+        $('div[role="tablist"]:has(> div > div > div > div > div > span:contains("Stories"))'),
         // "Reels" and short video recommendations.
         $('div[aria-label="Reels"]').parent().parent().parent().parent(),
         // "People you may know".
         $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
         // Suggested groups.
-        $('span:contains("Suggested groups")').parent().parent().parent().parent().parent(),
+        $('span:contains("Suggested groups")').parent().parent(),
     ];
     if (toggled) {
         for (const s of selectors) {
@@ -503,6 +511,8 @@ function onToggleFacebookNotif(toggled: boolean) {
         $('div[aria-label*="Notifications"][tabindex="-1"]'),
         // "Red dot" notification for Messenger.
         $('div[aria-label*="Messenger"][tabindex="-1"]'),
+        // "New posts" push notification
+        $('button:has(> div > span:contains("New posts"))'),
     ];
     if (toggled) {
         for (const s of selectors) {
