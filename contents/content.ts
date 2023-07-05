@@ -49,7 +49,7 @@ function showSelectors(selectors: Array<JQuery>) {
 
 function getCurrentPage(): string {
     const currentWindowURL = window.location.href;
-    console.log("current url", currentWindowURL);
+    // console.log("current url", currentWindowURL);
     if (currentWindowURL.includes("twitter.com")){
         return "Twitter";
     }
@@ -150,6 +150,7 @@ function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
     button.css("top", `${feedHeight+containerTop-100}px`);
 };
 
+/*
 var mutationObserver = new MutationObserver(function(mutations) {
     let keys = [
         "TwitterReadOnly",
@@ -168,6 +169,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         }
     });
 });
+*/
 
 function toggleInfScrolling(toggled: boolean) {
     getContainer().then((container: JQuery<HTMLElement>) => {
@@ -237,7 +239,7 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
 
     button.click(() => showMore(container, button));
 }
-
+/*
 // Starts listening for changes in the root HTML element of the page.
 mutationObserver.observe(document.documentElement, {
     attributes: false,
@@ -248,6 +250,7 @@ mutationObserver.observe(document.documentElement, {
 
 // Takes all changes which haven’t been fired so far.
 var changes = mutationObserver.takeRecords();
+*/
 
 function onToggleEnable(toggled: boolean) {
     isEnabled = toggled;
@@ -274,15 +277,20 @@ function onToggleEnable(toggled: boolean) {
             }
             chrome.storage.local.get(key, (result) => {
                 if (result.hasOwnProperty(key)) {
-                    if (key === "Desaturate") {
-                        return;
-                    }
+                    // if (key === "Desaturate") {
+                    //     return;
+                    // }
                     console.log("Running handler for '" + key + "' = '" + result[key] + "'.");
                     settingToHandler[key](result[key]);
                 }
             })
         }
     }
+    chrome.storage.local.get("Enable", (result) => {
+        setTimeout(() => {
+            onToggleEnable(result.Enable);
+          }, 300);
+    });
 }
 
 function onToggleLinkedInDeclutter(toggled: boolean) {
@@ -717,6 +725,7 @@ function run() {
             return
         }
         onToggleEnable(result.Enable);
+        // runEnabledFeatures(result.Enable);
     });
 }
 
