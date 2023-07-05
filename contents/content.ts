@@ -8,7 +8,7 @@ const settingToHandler = {
     "Desaturate":        onToggleDesaturate,
 
     "TwitterCompact":    onToggleTwitterCompact,
-    "TwitterReadOnly":   onToggleTwitterReadOnly,
+    // "TwitterReadOnly":   onToggleTwitterReadOnly,
     "TwitterClutter":    onToggleTwitterClutter,
     "TwitterInfinite":   onToggleTwitterInfinite,
     "TwitterNotif":      onToggleTwitterNotif,
