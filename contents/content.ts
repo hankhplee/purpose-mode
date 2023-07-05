@@ -573,9 +573,9 @@ function onToggleYouTubeRecomm(toggled: boolean) {
     }
 
     let selectors = [];
-    const currentPage = window.top.location.href;
+    const currentWindow = window.top.location.href;
     // Landing page.
-    if (currentPage === "https://www.youtube.com/") {
+    if (currentWindow === "https://www.youtube.com/") {
         selectors = selectors.concat([
             // All recommended videos on the landing page.
             $('div[id=contents]'),
@@ -597,16 +597,16 @@ function onToggleYouTubeRecomm(toggled: boolean) {
             $('span[id="title"]:contains("Latest YouTube posts")').closest('ytd-rich-section-renderer'),
             // "Discover your next favorite movie".
             $('yt-formatted-string[id="item-title"]:contains("Discover your next favorite movie")').closest('ytd-rich-section-renderer'),
+            // YouTube premium event
+            $('yt-formatted-string[id="subtitle"]:contains("Premium membership")').closest('ytd-rich-section-renderer'),
         ]);
     // Recommendations on the "watch" page.
-    } else if (currentPage.includes("https://www.youtube.com/watch?")) {
+    } else if (currentWindow.includes("https://www.youtube.com/watch?")) {
         selectors = selectors.concat([
             // Video recommendations.
             $('div#secondary-inner'),
-            // Comments.
-            $("ytd-comments#comments"),
         ]);
-    } else if (currentPage.includes("results?search_query")) {
+    } else if (currentWindow.includes("results?search_query")) {
         selectors = selectors.concat([
             // "People also watched".
             $('span[id="title"]:contains("People also watched")').closest('ytd-shelf-renderer'),
@@ -618,13 +618,26 @@ function onToggleYouTubeRecomm(toggled: boolean) {
             $('span[id="title"]:contains("Previously watched")').closest('ytd-shelf-renderer'),
             // "From related searches".
             $('span[id="title"]:contains("From related searches")').closest('ytd-shelf-renderer'),
+            // "Top news"
+            $('span[id="title"]:contains("Top news")').closest('ytd-shelf-renderer'),
+            // Recently uploaded Shorts
+            // $('span[id="title"]:contains("Recently uploaded Shorts")').closest('ytd-reel-shelf-renderer'),
+            // People also search for
+            $('yt-formatted-string[id="title"]:contains("People also search for")').closest('ytd-horizontal-card-list-renderer'),
         ]);
     }
 
     if (toggled) {
-        hideSelectors(selectors)
+        hideSelectors(selectors);
+        // all shorts
+        $('ytd-reel-shelf-renderer').each(function(){
+            $( this ).hide();
+        });
     } else {
-        showSelectors(selectors)
+        showSelectors(selectors);
+        $('ytd-reel-shelf-renderer').each(function(){
+            $( this ).show();
+        });
     }
 }
 
@@ -646,7 +659,7 @@ function onToggleYouTubeNotif(toggled: boolean) {
         // in every category incorrectly displaying a notification icon. To fix
         // this, we would have to remember which categories originally had a
         // notification.
-        showSelectors([selectors.pop()]);
+        showSelectors([selectors[0]]);
     }
 }
 
@@ -654,11 +667,15 @@ function onToggleYouTubeDeclutter(toggled: boolean) {
     if (getCurrentPage() !== "YouTube") {
         return;
     }
-
+    const currentWindow = window.top.location.href;
     const selectors = [
         // Hamburger menu.
         $('div#guide-content'),
     ]
+    if (currentWindow.includes("https://www.youtube.com/watch?")) {
+        selectors.push($("ytd-comments#comments")); // Comments.
+    }
+
     if (toggled) {
         hideSelectors(selectors);
     } else {
