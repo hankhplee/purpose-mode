@@ -150,11 +150,34 @@ function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
     button.css("top", `${feedHeight+containerTop-100}px`);
 };
 
-/*
+
 var mutationObserver = new MutationObserver(function(mutations) {
+    // let keys = [
+    //     "TwitterReadOnly",
+    // ];
     let keys = [
-        "TwitterReadOnly",
-    ];
+        "TwitterCompact",
+        "TwitterClutter",
+        // "TwitterInfinite",
+        "TwitterNotif",
+        "TwitterRecomm",
+
+        "LinkedInDeclutter",
+        "LinkedInRecomms",
+        // "LinkedInInfinite",
+        "LinkedInNotif",
+
+        // "FacebookInfinite",
+        "FacebookDeclutter",
+        "FacebookRecomms",
+        "FacebookNotif",
+
+        // "YouTubeInfinite",
+        "YouTubeRecomm",
+        "YouTubeNotif",
+        "YouTubeDeclutter",
+    ]
+
     // For each page mutation, invoke relevant toggle functions if enabled.
     mutations.forEach(function(mutation) {
         if (!isEnabled) {
@@ -169,7 +192,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         }
     });
 });
-*/
+
 
 function toggleInfScrolling(toggled: boolean) {
     getContainer().then((container: JQuery<HTMLElement>) => {
@@ -239,7 +262,7 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
 
     button.click(() => showMore(container, button));
 }
-/*
+
 // Starts listening for changes in the root HTML element of the page.
 mutationObserver.observe(document.documentElement, {
     attributes: false,
@@ -250,7 +273,7 @@ mutationObserver.observe(document.documentElement, {
 
 // Takes all changes which haven’t been fired so far.
 var changes = mutationObserver.takeRecords();
-*/
+
 
 function onToggleEnable(toggled: boolean) {
     isEnabled = toggled;
@@ -286,11 +309,6 @@ function onToggleEnable(toggled: boolean) {
             })
         }
     }
-    chrome.storage.local.get("Enable", (result) => {
-        setTimeout(() => {
-            onToggleEnable(result.Enable);
-          }, 300);
-    });
 }
 
 function onToggleLinkedInDeclutter(toggled: boolean) {
