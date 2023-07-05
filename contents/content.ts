@@ -105,7 +105,8 @@ function getContainer() {
             resolve(y);
         } else if (currentPage == "LinkedIn") {
             if (isHomePage()) {
-                const y = $('main[aria-label]');
+                // const y = $('main[aria-label]');
+                const y = $('div.application-outlet');
                 if (y.length === 0) {
                     setTimeout(() => { resolve(getContainer()); }, 100);
                     return;
@@ -296,7 +297,12 @@ function onToggleLinkedInDeclutter(toggled: boolean) {
         $('div.premium-upsell-link'),
         // "For Business" button.
         $('li.global-nav__primary-item:has(> button > span[title="For Business"])'),
+        // Footer
+        $('footer[aria-label="LinkedIn Footer Content"]'),
     ];
+    if(!isHomePage()){
+        elements.push($('footer.global-footer'));
+    }
     if (toggled) {
         for (const e of elements) { e.hide() }
     } else {
@@ -307,12 +313,15 @@ function onToggleLinkedInDeclutter(toggled: boolean) {
 function onToggleLinkedInNotif(toggled: boolean) {
     console.log("onToggleLinkedInNotif: " + toggled);
 
-    // "Red dot" notification icon.
-    let e = $('span.notification-badge--show');
     if (toggled) {
-        e.hide();
+        // "Red dot" notification icon.
+        $('span.notification-badge--show').each(function() {
+            $( this ).hide();
+        });
     } else {
-        e.show();
+        $('span.notification-badge--show').each(function() {
+            $( this ).show();
+        });
     }
 }
 
@@ -321,10 +330,13 @@ function onToggleLinkedInRecomms(toggled: boolean) {
 
     let elements = [
         // LinkedIn news.
-        $('aside[aria-label="LinkedIn News"]'),
-        // Profile recommendations.
-        $('aside.scaffold-layout__aside'),
+        // $('aside[aria-label="LinkedIn News"]'),
+        $('section:has(>div>div#feed-news-module)'),
     ];
+    if(!isHomePage()){
+        // Profile recommendations.
+        elements.push($('aside.scaffold-layout__aside'));
+    }
     if (toggled) {
         for (const e of elements) { e.hide() }
     } else {
