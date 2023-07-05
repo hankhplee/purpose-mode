@@ -691,9 +691,11 @@ function onToggleDesaturate(toggled: boolean) {
         // YouTube.
         console.log("Existing CSS:");
         console.log(e.css("filter"));
-        e.css({"cssText": "filter: saturate(10%)"});
+        // e.css({"cssText": "filter: saturate(10%)"});
+        e.css({"filter": "saturate(10%)"});
     } else {
-        e.css({"cssText": "filter: saturate(100%)"});
+        // e.css({"cssText": "filter: saturate(100%)"});
+        e.css({"filter": "saturate(100%)"});
     }
 }
 
