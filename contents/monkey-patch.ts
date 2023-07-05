@@ -22,22 +22,30 @@ window.addEventListener("message", (event) => {
 }, false);
 
 function maybePatchWinSize() {
-    console.log("maybePatchWinSize: " + spoof);
-    if (!spoof) {
-      return;
-    }
-    const width = Math.min(document.documentElement.offsetWidth || 800, 800)
+  let width = 0;
+  if (spoof) {
+    width = Math.min(document.documentElement.offsetWidth || 800, 800)
     if (window.innerWidth === width &&
         document.documentElement.clientWidth === width) {
         return;
     }
+  } else {
+    width = document.documentElement.offsetWidth
+  }
 
-    window.__defineGetter__('innerWidth', () => width);
-    document.documentElement.__defineGetter__('clientWidth', () => width)
-    window.dispatchEvent(new Event('resize'));
+  window.__defineGetter__('innerWidth', () => width);
+  document.documentElement.__defineGetter__('clientWidth', () => width)
+  window.dispatchEvent(new Event('resize'));
 }
 
-window.addEventListener("load", maybePatchWinSize);
-window.addEventListener("resize", maybePatchWinSize);
-document.addEventListener("visibilitychange", maybePatchWinSize);
+if (spoof) {
+  window.addEventListener("load", maybePatchWinSize);
+  window.addEventListener("resize", maybePatchWinSize);
+  document.addEventListener("visibilitychange", maybePatchWinSize);
+} else {
+  window.removeEventListener("load", maybePatchWinSize);
+  window.removeEventListener("resize", maybePatchWinSize);
+  document.removeEventListener("visibilitychange", maybePatchWinSize);
+}
+
 maybePatchWinSize();
