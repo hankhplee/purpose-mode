@@ -1,7 +1,10 @@
 import { useState } from "react"
 import { sendToContentScript } from "@plasmohq/messaging"
+import { sendToBackground } from "@plasmohq/messaging"
 import { useChromeStorageLocal } from "use-chrome-storage";
 import "./ToggleSwitch.css";
+import yesIcon from "data-base64:~assets/yes.png";
+import noIcon from "data-base64:~assets/no.png";
 
 const extName = "Purpose Mode";
 
@@ -37,6 +40,46 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
           <span className="switch" />
         </label>
       </div>
+    </div>
+  );
+}
+
+function ButtonSwitch({label, storage_var, current_status}){
+  let currentStatus;
+  let buttonText = "";
+  if(current_status == true){
+    // currentStatus = "V";
+    currentStatus = yesIcon;
+    buttonText = "Unblock";
+  }else{
+    currentStatus = noIcon;
+    buttonText = "Block";
+  }
+
+  return (
+    <div className="container">
+      <div id={label} className="container-child">
+        {label}: <img src={currentStatus} style={{
+        width: "20px",
+        height: "20px"
+      }}></img>
+      </div>
+      <button id={storage_var}
+              onClick={(e) => {
+                const resp = sendToBackground({
+                 name: "autoplay",
+                 body: {"site": storage_var, "state": !current_status}
+               })
+              }} 
+      >{buttonText}</button>
+      {/* <button id={storage_var}
+              onClick={(e) => {
+                const resp = sendToBackground({
+                 name: "autoplay",
+                 body: {"site": storage_var, "state": false}
+               })
+              }} 
+      >Unblock</button>   */}
     </div>
   );
 }
@@ -238,6 +281,55 @@ function TwitterSwitches() {
   )
 }
 
+function AutoPlaySwitch(){
+  const [twitterAutoplay] = 
+    useChromeStorageLocal("TwitterAutoplay", false);
+  const [setTwitterAutoplay] = 
+    useChromeStorageLocal("SetTwitterAutoplay", false);
+
+  return (
+    <div>
+      <h4>Autoplay Blocking</h4>
+
+      <ButtonSwitch
+      label="Twitter"
+      storage_var="TwitterAutoplay"
+      current_status={twitterAutoplay}
+      />
+      <hr></hr>
+    </div>
+  )
+
+}
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type !== "autoplay setting update") {
+      console.log("Ignoring non-autoplay event.");
+      return;
+  }
+
+  console.log("update autoplay status of " + msg.body.site +
+              "' changed to '" + msg.body.state + "'.");
+  updateAutoPlayStatus(msg.body.site,msg.body.state);
+  
+})
+
+function updateAutoPlayStatus(site, state){
+  var id, updateState;
+  if(site.includes("Twitter")){
+    id = "Twitter";
+  }
+
+  if(state === true){
+    updateState = id+": V";
+  }
+  else{
+    updateState = id+": X";
+  }
+  console.log("update label: ",updateState);
+  document.getElementById(id).innerHTML = updateState;
+}
+
 function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);
 
@@ -251,10 +343,13 @@ function IndexPopup() {
       }}>
 
       <h2>{extName}</h2>
-
       <div>
+        <AutoPlaySwitch/>
+      </div>
+      <div>
+        <br/>
       <ToggleSwitch
-        label="Enable"
+        label="Purpose Mode Enable"
         storage_var="Enable"
         checked={enabled}
         update={setEnabled}

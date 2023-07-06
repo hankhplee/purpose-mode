@@ -78,10 +78,25 @@ function isHomePage(): boolean {
     }
 }
 
+function isAutoPlaySettingPage() : boolean {
+    const currentWindowURL = window.location.href;
+    if (currentWindowURL.includes("https://twitter.com/settings/autoplay")){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 const currentPage = getCurrentPage();
 function getContainer() {
     return new Promise((resolve) => {
-        if (currentPage == "Twitter") {
+        const currentWindowURL = window.location.href;
+        // Twitter autoplay setting page
+        if(currentWindowURL.includes("https://twitter.com/settings/autoplay")){
+            const y = document;
+            resolve(y);
+        }
+        else if (currentPage == "Twitter") {
             const x = $('section[aria-labelledby]');
             if (x.length === 0 || x.find("article").length === 0) {
                 setTimeout(() => { resolve(getContainer()); }, 100);
@@ -156,7 +171,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
     //     "TwitterReadOnly",
     // ];
     let keys = [
-        "TwitterCompact",
+        // "TwitterCompact",
         "TwitterClutter",
         // "TwitterInfinite",
         "TwitterNotif",
@@ -191,6 +206,11 @@ var mutationObserver = new MutationObserver(function(mutations) {
             });
         }
     });
+
+    // For autoplay page, invoke autoplay setting
+    if(isAutoPlaySettingPage()){
+        setAutoPlay();
+    }
 });
 
 
@@ -725,6 +745,49 @@ function onToggleDesaturate(toggled: boolean) {
     }
 }
 
+
+function onToggleTwitterAutoplay(toggled: boolean){
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+    let autoPlayToggle;
+    let alertMessage;
+    if(toggled === true){
+        // autoPlayToggle = $('input:radio[name="video_autoplay"]:nth(1)');
+        autoPlayToggle = $('input[aria-posinset="2"]');
+        alertMessage = "Autoplay on Twitter has been turned OFF.\nTo turn it back on, please go to the Purpose Mode setting.";
+    }else{
+        autoPlayToggle = $('input[aria-posinset="1"]');
+        alertMessage = "Autoplay on Twitter has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.";
+    }
+    let toggleFlag = autoPlayToggle.is(':checked');
+    if(toggleFlag === false){
+        autoPlayToggle.parent().on('click', function (){
+            if(toggleFlag === false){
+                toggleFlag = true;
+                alert(alertMessage);
+                chrome.storage.local.set({"TwitterAutoplay": toggled});
+                window.postMessage({
+                    type:  "autoplay setting update",
+                    site: "Twitter",
+                    state: toggled
+                }, "*");
+            }
+            });
+        autoPlayToggle.parent().click();
+    }
+}
+
+function setAutoPlay(){
+    if (getCurrentPage() == "Twitter") {
+        const key = "SetTwitterAutoplay";
+        chrome.storage.local.get(key, (result) => {
+            console.log("Set Twitter autoplay:",result.SetTwitterAutoplay);
+            onToggleTwitterAutoplay(result.SetTwitterAutoplay);
+        });
+    }
+}
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.name !== "toggle") {
         console.log("Ignoring non-toggle event.");
@@ -743,8 +806,10 @@ function run() {
             return
         }
         onToggleEnable(result.Enable);
-        // runEnabledFeatures(result.Enable);
     });
+    if(isAutoPlaySettingPage()){
+        setAutoPlay();
+    }
 }
 
 console.log(__filename + " running.");
