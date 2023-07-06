@@ -57,21 +57,27 @@ function ButtonSwitch({label, storage_var, current_status}){
   }
 
   return (
-    <div className="container">
-      <div id={label} className="container-child">
-        {label}: <img src={currentStatus} style={{
+    <div>
+      <div id={label} style={{
+        display:"inline"
+        }}>
+        {label}:
+        <img src={currentStatus} style={{
         width: "20px",
         height: "20px"
-      }}></img>
+        }}></img>
       </div>
-      <button id={storage_var}
+      <button id={storage_var} style={{
+              display:"inline"
+              }}
               onClick={(e) => {
                 const resp = sendToBackground({
-                 name: "autoplay",
-                 body: {"site": storage_var, "state": !current_status}
-               })
+                name: "autoplay",
+                body: {"site": storage_var, "state": !current_status}
+              })
               }} 
       >{buttonText}</button>
+      
     </div>
   );
 }
@@ -278,6 +284,10 @@ function AutoPlaySwitch(){
     useChromeStorageLocal("TwitterAutoplay", false);
   const [setTwitterAutoplay] = 
     useChromeStorageLocal("SetTwitterAutoplay", false);
+    const [linkedInAutoplay] = 
+    useChromeStorageLocal("LinkedInAutoplay", false);
+  const [setLinkedInAutoplay] = 
+    useChromeStorageLocal("SetLinkedInAutoplay", false);
 
   return (
     <div>
@@ -288,39 +298,17 @@ function AutoPlaySwitch(){
       storage_var="TwitterAutoplay"
       current_status={twitterAutoplay}
       />
+      <ButtonSwitch
+      label="LinkedIn"
+      storage_var="LinkedInAutoplay"
+      current_status={linkedInAutoplay}
+      />
+
       <hr></hr>
     </div>
   )
 
 }
-
-// chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-//   if (msg.type !== "autoplay setting update") {
-//       console.log("Ignoring non-autoplay event.");
-//       return;
-//   }
-
-//   console.log("update autoplay status of " + msg.body.site +
-//               "' changed to '" + msg.body.state + "'.");
-//   updateAutoPlayStatus(msg.body.site,msg.body.state);
-  
-// })
-
-// function updateAutoPlayStatus(site, state){
-//   var id, updateState;
-//   if(site.includes("Twitter")){
-//     id = "Twitter";
-//   }
-
-//   if(state === true){
-//     updateState = id+": V";
-//   }
-//   else{
-//     updateState = id+": X";
-//   }
-//   console.log("update label: ",updateState);
-//   document.getElementById(id).innerHTML = updateState;
-// }
 
 function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);

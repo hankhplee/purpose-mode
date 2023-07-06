@@ -13,6 +13,10 @@ function settingAutoPlay(site: string, toggled: boolean){
         chrome.storage.local.set({"SetTwitterAutoplay": toggled})
         .then(chrome.tabs.create({ url: "https://twitter.com/settings/autoplay"}));
     }
+    else if(site.includes("LinkedIn")){
+        chrome.storage.local.set({"SetLinkedInAutoplay": toggled})
+        .then(chrome.tabs.create({ url: "https://www.linkedin.com/mypreferences/d/settings/autoplay-videos"}));
+    }
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {

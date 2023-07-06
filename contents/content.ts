@@ -80,7 +80,9 @@ function isHomePage(): boolean {
 
 function isAutoPlaySettingPage() : boolean {
     const currentWindowURL = window.location.href;
-    if (currentWindowURL.includes("https://twitter.com/settings/autoplay")){
+    if (currentWindowURL.includes("https://twitter.com/settings/autoplay") || 
+        currentWindowURL.includes("https://www.linkedin.com/mypreferences/d/settings/autoplay-videos")
+        ){
         return true;
     } else {
         return false;
@@ -773,12 +775,63 @@ function onToggleTwitterAutoplay(toggled: boolean){
     }
 }
 
+function onToggleLinkedInAutoplay(toggled: boolean){
+    console.log("remove autoplay on LinkedIn.");
+    if (getCurrentPage() !== "LinkedIn") {
+        return;
+    }
+    let currentToggle;
+    let alertMessage;
+    
+    if(toggled === true){
+        alertMessage = "Autoplay on Twitter has been turned OFF.\nTo turn it back on, please go to the Purpose Mode setting.";
+    } else{
+        alertMessage = "Autoplay on Twitter has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.";
+    }
+    
+    const autoPlayToggle = $('div[data-control-name="toggle_button"]');
+    const currentToggleText = $('span.artdeco-toggle__text').text();
+    if(currentToggleText.includes("Off")){
+        currentToggle = true;
+    } else if(currentToggleText.includes("On")){
+        currentToggle = false;
+    } else{
+        return;
+    }
+
+    let toggleFlag = false;
+    if(currentToggle !== toggled){
+        autoPlayToggle.on('click', function (){
+            if(toggleFlag === false){
+                toggleFlag = true;
+                alert(alertMessage);
+                chrome.storage.local.set({"LinkedInAutoplay": toggled});
+            }
+            });
+        autoPlayToggle.click();
+    }else{
+        if(toggleFlag === false){
+            toggleFlag = true;
+            alert(alertMessage);
+            chrome.storage.local.set({"LinkedInAutoplay": toggled});
+        }
+    }
+}
+
+
 function setAutoPlay(){
     if (getCurrentPage() == "Twitter") {
         const key = "SetTwitterAutoplay";
         chrome.storage.local.get(key, (result) => {
             console.log("Set Twitter autoplay:",result.SetTwitterAutoplay);
             onToggleTwitterAutoplay(result.SetTwitterAutoplay);
+        });
+    }
+    else if(getCurrentPage() == "LinkedIn"){
+        const key = "SetLinkedInAutoplay";
+        chrome.storage.local.get(key, (result) => {
+            console.log("Set Twitter autoplay:",result.SetLinkedInAutoplay);
+            onToggleLinkedInAutoplay(result.SetLinkedInAutoplay);
         });
     }
 }
