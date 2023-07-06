@@ -72,14 +72,6 @@ function ButtonSwitch({label, storage_var, current_status}){
                })
               }} 
       >{buttonText}</button>
-      {/* <button id={storage_var}
-              onClick={(e) => {
-                const resp = sendToBackground({
-                 name: "autoplay",
-                 body: {"site": storage_var, "state": false}
-               })
-              }} 
-      >Unblock</button>   */}
     </div>
   );
 }
@@ -302,33 +294,33 @@ function AutoPlaySwitch(){
 
 }
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg.type !== "autoplay setting update") {
-      console.log("Ignoring non-autoplay event.");
-      return;
-  }
+// chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+//   if (msg.type !== "autoplay setting update") {
+//       console.log("Ignoring non-autoplay event.");
+//       return;
+//   }
 
-  console.log("update autoplay status of " + msg.body.site +
-              "' changed to '" + msg.body.state + "'.");
-  updateAutoPlayStatus(msg.body.site,msg.body.state);
+//   console.log("update autoplay status of " + msg.body.site +
+//               "' changed to '" + msg.body.state + "'.");
+//   updateAutoPlayStatus(msg.body.site,msg.body.state);
   
-})
+// })
 
-function updateAutoPlayStatus(site, state){
-  var id, updateState;
-  if(site.includes("Twitter")){
-    id = "Twitter";
-  }
+// function updateAutoPlayStatus(site, state){
+//   var id, updateState;
+//   if(site.includes("Twitter")){
+//     id = "Twitter";
+//   }
 
-  if(state === true){
-    updateState = id+": V";
-  }
-  else{
-    updateState = id+": X";
-  }
-  console.log("update label: ",updateState);
-  document.getElementById(id).innerHTML = updateState;
-}
+//   if(state === true){
+//     updateState = id+": V";
+//   }
+//   else{
+//     updateState = id+": X";
+//   }
+//   console.log("update label: ",updateState);
+//   document.getElementById(id).innerHTML = updateState;
+// }
 
 function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);

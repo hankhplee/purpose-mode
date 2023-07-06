@@ -767,11 +767,6 @@ function onToggleTwitterAutoplay(toggled: boolean){
                 toggleFlag = true;
                 alert(alertMessage);
                 chrome.storage.local.set({"TwitterAutoplay": toggled});
-                window.postMessage({
-                    type:  "autoplay setting update",
-                    site: "Twitter",
-                    state: toggled
-                }, "*");
             }
             });
         autoPlayToggle.parent().click();
