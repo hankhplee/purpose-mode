@@ -790,9 +790,9 @@ function onToggleLinkedInAutoplay(toggled: boolean){
     let alertMessage;
     
     if(toggled === true){
-        alertMessage = "Autoplay on Twitter has been turned OFF.\nTo turn it back on, please go to the Purpose Mode setting.";
+        alertMessage = "Autoplay on LinkedIn has been turned OFF.\nTo turn it back on, please go to the Purpose Mode setting.";
     } else{
-        alertMessage = "Autoplay on Twitter has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.";
+        alertMessage = "Autoplay on LinkedIn has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.";
     }
     
     const autoPlayToggle = $('div[data-control-name="toggle_button"]');
@@ -804,24 +804,15 @@ function onToggleLinkedInAutoplay(toggled: boolean){
     } else{
         return;
     }
-
-    let toggleFlag = false;
+    
     if(currentToggle !== toggled){
-        autoPlayToggle.on('click', function (){
-            if(toggleFlag === false){
-                toggleFlag = true;
-                alert(alertMessage);
-                chrome.storage.local.set({"LinkedInAutoplay": toggled});
-            }
-            });
         autoPlayToggle.click();
-    }else{
-        if(toggleFlag === false){
-            toggleFlag = true;
-            alert(alertMessage);
-            chrome.storage.local.set({"LinkedInAutoplay": toggled});
-        }
+        alert(alertMessage);
     }
+    // }else{
+    //     alert(alertMessage);
+    // }
+    chrome.storage.local.set({"LinkedInAutoplay": toggled});
 }
 
 
