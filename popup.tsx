@@ -51,7 +51,7 @@ function ButtonSwitch({label, storage_var, current_status}){
     // currentStatus = "V";
     currentStatus = yesIcon;
     buttonText = "Unblock";
-  }else{
+  }else if(current_status == false){
     currentStatus = noIcon;
     buttonText = "Block";
   }

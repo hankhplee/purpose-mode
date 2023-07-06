@@ -762,17 +762,23 @@ function onToggleTwitterAutoplay(toggled: boolean){
         autoPlayToggle = $('input[aria-posinset="1"]');
         alertMessage = "Autoplay on Twitter has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.";
     }
-    let toggleFlag = autoPlayToggle.is(':checked');
-    if(toggleFlag === false){
+    // let toggleFlag = autoPlayToggle.is(':checked');
+    if(autoPlayToggle.is(':checked') === false){
+        console.log("suppose to click button");
         autoPlayToggle.parent().on('click', function (){
-            if(toggleFlag === false){
-                toggleFlag = true;
-                alert(alertMessage);
-                chrome.storage.local.set({"TwitterAutoplay": toggled});
-            }
+            // if(toggleFlag === false){
+            //     toggleFlag = true;
+            //     chrome.storage.local.set({"TwitterAutoplay": toggled});
+            //     alert(alertMessage);
+            // }
+            // });
+            chrome.storage.local.set({"TwitterAutoplay": toggled});
+            alert(alertMessage);
             });
         autoPlayToggle.parent().click();
     }
+    chrome.storage.local.set({"TwitterAutoplay": toggled});
+    
 }
 
 function onToggleLinkedInAutoplay(toggled: boolean){

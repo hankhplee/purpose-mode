@@ -5,6 +5,12 @@ chrome.runtime.onInstalled.addListener(init);
 
 function init() {
     console.log("Initializing " + extName + " background script.");
+
+    // initialize local storage
+    chrome.storage.local.set({"TwitterAutoplay": false});
+    chrome.storage.local.set({"SetTwitterAutoplay": false});
+    chrome.storage.local.set({"LinkedInAutoplay": false});
+    chrome.storage.local.set({"SetLinkedInAutoplay": false});
 }
 
 function settingAutoPlay(site: string, toggled: boolean){
