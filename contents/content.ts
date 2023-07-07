@@ -78,6 +78,16 @@ function isHomePage(): boolean {
     }
 }
 
+function isYouTubeVideo(): boolean{
+    const currentWindowURL = window.location.href;
+    if (currentWindowURL.includes("https://www.youtube.com/watch?")){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 function isAutoPlaySettingPage() : boolean {
     const currentWindowURL = window.location.href;
     if (currentWindowURL.includes("https://twitter.com/settings/autoplay") || 
@@ -900,6 +910,23 @@ function setAutoPlay(){
     }
 }
 
+function onYouTubeAutoPlay(toggled: boolean){
+    let autoPlayTarget;
+    if(toggled === true){
+        autoPlayTarget = $('button[aria-label="Autoplay is on"]');
+        console.log("Turn off autoplay on YouTube: ",autoPlayTarget);
+        if(autoPlayTarget){
+            autoPlayTarget.click();
+        }
+    }else {
+        autoPlayTarget = $('button[aria-label="Autoplay is off"]');
+        console.log("Turn on autoplay on YouTube: ",autoPlayTarget);
+        if(autoPlayTarget){
+            autoPlayTarget.click();
+        }
+    }
+}
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.name !== "toggle") {
         console.log("Ignoring non-toggle event.");
@@ -921,6 +948,13 @@ function run() {
     });
     if(isAutoPlaySettingPage()){
         setAutoPlay();
+    }
+    if(isYouTubeVideo()){
+        chrome.storage.local.get("YouTubeAutoplay", (result) => {
+            setTimeout(() => {
+                onYouTubeAutoPlay(result.YouTubeAutoplay);
+            }, 7000);
+        });
     }
 }
 

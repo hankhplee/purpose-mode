@@ -13,6 +13,7 @@ function init() {
     chrome.storage.local.set({"SetLinkedInAutoplay": false});
     chrome.storage.local.set({"FacebookAutoplay": false});
     chrome.storage.local.set({"SetFacebookAutoplay": false});
+    chrome.storage.local.set({"YouTubeAutoplay": false});
 }
 
 function settingAutoPlay(site: string, toggled: boolean){

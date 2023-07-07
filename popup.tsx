@@ -291,6 +291,8 @@ function AutoPlaySwitch(){
     useChromeStorageLocal("FacebookAutoplay", false);
   const [setFacebookAutoplay] = 
     useChromeStorageLocal("SetFacebookAutoplay", false);
+  const [youTubeAutoplay,setYouTubeAutoplay] = 
+    useChromeStorageLocal("YouTubeAutoplay", false);
 
   return (
     <div>
@@ -311,6 +313,13 @@ function AutoPlaySwitch(){
       storage_var="FacebookAutoplay"
       current_status={facebookAutoplay}
       />
+      <br/>
+      <ToggleSwitch
+      label="YouTube"
+      storage_var="YouTubeAutoplay"
+      checked={youTubeAutoplay}
+      update={setYouTubeAutoplay}
+    />
 
       <hr></hr>
     </div>
