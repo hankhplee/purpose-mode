@@ -581,6 +581,7 @@ function onToggleFacebookRecomms(toggled: boolean) {
         $('div[aria-label="Reels"]').parent().parent().parent().parent(),
         // "People you may know".
         $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
+        $('span:contains("People you may know")').parent().parent().parent().parent().parent(),
         // Suggested groups.
         $('span:contains("Suggested groups")').parent().parent(),
     ];
