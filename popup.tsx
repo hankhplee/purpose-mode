@@ -48,7 +48,6 @@ function ButtonSwitch({label, storage_var, current_status}){
   let currentStatus;
   let buttonText = "";
   if(current_status == true){
-    // currentStatus = "V";
     currentStatus = yesIcon;
     buttonText = "Unblock";
   }else if(current_status == false){
@@ -284,10 +283,14 @@ function AutoPlaySwitch(){
     useChromeStorageLocal("TwitterAutoplay", false);
   const [setTwitterAutoplay] = 
     useChromeStorageLocal("SetTwitterAutoplay", false);
-    const [linkedInAutoplay] = 
+  const [linkedInAutoplay] = 
     useChromeStorageLocal("LinkedInAutoplay", false);
   const [setLinkedInAutoplay] = 
     useChromeStorageLocal("SetLinkedInAutoplay", false);
+  const [facebookAutoplay] = 
+    useChromeStorageLocal("FacebookAutoplay", false);
+  const [setFacebookAutoplay] = 
+    useChromeStorageLocal("SetFacebookAutoplay", false);
 
   return (
     <div>
@@ -302,6 +305,11 @@ function AutoPlaySwitch(){
       label="LinkedIn"
       storage_var="LinkedInAutoplay"
       current_status={linkedInAutoplay}
+      />
+      <ButtonSwitch
+      label="Facebook"
+      storage_var="FacebookAutoplay"
+      current_status={facebookAutoplay}
       />
 
       <hr></hr>

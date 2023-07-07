@@ -81,7 +81,8 @@ function isHomePage(): boolean {
 function isAutoPlaySettingPage() : boolean {
     const currentWindowURL = window.location.href;
     if (currentWindowURL.includes("https://twitter.com/settings/autoplay") || 
-        currentWindowURL.includes("https://www.linkedin.com/mypreferences/d/settings/autoplay-videos")
+        currentWindowURL.includes("https://www.linkedin.com/mypreferences/d/settings/autoplay-videos") || 
+        currentWindowURL.includes("https://www.facebook.com/settings?tab=videos")
         ){
         return true;
     } else {
@@ -210,7 +211,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
     });
 
     // For autoplay page, invoke autoplay setting
-    if(isAutoPlaySettingPage()){
+    if(isAutoPlaySettingPage() && currentPage!="Facebook"){
         setAutoPlay();
     }
 });
@@ -781,8 +782,67 @@ function onToggleTwitterAutoplay(toggled: boolean){
     
 }
 
+function onToggleFacebookAutoplay(toggled: boolean){
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+    chrome.storage.local.set({"FacebookAutoplay": toggled});
+    let currentToggle;
+    let alertMessage;
+    
+    if(toggled === true){
+        alertMessage = 'Autoplay on Facebook has been turned OFF.\nTo turn it back on, please go to the Purpose Mode setting.\n\n[NOTICE]: To avoid mulfunction, please confirm if "Auto-Play Videos" is set to "Off". If not, please manually do so.';
+    } else{
+        alertMessage = 'Autoplay on Facebook has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.\n\n[NOTICE]: To avoid mulfunction, please confirm if "Auto-Play Videos" is set to "Default". If not, please manually do so.';
+    }
+    let currentToggleTarget;
+    setTimeout(() => {
+        currentToggleTarget = $('iframe').contents().find('span[id="autoplay_setting"]');
+        if(currentToggleTarget.length === 0){
+            currentToggleTarget = $('span[id="autoplay_setting"]');
+        }
+        // let currentToggleText = document.querySelector('span[id="autoplay_setting"]').innerHTML;
+        console.log("currentToggleText: ", currentToggleTarget.text());
+        if(currentToggleTarget.text().includes("Off")){
+            currentToggle = true;
+        } else if(currentToggleTarget.text().includes("On") || currentToggleTarget.text().includes("Default")){
+            currentToggle = false;
+        } else {
+            return;
+        }
+
+        if(currentToggle !== toggled){
+            // $('iframe').contents().find('span[id="autoplay_setting"]').click();
+            // $('iframe').contents().find('span[id="autoplay_setting"]').click();
+            currentToggleTarget.click();
+            
+            console.log("currentToggleTarget", currentToggleTarget);
+            setTimeout(() => {
+                console.log("Delayed for 1 second for the page to refresh.");
+                let autoPlayToggle;
+                if(toggled === true){
+                    autoPlayToggle = $('iframe').contents().find('a:has(>span>span:contains("Off"))').parent();// turn off autoplay
+                    if(autoPlayToggle.length === 0){
+                        autoPlayToggle = $('a:has(>span>span:contains("Off"))').parent();
+                    }
+                } else {
+                    autoPlayToggle = autoPlayToggle = $('iframe').contents().find('a:has(>span>span:contains("Default"))').parent(); // turn on autoplay
+                    if(autoPlayToggle.length === 0){
+                        autoPlayToggle = $('a:has(>span>span:contains("Default"))').parent();
+                    }
+                }
+                console.log("autoPlayToggle",autoPlayToggle);
+                autoPlayToggle.click();
+                alert(alertMessage);
+            }, 1000);
+        }
+    }, 1000);
+    // }else{
+    //     alert(alertMessage);
+    // }
+}
+
 function onToggleLinkedInAutoplay(toggled: boolean){
-    console.log("remove autoplay on LinkedIn.");
     if (getCurrentPage() !== "LinkedIn") {
         return;
     }
@@ -827,8 +887,15 @@ function setAutoPlay(){
     else if(getCurrentPage() == "LinkedIn"){
         const key = "SetLinkedInAutoplay";
         chrome.storage.local.get(key, (result) => {
-            console.log("Set Twitter autoplay:",result.SetLinkedInAutoplay);
+            console.log("Set LinkedIn autoplay:",result.SetLinkedInAutoplay);
             onToggleLinkedInAutoplay(result.SetLinkedInAutoplay);
+        });
+    }
+    else if(getCurrentPage() == "Facebook"){
+        const key = "SetFacebookAutoplay";
+        chrome.storage.local.get(key, (result) => {
+            console.log("Set Facebook autoplay:",result.SetFacebookAutoplay);
+            onToggleFacebookAutoplay(result.SetFacebookAutoplay);
         });
     }
 }

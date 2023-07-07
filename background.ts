@@ -11,6 +11,8 @@ function init() {
     chrome.storage.local.set({"SetTwitterAutoplay": false});
     chrome.storage.local.set({"LinkedInAutoplay": false});
     chrome.storage.local.set({"SetLinkedInAutoplay": false});
+    chrome.storage.local.set({"FacebookAutoplay": false});
+    chrome.storage.local.set({"SetFacebookAutoplay": false});
 }
 
 function settingAutoPlay(site: string, toggled: boolean){
@@ -22,6 +24,10 @@ function settingAutoPlay(site: string, toggled: boolean){
     else if(site.includes("LinkedIn")){
         chrome.storage.local.set({"SetLinkedInAutoplay": toggled})
         .then(chrome.tabs.create({ url: "https://www.linkedin.com/mypreferences/d/settings/autoplay-videos"}));
+    }
+    else if(site.includes("Facebook")){
+        chrome.storage.local.set({"SetFacebookAutoplay": toggled})
+        .then(chrome.tabs.create({ url: "https://www.facebook.com/settings?tab=videos"}));
     }
 }
 
