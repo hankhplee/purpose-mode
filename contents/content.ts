@@ -345,6 +345,9 @@ function onToggleEnable(toggled: boolean) {
 }
 
 function onToggleLinkedInDeclutter(toggled: boolean) {
+    if (getCurrentPage() != "LinkedIn") {
+        return;
+    }
     console.log("onToggleLinkedInDeclutter: " + toggled);
 
     let elements = [
@@ -370,6 +373,9 @@ function onToggleLinkedInDeclutter(toggled: boolean) {
 }
 
 function onToggleLinkedInNotif(toggled: boolean) {
+    if (getCurrentPage() != "LinkedIn") {
+        return;
+    }
     console.log("onToggleLinkedInNotif: " + toggled);
 
     if (toggled) {
@@ -377,6 +383,10 @@ function onToggleLinkedInNotif(toggled: boolean) {
         $('span.notification-badge--show').each(function() {
             $( this ).hide();
         });
+        // reset window title
+        if(document.title !== "LinkedIn"){
+            document.title = "LinkedIn";
+        }
     } else {
         $('span.notification-badge--show').each(function() {
             $( this ).show();
@@ -385,6 +395,9 @@ function onToggleLinkedInNotif(toggled: boolean) {
 }
 
 function onToggleLinkedInRecomms(toggled: boolean) {
+    if (getCurrentPage() != "LinkedIn") {
+        return;
+    }
     console.log("onToggleLinkedInRecomms: " + toggled);
 
     let elements = [
@@ -467,6 +480,13 @@ function onToggleTwitterNotif(toggled: boolean) {
         $('div[aria-label*="unread"]').each(function(){
             $( this ).hide();
         });
+        if(document.title !== "Twitter"){
+            // reset window title
+            document.title = "Twitter";
+            // reset window icon
+            var icon = document.querySelector("link[rel~='icon']");
+            icon.setAttribute('href','./assets/twitter.ico');
+        }
     } else {
         showSelectors(selectors);
         // Notifications.
@@ -613,6 +633,10 @@ function onToggleFacebookNotif(toggled: boolean) {
         for (const s of selectors) {
             s.each(() => { s.hide() });
         }
+        if(document.title !== "Facebook"){
+            // reset window title
+            document.title = "Facebook";
+        }
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
@@ -714,6 +738,10 @@ function onToggleYouTubeNotif(toggled: boolean) {
     ]
     if (toggled) {
         hideSelectors(selectors);
+        if(document.title !== "YouTube"){
+            // reset window title
+            document.title = "YouTube";
+        }
     } else {
         // Only show the first selector. Showing the second selector results
         // in every category incorrectly displaying a notification icon. To fix
