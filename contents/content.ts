@@ -527,7 +527,7 @@ function onToggleTwitterClutter(toggled: boolean) {
         // DM.
         $('div[data-testid="DMDrawer"]'),
         // Search
-        $('form[aria-label="Search Twitter"]'),
+        // $('form[aria-label="Search Twitter"]'),
     ];
     if (toggled) {
         hideSelectors(selectors);
