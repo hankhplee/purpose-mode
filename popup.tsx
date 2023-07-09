@@ -189,6 +189,8 @@ function YouTubeSwitches() {
     useChromeStorageLocal("YouTubeRecomm", false)
   const [notif, setNotif] =
     useChromeStorageLocal("YouTubeNotif", false);
+  const [feed, setFeed] =
+    useChromeStorageLocal("YouTubeFeed", false);
 
   return (
     <div>
@@ -216,6 +218,12 @@ function YouTubeSwitches() {
        storage_var="YouTubeRecomm"
        checked={recomm}
        update={setRecomm}
+      />
+      <ToggleSwitch
+       label="Hide videofeed"
+       storage_var="YouTubeFeed"
+       checked={feed}
+       update={setFeed}
       />
     </div>
   )

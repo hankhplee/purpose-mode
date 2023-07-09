@@ -29,6 +29,7 @@ const settingToHandler = {
     "YouTubeRecomm":     onToggleYouTubeRecomm,
     "YouTubeNotif":      onToggleYouTubeNotif,
     "YouTubeDeclutter":  onToggleYouTubeDeclutter,
+    "YouTubeFeed":       onToggleYouTubeFeed,
 }
 
 let isEnabled = false;
@@ -206,6 +207,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "YouTubeRecomm",
         "YouTubeNotif",
         "YouTubeDeclutter",
+        "YouTubeFeed",
     ]
 
     // For each page mutation, invoke relevant toggle functions if enabled.
@@ -677,6 +679,28 @@ function onToggleYouTubeInfinite(toggled: boolean) {
     toggleInfScrolling(toggled);
 }
 
+function onToggleYouTubeFeed(toggled: boolean){
+    const currentWindow = window.top.location.href;
+    if (getCurrentPage() !== "YouTube" || currentWindow !== "https://www.youtube.com/") {
+        return;
+    }
+    const selectors = [
+        // All recommended videos on the landing page.
+        $('div[id=contents]'),
+        // Recommendation tags on top of the page.
+        $('div#scroll-container'),
+        // "Next" button of the recommendation tags.
+        $('button[aria-label="Next"]'),
+        // "See More" button when finite scrolling is activated
+        $("#tisd-show-more"),
+    ];
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
+}
+
 function onToggleYouTubeRecomm(toggled: boolean) {
     if (getCurrentPage() !== "YouTube") {
         return;
@@ -687,13 +711,11 @@ function onToggleYouTubeRecomm(toggled: boolean) {
     // Landing page.
     if (currentWindow === "https://www.youtube.com/") {
         selectors = selectors.concat([
-            // All recommended videos on the landing page.
-            $('div[id=contents]'),
             // Recommendation tags on top of the page.
             $('div#scroll-container'),
             // "Next" button of the recommendation tags.
             $('button[aria-label="Next"]'),
-            // VIdeo ad on the home page.
+            // Video ad on the home page.
             $('div#masthead-ad'),
             // Shorts.
             $('ytd-rich-shelf-renderer[is-shorts]'),
