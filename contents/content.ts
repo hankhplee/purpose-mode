@@ -13,6 +13,7 @@ const settingToHandler = {
     "TwitterInfinite":   onToggleTwitterInfinite,
     "TwitterNotif":      onToggleTwitterNotif,
     "TwitterRecomm":     onToggleTwitterRecomm,
+    "TwitterFeed":       onToggleTwitterFeed,
 
     "LinkedInDeclutter": onToggleLinkedInDeclutter,
     "LinkedInRecomms":   onToggleLinkedInRecomms,
@@ -492,6 +493,23 @@ function onToggleTwitterNotif(toggled: boolean) {
         // Notifications.
         $('div[aria-label*="unread"]').each(function(){
             $( this ).show();
+        });
+    }
+}
+
+function onToggleTwitterFeed(toggled: boolean) {
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+
+    const selector = $('div[aria-label="Timeline: Your Home Timeline"]');
+    if (toggled) {
+        selector.css({
+            "visibility": "hidden"
+        });
+    } else {
+        selector.css({
+            "visibility": "visible"
         });
     }
 }

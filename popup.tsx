@@ -234,6 +234,8 @@ function TwitterSwitches() {
     useChromeStorageLocal("TwitterClutter", false);
   const [recomm, setRecomm] =
     useChromeStorageLocal("TwitterRecomm", false)
+  const [feed, setFeed] =
+    useChromeStorageLocal("TwitterFeed", false)
 
   return (
     <div>
@@ -269,10 +271,16 @@ function TwitterSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Hide recommendations"
+       label="Hide sidebar recommendations"
        storage_var="TwitterRecomm"
        checked={recomm}
        update={setRecomm}
+      />
+      <ToggleSwitch
+       label="Hide newsfeed"
+       storage_var="TwitterFeed"
+       checked={feed}
+       update={setFeed}
       />
     </div>
   )
