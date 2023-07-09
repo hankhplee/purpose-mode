@@ -348,7 +348,6 @@ function onToggleLinkedInDeclutter(toggled: boolean) {
     if (getCurrentPage() != "LinkedIn") {
         return;
     }
-    console.log("onToggleLinkedInDeclutter: " + toggled);
 
     let elements = [
         // Messaging.
@@ -376,7 +375,6 @@ function onToggleLinkedInNotif(toggled: boolean) {
     if (getCurrentPage() != "LinkedIn") {
         return;
     }
-    console.log("onToggleLinkedInNotif: " + toggled);
 
     if (toggled) {
         // "Red dot" notification icon.
@@ -398,7 +396,6 @@ function onToggleLinkedInRecomms(toggled: boolean) {
     if (getCurrentPage() != "LinkedIn") {
         return;
     }
-    console.log("onToggleLinkedInRecomms: " + toggled);
 
     let elements = [
         // LinkedIn news.
@@ -407,7 +404,10 @@ function onToggleLinkedInRecomms(toggled: boolean) {
     ];
     if(!isHomePage()){
         // Profile recommendations.
-        elements.push($('aside.scaffold-layout__aside'));
+        // elements.push($('aside.scaffold-layout__aside'));
+        $('aside.scaffold-layout__aside').children('section').each(function(){
+            elements.push($( this ));
+        });
     }
     if (toggled) {
         for (const e of elements) { e.hide() }
