@@ -187,9 +187,10 @@ var mutationObserver = new MutationObserver(function(mutations) {
     let keys = [
         // "TwitterCompact",
         "TwitterClutter",
-        // "TwitterInfinite",
+        "TwitterInfinite",
         "TwitterNotif",
         "TwitterRecomm",
+        "TwitterFeed",
 
         "LinkedInDeclutter",
         "LinkedInRecomms",
@@ -502,14 +503,21 @@ function onToggleTwitterFeed(toggled: boolean) {
         return;
     }
 
-    const selector = $('div[aria-label="Timeline: Your Home Timeline"]');
+    const feeds = $('div[aria-label="Timeline: Your Home Timeline"]');
+    const selectors = $('div[role="presentation"]:has(> a[role="tab"])'); // "For you" and "Following" tabs
     if (toggled) {
-        selector.css({
+        feeds.css({
             "visibility": "hidden"
         });
+        selectors.each(function(){
+            $( this ).hide();
+        });
     } else {
-        selector.css({
+        feeds.css({
             "visibility": "visible"
+        });
+        selectors.each(function(){
+            $( this ).show();
         });
     }
 }
