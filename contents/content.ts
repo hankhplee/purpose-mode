@@ -439,6 +439,8 @@ function onToggleLinkedInFeed(toggled: boolean){
     const selectors = [
         // newsfeed
         $('main[aria-label="Main Feed"] > div:has(>h1)'),
+        // newsfeed sort button
+        $('div:has( > button> div > svg[aria-label="Sort order dropdown button"])'),
         // "See More" button when finite scrolling is activated
         $("#tisd-show-more"),
     ];
