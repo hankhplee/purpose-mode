@@ -245,6 +245,48 @@ function toggleInfScrolling(toggled: boolean) {
     });
 }
 
+const checkBackgroundColorDark = () => {
+    if(currentPage == "Twitter"){
+        const bgColor = $("body").css("background-color");
+        if (bgColor === "rgb(21, 32, 43)" || bgColor === "rgb(0, 0, 0)") {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else if(currentPage == "Facebook"){
+        const bgColor = $("body").css("background-color");
+        if (bgColor === "rgb(24, 25, 26)") {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else if (currentPage == "YouTube"){
+        const bgColor = $("ytd-app").css("background");
+        if (bgColor.includes("rgb(15, 15, 15)")) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else if (currentPage == "LinkedIn"){
+        const bgColor = $("body").css("background-color");
+        if (bgColor.includes("rgb(0, 0, 0)")){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        console.error("Unknown page to enable purpose mode!");
+    }
+}
+
 function resetInfScrolling(container: JQuery<HTMLElement>) {
     container.css({
         "max-height": "none",
@@ -300,6 +342,13 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
         top: `${feedHeight+containerTop-100}px`
     });
     container.prepend(button);
+
+    if (checkBackgroundColorDark()){
+        button.children("button").css({"color": "rgb(255, 255, 255)", "background-color": "rgba(0 , 0, 0, 0.7)"});
+    }
+    else{
+        button.children("button").css({"color": "rgb(0, 0, 0)", "background-color": "rgba(255 , 255, 255, 0.7)"});
+    }
 
     button.click(() => showMore(container, button));
 }
