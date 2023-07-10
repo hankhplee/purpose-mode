@@ -19,6 +19,7 @@ const settingToHandler = {
     "LinkedInRecomms":   onToggleLinkedInRecomms,
     "LinkedInInfinite":  onToggleLinkedInInfinite,
     "LinkedInNotif":     onToggleLinkedInNotif,
+    "LinkedInFeed":      onToggleLinkedInFeed,
 
     "FacebookInfinite":  onToggleFacebookInfinite,
     "FacebookDeclutter": onToggleFacebookDeclutter,
@@ -197,6 +198,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "LinkedInRecomms",
         // "LinkedInInfinite",
         "LinkedInNotif",
+        "LinkedInFeed",
 
         // "FacebookInfinite",
         "FacebookDeclutter",
@@ -425,6 +427,24 @@ function onToggleLinkedInInfinite(toggled: boolean) {
         return;
     }
     toggleInfScrolling(toggled);
+}
+
+function onToggleLinkedInFeed(toggled: boolean){
+    const currentWindow = window.top.location.href;
+    if (!currentWindow.includes("https://www.linkedin.com/feed/")) {
+        return;
+    }
+    const selectors = [
+        // newsfeed
+        $('main[aria-label="Main Feed"] > div:has(>h1)'),
+        // "See More" button when finite scrolling is activated
+        $("#tisd-show-more"),
+    ];
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
 }
 
 function onToggleTwitterReadOnly(toggled: boolean, node: Node) {

@@ -148,6 +148,8 @@ function LinkedInSwitches() {
     useChromeStorageLocal("LinkedInNotif", false);
   const [finite, setFinite] =
     useChromeStorageLocal("LinkedInInfinite", false)
+  const [feed, setFeed] =
+    useChromeStorageLocal("LinkedInFeed", false)
 
   return (
     <div>
@@ -175,6 +177,12 @@ function LinkedInSwitches() {
        storage_var="LinkedInRecomms"
        checked={recomms}
        update={setRecomms}
+      />
+      <ToggleSwitch
+       label="Hide newsfeed"
+       storage_var="LinkedInFeed"
+       checked={feed}
+       update={setFeed}
       />
     </div>
   )
