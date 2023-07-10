@@ -25,6 +25,7 @@ const settingToHandler = {
     "FacebookDeclutter": onToggleFacebookDeclutter,
     "FacebookRecomms":   onToggleFacebookRecomms,
     "FacebookNotif":     onToggleFacebookNotif,
+    "FacebookFeed":      onToggleFacebookFeed,
 
     "YouTubeInfinite":   onToggleYouTubeInfinite,
     "YouTubeRecomm":     onToggleYouTubeRecomm,
@@ -204,6 +205,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "FacebookDeclutter",
         "FacebookRecomms",
         "FacebookNotif",
+        "FacebookFeed",
 
         // "YouTubeInfinite",
         "YouTubeRecomm",
@@ -521,7 +523,8 @@ function onToggleTwitterNotif(toggled: boolean) {
 }
 
 function onToggleTwitterFeed(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    const currentWindow = window.location.href;
+    if (!currentWindow.includes("https://twitter.com/home")) {
         return;
     }
 
@@ -635,6 +638,29 @@ function onToggleFacebookDeclutter(toggled: boolean) {
     }
 }
 
+function onToggleFacebookFeed(toggled: boolean){
+    const currentWindow = window.top.location.href;
+    if (currentWindow !== "https://www.facebook.com/") {
+        return;
+    }
+    const selectors = [
+        // "Stories" and "reels" videos at the top.
+        $('div[aria-label="Stories"]').parent().parent(),
+        // “Stories” and “Reels” buttons
+        $('div[role="tablist"]:has(> div > div > div > div > div > span:contains("Stories"))'),
+        // newsfeed
+        $('div:has(>span[id="ssrb_feed_start"])'),
+        // "See More" button when finite scrolling is activated
+        $("#tisd-show-more"),
+
+    ];
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
+    }
+}
+
 function onToggleFacebookRecomms(toggled: boolean) {
     if (getCurrentPage() !== "Facebook") {
         return;
@@ -701,7 +727,7 @@ function onToggleYouTubeInfinite(toggled: boolean) {
 
 function onToggleYouTubeFeed(toggled: boolean){
     const currentWindow = window.top.location.href;
-    if (getCurrentPage() !== "YouTube" || currentWindow !== "https://www.youtube.com/") {
+    if (currentWindow !== "https://www.youtube.com/") {
         return;
     }
     const selectors = [

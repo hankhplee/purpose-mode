@@ -107,6 +107,8 @@ function FacebookSwitches() {
     useChromeStorageLocal("FacebookRecomms", false)
   const [notif, setNotif] =
     useChromeStorageLocal("FacebookNotif", false)
+  const [feed, setFeed] =
+    useChromeStorageLocal("FacebookFeed", false)
 
   return (
     <div>
@@ -134,6 +136,12 @@ function FacebookSwitches() {
        storage_var="FacebookRecomms"
        checked={recomms}
        update={setRecomms}
+      />
+      <ToggleSwitch
+       label="Hide newsfeed"
+       storage_var="FacebookFeed"
+       checked={feed}
+       update={setFeed}
       />
     </div>
   )
