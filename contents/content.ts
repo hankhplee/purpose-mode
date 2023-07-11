@@ -433,7 +433,13 @@ function onToggleLinkedInNotif(toggled: boolean) {
         return;
     }
 
+    let elements = [
+        // DM notification
+        $('mark.msg-overlay-bubble-header__unread-count'),
+    ];
+
     if (toggled) {
+        for (const e of elements) { e.hide() }
         // "Red dot" notification icon.
         $('span.notification-badge--show').each(function() {
             $( this ).hide();
@@ -443,6 +449,8 @@ function onToggleLinkedInNotif(toggled: boolean) {
             document.title = "LinkedIn";
         }
     } else {
+        for (const e of elements) { e.show() }
+        // "Red dot" notification icon.
         $('span.notification-badge--show').each(function() {
             $( this ).show();
         });
