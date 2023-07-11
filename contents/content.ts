@@ -558,6 +558,8 @@ function onToggleTwitterNotif(toggled: boolean) {
         $('div[aria-label="undefined unread items"]'),
         // Blue button that promotes new tweets.
         $('div[aria-label="New Tweets are available. Push the period key to go to the them."]'),
+        // DM box notification
+        $('svg[aria-label="New Direct Message"]'),
     ]
     if (toggled) {
         hideSelectors(selectors);
