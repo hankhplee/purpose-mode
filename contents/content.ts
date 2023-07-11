@@ -766,6 +766,10 @@ function onToggleFacebookNotif(toggled: boolean) {
         for (const s of selectors) {
             s.each(() => { s.hide() });
         }
+        // DM bubble
+        $('div[aria-label*="Open chat"]').find('div[aria-label*="unread"]').each(function() {
+            $( this ).hide();
+        });
         if(document.title !== "Facebook"){
             // reset window title
             document.title = "Facebook";
@@ -774,6 +778,10 @@ function onToggleFacebookNotif(toggled: boolean) {
         for (const s of selectors) {
             s.each(() => { s.show() });
         }
+        // DM bubble
+        $('div[aria-label*="Open chat"]').find('div[aria-label*="unread"]').each(function() {
+            $( this ).show();
+        });
     }
 }
 
