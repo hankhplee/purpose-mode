@@ -917,7 +917,9 @@ function onToggleYouTubeDeclutter(toggled: boolean) {
 }
 
 function onToggleDesaturate(toggled: boolean) {
-    console.log("onToggleDesaturate: " + toggled);
+    if (getCurrentPage() !== "Twitter" && getCurrentPage() !== "Facebook" && getCurrentPage() !== "YouTube" && getCurrentPage() !== "LinkedIn") {
+        return;
+    }
     let e = $("html");
     if (toggled) {
         // TODO: This does not work on Reddit. It also breaks the style on
