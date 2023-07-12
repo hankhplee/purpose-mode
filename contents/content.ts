@@ -15,6 +15,7 @@ const settingToHandler = {
     "TwitterRecomm":     onToggleTwitterRecomm,
     "TwitterFeed":       onToggleTwitterFeed,
 
+    "LinkedInCompact":   onToggleLinkedInCompact,
     "LinkedInDeclutter": onToggleLinkedInDeclutter,
     "LinkedInRecomms":   onToggleLinkedInRecomms,
     "LinkedInInfinite":  onToggleLinkedInInfinite,
@@ -404,6 +405,43 @@ function onToggleEnable(toggled: boolean) {
                 }
             })
         }
+    }
+}
+
+function onToggleLinkedInCompact(toggled: boolean){
+    if (getCurrentPage() != "LinkedIn") {
+        return;
+    }
+
+    let elements = [
+        /* Declutter */
+        // Messaging.
+        $('aside#msg-overlay'),
+        // Left column profile and links.
+        $('div.scaffold-layout__sidebar'),
+        // LinkedIn Premium ads (upper right).
+        $('div.premium-upsell-link'),
+        // "For Business" button.
+        $('li.global-nav__primary-item:has(> button > span[title="For Business"])'),
+        // Footer
+        $('footer[aria-label="LinkedIn Footer Content"]'),
+
+        /* Recommendations */
+        // LinkedIn news.
+        $('section:has(>div>div#feed-news-module)'),
+
+    ];
+    if(!isHomePage()){
+        elements.push($('footer.global-footer'));
+        // Profile recommendations.
+        $('aside.scaffold-layout__aside').children('section').each(function(){
+            elements.push($( this ));
+        });
+    }
+    if (toggled) {
+        for (const e of elements) { e.hide() }
+    } else {
+        for (const e of elements) { e.show() }
     }
 }
 
