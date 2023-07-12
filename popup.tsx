@@ -102,15 +102,17 @@ function FacebookSwitches() {
   const [compact, setCompact] =
     useChromeStorageLocal("FacebookCompact", false);
   const [finite, setFinite] =
-    useChromeStorageLocal("FacebookInfinite", false)
+    useChromeStorageLocal("FacebookInfinite", false);
   const [declutter, setDeclutter] =
-    useChromeStorageLocal("FacebookDeclutter", false)
+    useChromeStorageLocal("FacebookDeclutter", false);
   const [recomms, setRecomms] =
-    useChromeStorageLocal("FacebookRecomms", false)
+    useChromeStorageLocal("FacebookRecomms", false);
   const [notif, setNotif] =
-    useChromeStorageLocal("FacebookNotif", false)
+    useChromeStorageLocal("FacebookNotif", false);
   const [feed, setFeed] =
-    useChromeStorageLocal("FacebookFeed", false)
+    useChromeStorageLocal("FacebookFeed", false);
+  const [desaturate, setDesaturate] =
+    useChromeStorageLocal("FacebookDesaturate", false);
 
   return (
     <div>
@@ -151,6 +153,12 @@ function FacebookSwitches() {
        checked={feed}
        update={setFeed}
       />
+      <ToggleSwitch
+       label="Desaturate"
+       storage_var="FacebookDesaturate"
+       checked={desaturate}
+       update={setDesaturate}
+      />
     </div>
   )
 }
@@ -165,9 +173,11 @@ function LinkedInSwitches() {
   const [notif, setNotif] =
     useChromeStorageLocal("LinkedInNotif", false);
   const [finite, setFinite] =
-    useChromeStorageLocal("LinkedInInfinite", false)
+    useChromeStorageLocal("LinkedInInfinite", false);
   const [feed, setFeed] =
-    useChromeStorageLocal("LinkedInFeed", false)
+    useChromeStorageLocal("LinkedInFeed", false);
+  const [desaturate, setDesaturate] =
+    useChromeStorageLocal("LinkedInDesaturate", false);
 
   return (
     <div>
@@ -208,6 +218,12 @@ function LinkedInSwitches() {
        checked={feed}
        update={setFeed}
       />
+      <ToggleSwitch
+       label="Desaturate"
+       storage_var="LinkedInDesaturate"
+       checked={desaturate}
+       update={setDesaturate}
+      />
     </div>
   )
 }
@@ -225,6 +241,8 @@ function YouTubeSwitches() {
     useChromeStorageLocal("YouTubeNotif", false);
   const [feed, setFeed] =
     useChromeStorageLocal("YouTubeFeed", false);
+  const [desaturate, setDesaturate] =
+    useChromeStorageLocal("YouTubeDesaturate", false);
 
   return (
     <div>
@@ -265,6 +283,12 @@ function YouTubeSwitches() {
        checked={feed}
        update={setFeed}
       />
+      <ToggleSwitch
+       label="Desaturate"
+       storage_var="YouTubeDesaturate"
+       checked={desaturate}
+       update={setDesaturate}
+      />
     </div>
   )
 }
@@ -275,15 +299,17 @@ function TwitterSwitches() {
   const [compact, setCompact] =
     useChromeStorageLocal("TwitterCompact", false);
   const [finite, setFinite] =
-    useChromeStorageLocal("TwitterInfinite", false)
+    useChromeStorageLocal("TwitterInfinite", false);
   const [notif, setNotif] =
-    useChromeStorageLocal("TwitterNotif", false)
+    useChromeStorageLocal("TwitterNotif", false);
   const [clutter, setClutter] =
     useChromeStorageLocal("TwitterClutter", false);
   const [recomm, setRecomm] =
-    useChromeStorageLocal("TwitterRecomm", false)
+    useChromeStorageLocal("TwitterRecomm", false);
   const [feed, setFeed] =
-    useChromeStorageLocal("TwitterFeed", false)
+    useChromeStorageLocal("TwitterFeed", false);
+  const [desaturate, setDesaturate] =
+    useChromeStorageLocal("TwitterDesaturate", false);
 
   return (
     <div>
@@ -329,6 +355,12 @@ function TwitterSwitches() {
        storage_var="TwitterFeed"
        checked={feed}
        update={setFeed}
+      />
+      <ToggleSwitch
+       label="Desaturate"
+       storage_var="TwitterDesaturate"
+       checked={desaturate}
+       update={setDesaturate}
       />
     </div>
   )
@@ -411,7 +443,6 @@ function IndexPopup() {
       {
         enabled &&
         <div>
-          <GlobalSwitches />
           <FacebookSwitches />
           <LinkedInSwitches />
           <TwitterSwitches />

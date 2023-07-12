@@ -14,6 +14,7 @@ const settingToHandler = {
     "TwitterInfinite":   onToggleTwitterInfinite,
     "TwitterNotif":      onToggleTwitterNotif,
     "TwitterFeed":       onToggleTwitterFeed,
+    "TwitterDesaturate": onToggleTwitterDesaturate,
 
     "LinkedInCompact":   onToggleLinkedInCompact,
     // "LinkedInDeclutter": onToggleLinkedInDeclutter,
@@ -21,6 +22,7 @@ const settingToHandler = {
     "LinkedInInfinite":  onToggleLinkedInInfinite,
     "LinkedInNotif":     onToggleLinkedInNotif,
     "LinkedInFeed":      onToggleLinkedInFeed,
+    "LinkedInDesaturate":onToggleLinkedInDesaturate,
 
     "FacebookCompact":   onToggleFacebookCompact,
     // "FacebookDeclutter": onToggleFacebookDeclutter,
@@ -28,6 +30,7 @@ const settingToHandler = {
     "FacebookInfinite":  onToggleFacebookInfinite,
     "FacebookNotif":     onToggleFacebookNotif,
     "FacebookFeed":      onToggleFacebookFeed,
+    "FacebookDesaturate":onToggleFacebookDesaturate,
 
     "YouTubeCompact":    onToggleYouTubeCompact,
     // "YouTubeDeclutter":  onToggleYouTubeDeclutter,
@@ -35,6 +38,7 @@ const settingToHandler = {
     "YouTubeInfinite":   onToggleYouTubeInfinite,
     "YouTubeNotif":      onToggleYouTubeNotif,
     "YouTubeFeed":       onToggleYouTubeFeed,
+    "YouTubeDesaturate": onToggleYouTubeDesaturate,
 }
 
 let isEnabled = false;
@@ -1145,6 +1149,54 @@ function onToggleDesaturate(toggled: boolean) {
         e.css({"filter": "saturate(10%)"});
     } else {
         // e.css({"cssText": "filter: saturate(100%)"});
+        e.css({"filter": "saturate(100%)"});
+    }
+}
+
+function onToggleFacebookDesaturate(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+    let e = $("html");
+    if (toggled) {
+        e.css({"filter": "saturate(10%)"});
+    } else {
+        e.css({"filter": "saturate(100%)"});
+    }
+}
+
+function onToggleLinkedInDesaturate(toggled: boolean) {
+    if (getCurrentPage() !== "LinkedIn") {
+        return;
+    }
+    let e = $("html");
+    if (toggled) {
+        e.css({"filter": "saturate(10%)"});
+    } else {
+        e.css({"filter": "saturate(100%)"});
+    }
+}
+
+function onToggleTwitterDesaturate(toggled: boolean) {
+    if (getCurrentPage() !== "Twitter") {
+        return;
+    }
+    let e = $("html");
+    if (toggled) {
+        e.css({"filter": "saturate(10%)"});
+    } else {
+        e.css({"filter": "saturate(100%)"});
+    }
+}
+
+function onToggleYouTubeDesaturate(toggled: boolean) {
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+    let e = $("html");
+    if (toggled) {
+        e.css({"filter": "saturate(10%)"});
+    } else {
         e.css({"filter": "saturate(100%)"});
     }
 }
