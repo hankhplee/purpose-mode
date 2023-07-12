@@ -9,31 +9,31 @@ const settingToHandler = {
 
     "TwitterCompact":    onToggleTwitterCompact,
     // "TwitterReadOnly":   onToggleTwitterReadOnly,
-    "TwitterClutter":    onToggleTwitterClutter,
+    // "TwitterClutter":    onToggleTwitterClutter,
+    // "TwitterRecomm":     onToggleTwitterRecomm,
     "TwitterInfinite":   onToggleTwitterInfinite,
     "TwitterNotif":      onToggleTwitterNotif,
-    "TwitterRecomm":     onToggleTwitterRecomm,
     "TwitterFeed":       onToggleTwitterFeed,
 
     "LinkedInCompact":   onToggleLinkedInCompact,
-    "LinkedInDeclutter": onToggleLinkedInDeclutter,
-    "LinkedInRecomms":   onToggleLinkedInRecomms,
+    // "LinkedInDeclutter": onToggleLinkedInDeclutter,
+    // "LinkedInRecomms":   onToggleLinkedInRecomms,
     "LinkedInInfinite":  onToggleLinkedInInfinite,
     "LinkedInNotif":     onToggleLinkedInNotif,
     "LinkedInFeed":      onToggleLinkedInFeed,
 
     "FacebookCompact":   onToggleFacebookCompact,
+    // "FacebookDeclutter": onToggleFacebookDeclutter,
+    // "FacebookRecomms":   onToggleFacebookRecomms,
     "FacebookInfinite":  onToggleFacebookInfinite,
-    "FacebookDeclutter": onToggleFacebookDeclutter,
-    "FacebookRecomms":   onToggleFacebookRecomms,
     "FacebookNotif":     onToggleFacebookNotif,
     "FacebookFeed":      onToggleFacebookFeed,
 
     "YouTubeCompact":    onToggleYouTubeCompact,
+    // "YouTubeDeclutter":  onToggleYouTubeDeclutter,
+    // "YouTubeRecomm":     onToggleYouTubeRecomm,
     "YouTubeInfinite":   onToggleYouTubeInfinite,
-    "YouTubeRecomm":     onToggleYouTubeRecomm,
     "YouTubeNotif":      onToggleYouTubeNotif,
-    "YouTubeDeclutter":  onToggleYouTubeDeclutter,
     "YouTubeFeed":       onToggleYouTubeFeed,
 }
 
@@ -192,31 +192,31 @@ var mutationObserver = new MutationObserver(function(mutations) {
     // ];
     let keys = [
         // "TwitterCompact",
-        "TwitterClutter",
-        "TwitterInfinite",
+        // "TwitterClutter",
+        // "TwitterRecomm",
+        // "TwitterInfinite",
         "TwitterNotif",
-        "TwitterRecomm",
         "TwitterFeed",
 
         "LinkedInCompact",
-        "LinkedInDeclutter",
-        "LinkedInRecomms",
+        // "LinkedInDeclutter",
+        // "LinkedInRecomms",
         // "LinkedInInfinite",
         "LinkedInNotif",
         "LinkedInFeed",
 
-        // "FacebookInfinite",
         "FacebookCompact",
-        "FacebookDeclutter",
-        "FacebookRecomms",
+        // "FacebookDeclutter",
+        // "FacebookRecomms",
+        // "FacebookInfinite",
         "FacebookNotif",
         "FacebookFeed",
 
         // "YouTubeInfinite",
         "YouTubeCompact",
-        "YouTubeRecomm",
+        // "YouTubeRecomm",
+        // "YouTubeDeclutter",
         "YouTubeNotif",
-        "YouTubeDeclutter",
         "YouTubeFeed",
     ]
 
@@ -544,7 +544,8 @@ function onToggleLinkedInRecomms(toggled: boolean) {
 }
 
 function onToggleLinkedInInfinite(toggled: boolean) {
-    if (getCurrentPage() !== "LinkedIn") {
+    const currentWindow = window.top.location.href;
+    if (!currentWindow.includes("https://www.linkedin.com/feed/")) {
         return;
     }
     toggleInfScrolling(toggled);
