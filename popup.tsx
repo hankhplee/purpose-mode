@@ -99,6 +99,8 @@ function GlobalSwitches() {
 }
 
 function FacebookSwitches() {
+  const [compact, setCompact] =
+    useChromeStorageLocal("FacebookCompact", false);
   const [finite, setFinite] =
     useChromeStorageLocal("FacebookInfinite", false)
   const [declutter, setDeclutter] =
@@ -113,6 +115,12 @@ function FacebookSwitches() {
   return (
     <div>
       <h3>Facebook</h3>
+      <ToggleSwitch
+       label="Compact layout"
+       storage_var="FacebookCompact"
+       checked={compact}
+       update={setCompact}
+      />
       <ToggleSwitch
        label="Declutter"
        storage_var="FacebookDeclutter"

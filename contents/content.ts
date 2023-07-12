@@ -21,6 +21,7 @@ const settingToHandler = {
     "LinkedInNotif":     onToggleLinkedInNotif,
     "LinkedInFeed":      onToggleLinkedInFeed,
 
+    "FacebookCompact":   onToggleFacebookCompact,
     "FacebookInfinite":  onToggleFacebookInfinite,
     "FacebookDeclutter": onToggleFacebookDeclutter,
     "FacebookRecomms":   onToggleFacebookRecomms,
@@ -202,6 +203,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "LinkedInFeed",
 
         // "FacebookInfinite",
+        "FacebookCompact",
         "FacebookDeclutter",
         "FacebookRecomms",
         "FacebookNotif",
@@ -653,6 +655,65 @@ function onToggleFacebookInfinite(toggled: boolean) {
         return;
     }
     toggleInfScrolling(toggled);
+}
+
+function onToggleFacebookCompact(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+
+    const selectors = [
+        /* Declutter */
+        // Right column.
+        $('div[role="complementary"]'),
+        // Hamburger menu on the left.
+        $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))'),
+        // Buttons at the top of the page.
+        $('a[aria-label="Home"]'),
+        // Watch button.
+        $('a[aria-label="Watch"]'),
+        // Marketplace button.
+        $('a[aria-label="Marketplace"]'),
+        // Groups button.
+        $('a[aria-label="Groups"]'),
+        // Gaming button.
+        $('a[aria-label="Gaming"]'),
+        // Additional chat boxes.
+        $('div[aria-label*="additional chats"]'),
+        // New message box.
+        $('div[aria-label="New message"'),
+
+        /* Remove recommendations */
+        // "Stories" and "reels" videos at the top.
+        $('div[aria-label="Stories"]').parent().parent(),
+        // “Stories” and “Reels” buttons
+        $('div[role="tablist"]:has(> div > div > div > div > div > span:contains("Stories"))'),
+        // "Reels" and short video recommendations.
+        $('div[aria-label="Reels"]').parent().parent().parent().parent(),
+        // "People you may know".
+        $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
+        $('span:contains("People you may know")').parent().parent().parent().parent().parent(),
+        // Suggested groups.
+        $('span:contains("Suggested groups")').parent().parent(),
+    ];
+
+    if (toggled) {
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+        // Messenger boxes.
+        $('div[aria-label*="Open chat"').each(function(){
+            $( this ).hide();
+        });
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+        // Messenger boxes.
+        $('div[aria-label*="Open chat"').each(function(){
+            $( this ).show();
+        });
+    }
 }
 
 function onToggleFacebookDeclutter(toggled: boolean) {
