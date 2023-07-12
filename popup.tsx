@@ -156,6 +156,8 @@ function FacebookSwitches() {
 }
 
 function LinkedInSwitches() {
+  const [compact, setCompact] =
+    useChromeStorageLocal("LinkedInCompact", false);
   const [declutter, setDeclutter] =
     useChromeStorageLocal("LinkedInDeclutter", false);
   const [recomms, setRecomms] =
@@ -170,6 +172,12 @@ function LinkedInSwitches() {
   return (
     <div>
       <h3>LinkedIn</h3>
+      <ToggleSwitch
+        label="Compact Layout"
+        storage_var="LinkedInCompact"
+        checked={compact}
+        update={setCompact}
+      />
       <ToggleSwitch
         label="Declutter"
         storage_var="LinkedInDeclutter"
