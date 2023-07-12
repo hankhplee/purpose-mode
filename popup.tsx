@@ -121,7 +121,7 @@ function FacebookSwitches() {
        checked={compact}
        update={setCompact}
       />
-      <ToggleSwitch
+      {/* <ToggleSwitch
        label="Declutter"
        storage_var="FacebookDeclutter"
        checked={declutter}
@@ -132,7 +132,7 @@ function FacebookSwitches() {
        storage_var="FacebookRecomms"
        checked={recomms}
        update={setRecomms}
-      />
+      /> */}
       <ToggleSwitch
        label="Hide notifications"
        storage_var="FacebookNotif"
@@ -178,7 +178,7 @@ function LinkedInSwitches() {
         checked={compact}
         update={setCompact}
       />
-      <ToggleSwitch
+      {/* <ToggleSwitch
         label="Declutter"
         storage_var="LinkedInDeclutter"
         checked={declutter}
@@ -189,7 +189,7 @@ function LinkedInSwitches() {
        storage_var="LinkedInRecomms"
        checked={recomms}
        update={setRecomms}
-      />
+      /> */}
       <ToggleSwitch
        label="Hide notifications"
        storage_var="LinkedInNotif"
@@ -235,7 +235,7 @@ function YouTubeSwitches() {
        checked={compact}
        update={setCompact}
       />
-      <ToggleSwitch
+      {/* <ToggleSwitch
        label="Declutter"
        storage_var="YouTubeDeclutter"
        checked={declutter}
@@ -246,7 +246,7 @@ function YouTubeSwitches() {
        storage_var="YouTubeRecomm"
        checked={recomm}
        update={setRecomm}
-      />
+      /> */}
       <ToggleSwitch
         label="Hide notifications"
         storage_var="YouTubeNotif"
@@ -300,7 +300,7 @@ function TwitterSwitches() {
        checked={compact}
        update={setCompact}
       />
-      <ToggleSwitch
+      {/* <ToggleSwitch
         label="Declutter"
         storage_var="TwitterClutter"
         checked={clutter}
@@ -311,7 +311,7 @@ function TwitterSwitches() {
        storage_var="TwitterRecomm"
        checked={recomm}
        update={setRecomm}
-      />
+      /> */}
       <ToggleSwitch
        label="Hide notifications"
        storage_var="TwitterNotif"
