@@ -1,5 +1,6 @@
 import $ from "jquery";
 import "../finite_scroll_style.css";
+import twitterIcon from "data-base64:~assets/twitter.ico";
 
 const extName = "Purpose Mode";
 const settingToHandler = {
@@ -639,7 +640,7 @@ function onToggleTwitterNotif(toggled: boolean) {
             document.title = "Twitter";
             // reset window icon
             var icon = document.querySelector("link[rel~='icon']");
-            icon.setAttribute('href','./assets/twitter.ico');
+            icon.setAttribute('href',twitterIcon);
         }
     } else {
         showSelectors(selectors);
