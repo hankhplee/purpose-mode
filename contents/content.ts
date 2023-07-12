@@ -197,6 +197,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "TwitterRecomm",
         "TwitterFeed",
 
+        "LinkedInCompact",
         "LinkedInDeclutter",
         "LinkedInRecomms",
         // "LinkedInInfinite",
@@ -227,7 +228,11 @@ var mutationObserver = new MutationObserver(function(mutations) {
                 if (result[key] === true) {
                     if(key === "FacebookCompact"){
                         onToggleFacebookCompactDynamic(true);
-                    } else {
+                    }
+                    else if(key === "LinkedInCompact"){
+                        onToggleLinkedInCompactDynamic(true);
+                    } 
+                    else {
                         settingToHandler[key](result[key], mutation.target);
                     }
                 }
@@ -404,6 +409,17 @@ function onToggleEnable(toggled: boolean) {
                     settingToHandler[key](result[key]);
                 }
             })
+        }
+    }
+}
+
+function onToggleLinkedInCompactDynamic(toggled: boolean){
+    if (getCurrentPage() != "LinkedIn") {
+        return;
+    }
+    if (toggled) {
+        if($('div.scaffold-layout__sidebar').css('display') !== 'none'){
+            onToggleLinkedInCompact(toggled);
         }
     }
 }
