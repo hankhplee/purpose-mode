@@ -120,10 +120,10 @@ function FacebookSwitches() {
        update={setDeclutter}
       />
       <ToggleSwitch
-       label="Finite scrolling"
-       storage_var="FacebookInfinite"
-       checked={finite}
-       update={setFinite}
+       label="Hide newsfeed recommendations"
+       storage_var="FacebookRecomms"
+       checked={recomms}
+       update={setRecomms}
       />
       <ToggleSwitch
        label="Hide notifications"
@@ -132,10 +132,10 @@ function FacebookSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Hide recommendations"
-       storage_var="FacebookRecomms"
-       checked={recomms}
-       update={setRecomms}
+       label="Finite newsfeed scrolling"
+       storage_var="FacebookInfinite"
+       checked={finite}
+       update={setFinite}
       />
       <ToggleSwitch
        label="Hide newsfeed"
@@ -169,10 +169,10 @@ function LinkedInSwitches() {
         update={setDeclutter}
       />
       <ToggleSwitch
-       label="Finite scrolling"
-       storage_var="LinkedInInfinite"
-       checked={finite}
-       update={setFinite}
+       label="Hide sidebar recommendations"
+       storage_var="LinkedInRecomms"
+       checked={recomms}
+       update={setRecomms}
       />
       <ToggleSwitch
        label="Hide notifications"
@@ -181,10 +181,10 @@ function LinkedInSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Hide recommendations"
-       storage_var="LinkedInRecomms"
-       checked={recomms}
-       update={setRecomms}
+       label="Finite newsfeed scrolling"
+       storage_var="LinkedInInfinite"
+       checked={finite}
+       update={setFinite}
       />
       <ToggleSwitch
        label="Hide newsfeed"
@@ -218,10 +218,10 @@ function YouTubeSwitches() {
        update={setDeclutter}
       />
       <ToggleSwitch
-        label="Finite scrolling"
-        storage_var="YouTubeInfinite"
-        checked={finite}
-        update={setFinite}
+       label="Hide video recommendations"
+       storage_var="YouTubeRecomm"
+       checked={recomm}
+       update={setRecomm}
       />
       <ToggleSwitch
         label="Hide notifications"
@@ -230,13 +230,13 @@ function YouTubeSwitches() {
         update={setNotif}
       />
       <ToggleSwitch
-       label="Hide recommendations"
-       storage_var="YouTubeRecomm"
-       checked={recomm}
-       update={setRecomm}
+        label="Finite newsfeed scrolling"
+        storage_var="YouTubeInfinite"
+        checked={finite}
+        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide videofeed"
+       label="Hide newsfeed"
        storage_var="YouTubeFeed"
        checked={feed}
        update={setFeed}
@@ -283,10 +283,10 @@ function TwitterSwitches() {
         update={setClutter}
       />
       <ToggleSwitch
-        label="Finite scrolling"
-        storage_var="TwitterInfinite"
-        checked={finite}
-        update={setFinite}
+       label="Hide sidebar recommendations"
+       storage_var="TwitterRecomm"
+       checked={recomm}
+       update={setRecomm}
       />
       <ToggleSwitch
        label="Hide notifications"
@@ -295,10 +295,10 @@ function TwitterSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Hide sidebar recommendations"
-       storage_var="TwitterRecomm"
-       checked={recomm}
-       update={setRecomm}
+        label="Finite newsfeed scrolling"
+        storage_var="TwitterInfinite"
+        checked={finite}
+        update={setFinite}
       />
       <ToggleSwitch
        label="Hide newsfeed"
@@ -328,7 +328,7 @@ function AutoPlaySwitch(){
 
   return (
     <div>
-      <h4>Autoplay Blocking</h4>
+      <h4>Block autoplay</h4>
 
       <ButtonSwitch
       label="Twitter"
