@@ -213,6 +213,8 @@ function LinkedInSwitches() {
 }
 
 function YouTubeSwitches() {
+  const [compact, setCompact] =
+    useChromeStorageLocal("YouTubeCompact", false);
   const [declutter, setDeclutter] =
     useChromeStorageLocal("YouTubeDeclutter", false)
   const [finite, setFinite] =
@@ -227,6 +229,12 @@ function YouTubeSwitches() {
   return (
     <div>
       <h3>YouTube</h3>
+      <ToggleSwitch
+       label="Compact layout"
+       storage_var="YouTubeCompact"
+       checked={compact}
+       update={setCompact}
+      />
       <ToggleSwitch
        label="Declutter"
        storage_var="YouTubeDeclutter"

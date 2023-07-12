@@ -29,6 +29,7 @@ const settingToHandler = {
     "FacebookNotif":     onToggleFacebookNotif,
     "FacebookFeed":      onToggleFacebookFeed,
 
+    "YouTubeCompact":    onToggleYouTubeCompact,
     "YouTubeInfinite":   onToggleYouTubeInfinite,
     "YouTubeRecomm":     onToggleYouTubeRecomm,
     "YouTubeNotif":      onToggleYouTubeNotif,
@@ -212,6 +213,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "FacebookFeed",
 
         // "YouTubeInfinite",
+        "YouTubeCompact",
         "YouTubeRecomm",
         "YouTubeNotif",
         "YouTubeDeclutter",
@@ -999,6 +1001,15 @@ function onToggleYouTubeFeed(toggled: boolean){
     } else {
         showSelectors(selectors);
     }
+}
+
+function onToggleYouTubeCompact(toggled: boolean){
+    if (getCurrentPage() !== "YouTube") {
+        return;
+    }
+    
+    onToggleYouTubeRecomm(toggled);
+    onToggleYouTubeDeclutter(toggled);
 }
 
 function onToggleYouTubeRecomm(toggled: boolean) {
