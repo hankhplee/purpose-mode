@@ -689,7 +689,7 @@ function onToggleFacebookCompact(toggled: boolean) {
         // “Stories” and “Reels” buttons
         $('div[role="tablist"]:has(> div > div > div > div > div > span:contains("Stories"))'),
         // "Reels" and short video recommendations.
-        $('div[aria-label="Reels"]').parent().parent().parent().parent(),
+        // $('div[aria-label="Reels"]').parent().parent().parent().parent(),
         // "People you may know".
         $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
         $('span:contains("People you may know")').parent().parent().parent().parent().parent(),
@@ -705,6 +705,10 @@ function onToggleFacebookCompact(toggled: boolean) {
         $('div[aria-label*="Open chat"').each(function(){
             $( this ).hide();
         });
+        // "Reels" and short video recommendations.
+        // $('div[aria-label="Reels"]').each(function(){
+        //     $( this ).parent().parent().parent().parent().hide();
+        // });
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
@@ -713,6 +717,10 @@ function onToggleFacebookCompact(toggled: boolean) {
         $('div[aria-label*="Open chat"').each(function(){
             $( this ).show();
         });
+        // // "Reels" and short video recommendations.
+        // $('div:has( > div > div > div > div[aria-label="Reels"])').each(function(){
+        //     $( this ).show();
+        // });
     }
 }
 
