@@ -224,7 +224,11 @@ var mutationObserver = new MutationObserver(function(mutations) {
         for (const key of keys) {
             chrome.storage.local.get(key, (result) => {
                 if (result[key] === true) {
-                    settingToHandler[key](result[key], mutation.target);
+                    if(key === "FacebookCompact"){
+                        onToggleFacebookCompactDynamic(true);
+                    } else {
+                        settingToHandler[key](result[key], mutation.target);
+                    }
                 }
             });
         }
@@ -657,6 +661,64 @@ function onToggleFacebookInfinite(toggled: boolean) {
     toggleInfScrolling(toggled);
 }
 
+function onToggleFacebookCompactDynamic(toggled: boolean){
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+    const selectors = [
+        /* Declutter */
+        // Additional chat boxes.
+        $('div[aria-label*="additional chats"]'),
+        // New message box.
+        $('div[aria-label="New message"'),
+
+        /* Remove recommendations */
+        // "Reels" and short video recommendations.
+        // $('div[aria-label="Reels"]').parent().parent().parent().parent(),
+        // "People you may know".
+        $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
+        $('span:contains("People you may know")').parent().parent().parent().parent().parent(),
+        // Suggested groups.
+        $('span:contains("Suggested groups")').parent().parent(),
+    ];
+
+    if (toggled) {
+        // check if need to run FacebookCompactDynamic
+        if($('div[role="complementary"]').css('display') !== 'none'){
+            onToggleFacebookCompact(toggled);
+            console.log("Run FacebookCompact");
+            return;
+        }
+        else{
+            console.log("Run FacebookCompactDynamic");
+        }
+
+        for (const s of selectors) {
+            s.each(() => { s.hide() });
+        }
+        // Messenger boxes.
+        $('div[aria-label*="Open chat"').each(function(){
+            $( this ).hide();
+        });
+        // "Reels" and short video recommendations. (optimal solution; comment out due to performance issue)
+        $('div[aria-label="Reels"]').each(function(){
+            $( this ).parent().parent().parent().parent().hide();
+        });
+    } else {
+        for (const s of selectors) {
+            s.each(() => { s.show() });
+        }
+        // Messenger boxes.
+        $('div[aria-label*="Open chat"').each(function(){
+            $( this ).show();
+        });
+        // // "Reels" and short video recommendations.
+        $('div:has( > div > div > div > div[aria-label="Reels"])').each(function(){
+            $( this ).show();
+        });
+    }
+}
+
 function onToggleFacebookCompact(toggled: boolean) {
     if (getCurrentPage() !== "Facebook") {
         return;
@@ -705,10 +767,10 @@ function onToggleFacebookCompact(toggled: boolean) {
         $('div[aria-label*="Open chat"').each(function(){
             $( this ).hide();
         });
-        // "Reels" and short video recommendations.
-        // $('div[aria-label="Reels"]').each(function(){
-        //     $( this ).parent().parent().parent().parent().hide();
-        // });
+        // "Reels" and short video recommendations. (optimal solution; comment out due to performance issue)
+        $('div[aria-label="Reels"]').each(function(){
+            $( this ).parent().parent().parent().parent().hide();
+        });
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
@@ -718,9 +780,9 @@ function onToggleFacebookCompact(toggled: boolean) {
             $( this ).show();
         });
         // // "Reels" and short video recommendations.
-        // $('div:has( > div > div > div > div[aria-label="Reels"])').each(function(){
-        //     $( this ).show();
-        // });
+        $('div:has( > div > div > div > div[aria-label="Reels"])').each(function(){
+            $( this ).show();
+        });
     }
 }
 
