@@ -3,8 +3,11 @@ import { sendToContentScript } from "@plasmohq/messaging"
 import { sendToBackground } from "@plasmohq/messaging"
 import { useChromeStorageLocal } from "use-chrome-storage";
 import "./ToggleSwitch.css";
+import "./mystyles.css";
+// import "./ui.js";
 import yesIcon from "data-base64:~assets/yes.png";
 import noIcon from "data-base64:~assets/no.png";
+import setting from "data-base64:~assets/settings.png";
 
 const extName = "Purpose Mode";
 
@@ -15,30 +18,33 @@ function setBool(key: string, value: boolean) {
 
 function ToggleSwitch({ label, storage_var, checked, update }) {
   return (
-    <div className="container">
-      <div className="container-child">
-        {label}{" "}
+    <div className="columns is-mobile">
+      <div className="column is-two-thirds">
+        <span className="tag">
+          {label}
+        </span>
       </div>
+      <div className="column">
+        <div className="toggle-switch">
+          <input type="checkbox"
+                className="toggle-checkbox"
+                name={storage_var}
+                id={storage_var}
+                checked={checked}
+                onChange={(e) => {
+                  update(e.target.checked);
+                  setBool(storage_var, e.target.checked);
+                  const resp = sendToContentScript({
+                    name: "toggle",
+                    body: {"button": storage_var, "state": e.target.checked}
+                  })
+                }} />
 
-      <div className="toggle-switch">
-        <input type="checkbox"
-               className="checkbox"
-               name={storage_var}
-               id={storage_var}
-               checked={checked}
-               onChange={(e) => {
-                 update(e.target.checked);
-                 setBool(storage_var, e.target.checked);
-                 const resp = sendToContentScript({
-                  name: "toggle",
-                  body: {"button": storage_var, "state": e.target.checked}
-                })
-               }} />
-
-        <label className="label" htmlFor={storage_var}>
-          <span className="inner" />
-          <span className="switch" />
-        </label>
+          <label className="label" htmlFor={storage_var}>
+            <span className="toggleswitch-inner" />
+            <span className="toggleswitch-switch" />
+          </label>
+        </div>
       </div>
     </div>
   );
@@ -47,36 +53,39 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
 function ButtonSwitch({label, storage_var, current_status}){
   let currentStatus;
   let buttonText = "";
+  let buttonClass = "button is-small is-outlined is-fullwidth ";
   if(current_status == true){
     currentStatus = yesIcon;
-    buttonText = "Unblock";
+    buttonText = "Go Unblock";
+    buttonClass = buttonClass + "is-danger";
   }else if(current_status == false){
     currentStatus = noIcon;
-    buttonText = "Block";
+    buttonText = "Go Block";
+    buttonClass = buttonClass + "is-success";
   }
 
   return (
-    <div>
-      <div id={label} style={{
-        display:"inline"
-        }}>
-        {label}:
-        <img src={currentStatus} style={{
-        width: "20px",
-        height: "20px"
-        }}></img>
+    <div className="columns is-mobile">
+      <div id={label}
+        className="column">
+          <span className="icon-text">
+            <span className="tag">{label}:</span>
+            <span className="icon">
+            <img className="image is-16x16 fas fa-home" src={currentStatus}></img>
+            </span>
+          </span>
       </div>
-      <button id={storage_var} style={{
-              display:"inline"
-              }}
-              onClick={(e) => {
-                const resp = sendToBackground({
-                name: "autoplay",
-                body: {"site": storage_var, "state": !current_status}
-              })
-              }} 
-      >{buttonText}</button>
-      
+      <div className="column">
+        <button id={storage_var}
+                className= {buttonClass}
+                onClick={(e) => {
+                  const resp = sendToBackground({
+                  name: "autoplay",
+                  body: {"site": storage_var, "state": !current_status}
+                })
+                }} 
+        >{buttonText}</button>
+      </div>
     </div>
   );
 }
@@ -115,8 +124,8 @@ function FacebookSwitches() {
     useChromeStorageLocal("FacebookDesaturate", false);
 
   return (
-    <div>
-      <h3>Facebook</h3>
+    <div className="box">
+      <h6 className="title is-6">Facebook</h6>
       <ToggleSwitch
        label="Compact layout"
        storage_var="FacebookCompact"
@@ -180,8 +189,8 @@ function LinkedInSwitches() {
     useChromeStorageLocal("LinkedInDesaturate", false);
 
   return (
-    <div>
-      <h3>LinkedIn</h3>
+    <div className="box">
+      <h6 className="title is-6">LinkedIn</h6>
       <ToggleSwitch
         label="Compact Layout"
         storage_var="LinkedInCompact"
@@ -245,8 +254,8 @@ function YouTubeSwitches() {
     useChromeStorageLocal("YouTubeDesaturate", false);
 
   return (
-    <div>
-      <h3>YouTube</h3>
+    <div className="box">
+      <h3 className="title is-6">YouTube</h3>
       <ToggleSwitch
        label="Compact layout"
        storage_var="YouTubeCompact"
@@ -312,8 +321,8 @@ function TwitterSwitches() {
     useChromeStorageLocal("TwitterDesaturate", false);
 
   return (
-    <div>
-      <h3>Twitter</h3>
+    <div className="box">
+      <h6 className="title is-6">Twitter</h6>
       {/* <ToggleSwitch
         label="Read only"
         storage_var="TwitterReadOnly"
@@ -383,8 +392,8 @@ function AutoPlaySwitch(){
     useChromeStorageLocal("YouTubeAutoplay", false);
 
   return (
-    <div>
-      <h4>Block autoplay</h4>
+    <div className="box">
+      <h6 className="title is-6">Block autoplay</h6>
 
       <ButtonSwitch
       label="Twitter"
@@ -401,15 +410,12 @@ function AutoPlaySwitch(){
       storage_var="FacebookAutoplay"
       current_status={facebookAutoplay}
       />
-      <br/>
       <ToggleSwitch
       label="YouTube"
       storage_var="YouTubeAutoplay"
       checked={youTubeAutoplay}
       update={setYouTubeAutoplay}
     />
-
-      <hr></hr>
     </div>
   )
 
@@ -421,24 +427,68 @@ function IndexPopup() {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
+        // display: "flex",
+        // flexDirection: "column",
         padding: 16,
         width: "300px"
       }}>
-
-      <h2>{extName}</h2>
+    <div id="hero">
       <div>
-        <AutoPlaySwitch/>
+        <div className="has-text-right">
+          <div id="dropdown_setting" className="dropdown is-right">
+            <div className="dropdown-trigger">
+              <span>
+                <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} />
+              </span>
+            </div>
+            <div className="dropdown-menu" id="dropdown-menu" role="menu">
+              <div className="dropdown-content has-text-centered">
+                <div className="dropdown-item">
+                  <p className="heading">ID</p> 
+                  <p id="userId">user id</p>
+                </div> 
+                <div className="dropdown-item">
+                  <button className="button is-small" id="test_notification">Test notification</button> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="has-text-centered">
+          <h2 className="title is-4"> {extName}</h2>
+        </div>
       </div>
-      <div>
-        <br/>
-      <ToggleSwitch
-        label="Purpose Mode Enable"
-        storage_var="Enable"
-        checked={enabled}
-        update={setEnabled}
-      />
+    </div>
+    <nav className="level is-mobile">
+      {/* <div className="level-item has-text-centered">
+        <div>
+          <p className="heading">Today Answered</p>
+          <p id="numTodayAnswered">0</p>
+        </div>
+      </div>
+      <div className="level-item has-text-centered">
+        <div>
+          <p className="heading">Total Answered</p>
+          <p id="numTotalAnswered">0</p>
+        </div>
+      </div> */}
+    </nav>
+    {/* <nav className="level is-mobile">
+      <div className="level-item has-text-centered">
+        <button className="button is-info is-small" id="questionnaire">Questionnaire</button>
+      </div>
+    </nav> */}
+
+    
+      <AutoPlaySwitch/>
+      
+      <div className="box hero is-primary">
+        <ToggleSwitch
+          label="Purpose Mode Enable"
+          storage_var="Enable"
+          checked={enabled}
+          update={setEnabled}
+        />
       </div>
       {
         enabled &&
@@ -449,7 +499,7 @@ function IndexPopup() {
           <YouTubeSwitches />
         </div>
       }
-    </div>
+  </div>
   )
 }
 
