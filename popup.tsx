@@ -502,9 +502,9 @@ function IndexPopup() {
         padding: 16,
         width: "300px"
       }}>
-    <div id="hero">
-      <div>
-        <div className="has-text-right">
+    <div id="hero" className="block">
+      <div className="columns is-mobile">
+        <div className="column has-text-right">
           <div id="dropdown_setting" className="dropdown is-right">
             <div className="dropdown-trigger">
               <span>
@@ -541,12 +541,9 @@ function IndexPopup() {
             </div>
           </div>
         </div>
-        <div className="has-text-centered">
-          <h2 className="title is-6"> {extName}</h2>
-        </div>
       </div>
     </div>
-    <nav className="level is-mobile">
+    <nav className="level is-mobile block">
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Today Answered</p>
