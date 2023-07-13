@@ -715,7 +715,7 @@ function onToggleFacebookCompactDynamic(toggled: boolean){
 
     if (toggled) {
         // check if need to run FacebookCompactDynamic
-        if($('div[role="complementary"]').css('display') !== 'none'){
+        if($('div[aria-label="Stories"]').parent().parent().css('display') !== 'none'){
             onToggleFacebookCompact(toggled);
             console.log("Run FacebookCompact");
             return;
