@@ -543,7 +543,7 @@ function IndexPopup() {
         </div>
       </div>
     </div>
-    <nav className="level is-mobile">
+    <nav className="level is-mobile block">
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Today Answered</p>
