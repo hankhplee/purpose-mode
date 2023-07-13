@@ -438,7 +438,7 @@ function IndexPopup() {
           <div id="dropdown_setting" className="dropdown is-right">
             <div className="dropdown-trigger">
               <span>
-                <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} />
+                {/* <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} /> */}
               </span>
             </div>
             <div className="dropdown-menu" id="dropdown-menu" role="menu">
