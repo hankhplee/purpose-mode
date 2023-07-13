@@ -32,6 +32,7 @@
   "manifest": {
     "host_permissions": [
       "https://*/*"
-    ]
+    ],
+    "permissions": ["notifications"]
   }
 }

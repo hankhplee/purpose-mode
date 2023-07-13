@@ -508,7 +508,18 @@ function IndexPopup() {
           <div id="dropdown_setting" className="dropdown is-right">
             <div className="dropdown-trigger">
               <span>
-                {/* <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} /> */}
+                <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} 
+                onClick={(e) => {
+                  var dropdown_setting = document.getElementById("dropdown_setting");
+                  var dropdown_setting_class = dropdown_setting.getAttribute('class');
+                  if (dropdown_setting_class == "dropdown is-right") {
+                    dropdown_setting.setAttribute('class', "dropdown is-right is-active");
+                  }
+                  else {
+                    dropdown_setting.setAttribute('class', "dropdown is-right");
+                  }
+                }}
+                />
               </span>
             </div>
             <div className="dropdown-menu" id="dropdown-menu" role="menu">
@@ -518,7 +529,13 @@ function IndexPopup() {
                   <p id="userId">user id</p>
                 </div> 
                 <div className="dropdown-item">
-                  <button className="button is-small" id="test_notification">Test notification</button> 
+                  <button className="button is-small" id="test_notification"
+                  onClick={(e) => {
+                    const resp = sendToBackground({
+                    name: "test notification"
+                    })
+                  }} 
+                  >Test notification</button> 
                 </div>
               </div>
             </div>
@@ -530,7 +547,7 @@ function IndexPopup() {
       </div>
     </div>
     <nav className="level is-mobile">
-      {/* <div className="level-item has-text-centered">
+      <div className="level-item has-text-centered">
         <div>
           <p className="heading">Today Answered</p>
           <p id="numTodayAnswered">0</p>
@@ -541,13 +558,13 @@ function IndexPopup() {
           <p className="heading">Total Answered</p>
           <p id="numTotalAnswered">0</p>
         </div>
-      </div> */}
+      </div>
     </nav>
-    {/* <nav className="level is-mobile">
+    <nav className="level is-mobile">
       <div className="level-item has-text-centered">
         <button className="button is-info is-small" id="questionnaire">Questionnaire</button>
       </div>
-    </nav> */}
+    </nav>
 
       <div className="block">  
         <ExpandableMenu
