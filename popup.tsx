@@ -585,7 +585,11 @@ function IndexPopup() {
         </div>
       </div>
     </div>
+<<<<<<< HEAD
     <nav className="level is-mobile block">
+=======
+    <nav className="level is-mobile">
+>>>>>>> 9cf21d4 (Added ESM study interface)
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Today Answered</p>
@@ -604,6 +608,7 @@ function IndexPopup() {
         <button className="button is-info is-small" id="questionnaire">Questionnaire</button>
       </div>
     </nav>
+<<<<<<< HEAD
 
       <div className="block">  
         <ExpandableMenu
@@ -612,6 +617,8 @@ function IndexPopup() {
             Switches={AutoPlaySwitch}
             />
       </div>
+=======
+>>>>>>> 9cf21d4 (Added ESM study interface)
 
       <GlobalSwitch
           label="Purpose Mode"
