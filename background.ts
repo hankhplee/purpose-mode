@@ -1,3 +1,4 @@
+import surveyIcon from "data-base64:~assets/survey.png";
 const extName = "Purpose Mode";
 
 // Initialize storage variables at installation time.
@@ -33,15 +34,21 @@ function settingAutoPlay(site: string, toggled: boolean){
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.name !== "autoplay") {
-        console.log("Ignoring non-autoplay event.");
-        return;
-    }
-
-    console.log("UI wants the autoplay of " + msg.body.site +
+    if (msg.name === "autoplay") {
+        console.log("UI wants the autoplay of " + msg.body.site +
                 "' changed to '" + msg.body.state + "'.");
-    settingAutoPlay(msg.body.site,msg.body.state);
-    
+        settingAutoPlay(msg.body.site,msg.body.state);
+    }
+    else if(msg.name === "test notification"){
+        var timestamp = new Date().getTime();
+        var questionnaireNotification = "questionnaire-notification" + timestamp;
+        chrome.notifications.create(questionnaireNotification, {
+            "type": "basic",
+            "iconUrl": surveyIcon,
+            "title": "You have a questionnaire to fill!",
+            "message": "Click this notification to answer the questionnaire.",
+        });
+    }
 })
 
 export {};
