@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useCollapse } from "react-collapsed";
 import { sendToContentScript } from "@plasmohq/messaging"
 import { sendToBackground } from "@plasmohq/messaging"
 import { useChromeStorageLocal } from "use-chrome-storage";
@@ -124,8 +125,7 @@ function FacebookSwitches() {
     useChromeStorageLocal("FacebookDesaturate", false);
 
   return (
-    <div className="box">
-      <h6 className="title is-6">Facebook</h6>
+    <div>
       <ToggleSwitch
        label="Compact layout"
        storage_var="FacebookCompact"
@@ -189,8 +189,7 @@ function LinkedInSwitches() {
     useChromeStorageLocal("LinkedInDesaturate", false);
 
   return (
-    <div className="box">
-      <h6 className="title is-6">LinkedIn</h6>
+    <div>
       <ToggleSwitch
         label="Compact Layout"
         storage_var="LinkedInCompact"
@@ -254,8 +253,7 @@ function YouTubeSwitches() {
     useChromeStorageLocal("YouTubeDesaturate", false);
 
   return (
-    <div className="box">
-      <h3 className="title is-6">YouTube</h3>
+    <div>
       <ToggleSwitch
        label="Compact layout"
        storage_var="YouTubeCompact"
@@ -321,8 +319,7 @@ function TwitterSwitches() {
     useChromeStorageLocal("TwitterDesaturate", false);
 
   return (
-    <div className="box">
-      <h6 className="title is-6">Twitter</h6>
+    <div>
       {/* <ToggleSwitch
         label="Read only"
         storage_var="TwitterReadOnly"
@@ -421,6 +418,59 @@ function AutoPlaySwitch(){
 
 }
 
+function getTabURL() {
+  return new Promise<string>((resolve, reject) => {
+      try {
+          chrome.tabs.query({
+              active: true,
+          }, function (tabs) {
+              resolve(tabs[0].url);
+          })
+      } catch (e) {
+          reject("fail");
+      }
+  })
+}
+
+function ExpandableMenu({name, matchURL, Switches}) {
+  const {
+    getCollapseProps,
+    getToggleProps,
+    isExpanded,
+    setExpanded,
+  } = useCollapse();
+
+  useEffect(() => {
+    const fetchURL = async () => {
+      const url = await getTabURL();
+      if (url.startsWith(matchURL)) {
+        setExpanded(true);
+      }
+    }
+    fetchURL();
+  }, []);
+
+  return (
+    <div className="collapsible">
+      <div className="box">
+        <div className="header" {...getToggleProps({
+          onClick: () => setExpanded((prevExpanded) => !prevExpanded),
+        })}>
+          { isExpanded ?
+            <h6 className="title is-6">{name}</h6>
+            :
+            <h6 className="title is-6">{name} »</h6>
+          }
+        </div>
+
+        <div {...getCollapseProps()}>
+          <Switches />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);
 
@@ -493,10 +543,29 @@ function IndexPopup() {
       {
         enabled &&
         <div>
-          <FacebookSwitches />
-          <LinkedInSwitches />
-          <TwitterSwitches />
-          <YouTubeSwitches />
+          <ExpandableMenu
+           name="Facebook"
+           matchURL="https://www.facebook.com"
+           Switches={FacebookSwitches}
+          />
+
+          <ExpandableMenu
+           name="LinkedIn"
+           matchURL="https://www.linkedin.com"
+           Switches={LinkedInSwitches}
+          />
+
+          <ExpandableMenu
+           name="Twitter"
+           matchURL="https://twitter.com"
+           Switches={TwitterSwitches}
+          />
+
+          <ExpandableMenu
+           name="YouTube"
+           matchURL="https://www.youtube.com"
+           Switches={YouTubeSwitches}
+          />
         </div>
       }
   </div>
