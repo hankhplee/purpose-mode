@@ -435,37 +435,8 @@ function onToggleLinkedInCompact(toggled: boolean){
     if (getCurrentPage() != "LinkedIn") {
         return;
     }
-
-    let elements = [
-        /* Declutter */
-        // Messaging.
-        $('aside#msg-overlay'),
-        // Left column profile and links.
-        $('div.scaffold-layout__sidebar'),
-        // LinkedIn Premium ads (upper right).
-        $('div.premium-upsell-link'),
-        // "For Business" button.
-        $('li.global-nav__primary-item:has(> button > span[title="For Business"])'),
-        // Footer
-        $('footer[aria-label="LinkedIn Footer Content"]'),
-
-        /* Recommendations */
-        // LinkedIn news.
-        $('section:has(>div>div#feed-news-module)'),
-
-    ];
-    if(!isHomePage()){
-        elements.push($('footer.global-footer'));
-        // Profile recommendations.
-        $('aside.scaffold-layout__aside').children('section').each(function(){
-            elements.push($( this ));
-        });
-    }
-    if (toggled) {
-        for (const e of elements) { e.hide() }
-    } else {
-        for (const e of elements) { e.show() }
-    }
+    onToggleLinkedInDeclutter(toggled);
+    onToggleLinkedInRecomms(toggled);
 }
 
 function onToggleLinkedInDeclutter(toggled: boolean) {
@@ -531,12 +502,10 @@ function onToggleLinkedInRecomms(toggled: boolean) {
 
     let elements = [
         // LinkedIn news.
-        // $('aside[aria-label="LinkedIn News"]'),
         $('section:has(>div>div#feed-news-module)'),
     ];
     if(!isHomePage()){
         // Profile recommendations.
-        // elements.push($('aside.scaffold-layout__aside'));
         $('aside.scaffold-layout__aside').children('section').each(function(){
             elements.push($( this ));
         });
@@ -775,8 +744,8 @@ function onToggleFacebookCompactDynamic(toggled: boolean){
             $( this ).show();
         });
         // // "Reels" and short video recommendations.
-        $('div:has( > div > div > div > div[aria-label="Reels"])').each(function(){
-            $( this ).show();
+        $('div[aria-label="Reels"]').each(function(){
+            $( this ).parent().parent().parent().parent().show();
         });
     }
 }
@@ -785,67 +754,8 @@ function onToggleFacebookCompact(toggled: boolean) {
     if (getCurrentPage() !== "Facebook") {
         return;
     }
-
-    const selectors = [
-        /* Declutter */
-        // Right column.
-        $('div[role="complementary"]'),
-        // Hamburger menu on the left.
-        $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))'),
-        // Buttons at the top of the page.
-        $('a[aria-label="Home"]'),
-        // Watch button.
-        $('a[aria-label="Watch"]'),
-        // Marketplace button.
-        $('a[aria-label="Marketplace"]'),
-        // Groups button.
-        $('a[aria-label="Groups"]'),
-        // Gaming button.
-        $('a[aria-label="Gaming"]'),
-        // Additional chat boxes.
-        $('div[aria-label*="additional chats"]'),
-        // New message box.
-        $('div[aria-label="New message"'),
-
-        /* Remove recommendations */
-        // "Stories" and "reels" videos at the top.
-        $('div[aria-label="Stories"]').parent().parent(),
-        // “Stories” and “Reels” buttons
-        $('div[role="tablist"]:has(> div > div > div > div > div > span:contains("Stories"))'),
-        // "Reels" and short video recommendations.
-        // $('div[aria-label="Reels"]').parent().parent().parent().parent(),
-        // "People you may know".
-        $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
-        $('span:contains("People you may know")').parent().parent().parent().parent().parent(),
-        // Suggested groups.
-        $('span:contains("Suggested groups")').parent().parent(),
-    ];
-
-    if (toggled) {
-        for (const s of selectors) {
-            s.each(() => { s.hide() });
-        }
-        // Messenger boxes.
-        $('div[aria-label*="Open chat"').each(function(){
-            $( this ).hide();
-        });
-        // "Reels" and short video recommendations. (optimal solution; comment out due to performance issue)
-        $('div[aria-label="Reels"]').each(function(){
-            $( this ).parent().parent().parent().parent().hide();
-        });
-    } else {
-        for (const s of selectors) {
-            s.each(() => { s.show() });
-        }
-        // Messenger boxes.
-        $('div[aria-label*="Open chat"').each(function(){
-            $( this ).show();
-        });
-        // // "Reels" and short video recommendations.
-        $('div:has( > div > div > div > div[aria-label="Reels"])').each(function(){
-            $( this ).show();
-        });
-    }
+    onToggleFacebookRecomms(toggled);
+    onToggleFacebookDeclutter(toggled);
 }
 
 function onToggleFacebookDeclutter(toggled: boolean) {
@@ -925,8 +835,6 @@ function onToggleFacebookRecomms(toggled: boolean) {
         $('div[aria-label="Stories"]').parent().parent(),
         // “Stories” and “Reels” buttons
         $('div[role="tablist"]:has(> div > div > div > div > div > span:contains("Stories"))'),
-        // "Reels" and short video recommendations.
-        $('div[aria-label="Reels"]').parent().parent().parent().parent(),
         // "People you may know".
         $('span:contains("People You May Know")').parent().parent().parent().parent().parent(),
         $('span:contains("People you may know")').parent().parent().parent().parent().parent(),
@@ -937,10 +845,18 @@ function onToggleFacebookRecomms(toggled: boolean) {
         for (const s of selectors) {
             s.each(() => { s.hide() });
         }
+        // "Reels" and short video recommendations.
+        $('div[aria-label="Reels"]').each(function(){
+            $( this ).parent().parent().parent().parent().hide();
+        });
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
         }
+        // "Reels" and short video recommendations.
+        $('div[aria-label="Reels"]').each(function(){
+            $( this ).parent().parent().parent().parent().show();
+        });
     }
 }
 
