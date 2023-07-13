@@ -423,6 +423,7 @@ function getTabURL() {
       try {
           chrome.tabs.query({
               active: true,
+              lastFocusedWindow: true,
           }, function (tabs) {
               resolve(tabs[0].url);
           })
@@ -443,7 +444,7 @@ function ExpandableMenu({name, matchURL, Switches}) {
   useEffect(() => {
     const fetchURL = async () => {
       const url = await getTabURL();
-      if (url.startsWith(matchURL)) {
+      if (url.includes(matchURL)) {
         setExpanded(true);
       }
     }
