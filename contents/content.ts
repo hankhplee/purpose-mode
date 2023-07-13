@@ -33,6 +33,7 @@ const settingToHandler = {
     "FacebookFeed":      onToggleFacebookFeed,
     "FacebookDesaturate":onToggleFacebookDesaturate,
 
+    "YouTubeAutoplay":   onYouTubeAutoPlay,
     "YouTubeCompact":    onToggleYouTubeCompact,
     // "YouTubeDeclutter":  onToggleYouTubeDeclutter,
     // "YouTubeRecomm":     onToggleYouTubeRecomm,
@@ -217,6 +218,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "FacebookNotif",
         "FacebookFeed",
 
+        "YouTubeAutoplay",
         "YouTubeCompact",
         // "YouTubeRecomm",
         // "YouTubeDeclutter",
@@ -1277,18 +1279,25 @@ function setAutoPlay(){
 }
 
 function onYouTubeAutoPlay(toggled: boolean){
+    if(!isYouTubeVideo()){
+        return;
+    }
     let autoPlayTarget;
+    const autoPlayTargetOn = $('button[aria-label="Autoplay is on"]');
+    const autoPlayTargetOff = $('button[aria-label="Autoplay is off"]');
+    if(autoPlayTargetOn.length === 0 && autoPlayTargetOff.length === 0){
+        setTimeout(() => {onYouTubeAutoPlay(toggled);}, 500);
+        return;
+    }
     if(toggled === true){
-        autoPlayTarget = $('button[aria-label="Autoplay is on"]');
         console.log("Turn off autoplay on YouTube: ",autoPlayTarget);
-        if(autoPlayTarget){
-            autoPlayTarget.click();
+        if(autoPlayTargetOn){
+            autoPlayTargetOn.click();
         }
     }else {
-        autoPlayTarget = $('button[aria-label="Autoplay is off"]');
         console.log("Turn on autoplay on YouTube: ",autoPlayTarget);
-        if(autoPlayTarget){
-            autoPlayTarget.click();
+        if(autoPlayTargetOff){
+            autoPlayTargetOff.click();
         }
     }
 }
@@ -1315,13 +1324,13 @@ function run() {
     if(isAutoPlaySettingPage()){
         setAutoPlay();
     }
-    if(isYouTubeVideo()){
-        chrome.storage.local.get("YouTubeAutoplay", (result) => {
-            setTimeout(() => {
-                onYouTubeAutoPlay(result.YouTubeAutoplay);
-            }, 7000);
-        });
-    }
+    // if(isYouTubeVideo()){
+    //     chrome.storage.local.get("YouTubeAutoplay", (result) => {
+    //         setTimeout(() => {
+    //             onYouTubeAutoPlay(result.YouTubeAutoplay);
+    //         }, 7000);
+    //     });
+    // }
 }
 
 console.log(__filename + " running.");
