@@ -587,10 +587,14 @@ function IndexPopup() {
       </div>
     </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <nav className="level is-mobile block">
 =======
     <nav className="level is-mobile">
 >>>>>>> 9eb0269 (Added ESM study interface)
+=======
+    <nav className="level is-mobile block">
+>>>>>>> 12bed1e (Updated ESM study popup layout)
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Today Answered</p>
