@@ -217,10 +217,10 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "FacebookNotif",
         "FacebookFeed",
 
-        // "YouTubeInfinite",
         "YouTubeCompact",
         // "YouTubeRecomm",
         // "YouTubeDeclutter",
+        "YouTubeInfinite",
         "YouTubeNotif",
         "YouTubeFeed",
     ]
@@ -897,15 +897,21 @@ function onToggleFacebookNotif(toggled: boolean) {
 }
 
 function onToggleYouTubeInfinite(toggled: boolean) {
+    const currentWindow = window.top.location.href;
     if (getCurrentPage() !== "YouTube") {
         return;
     }
-    toggleInfScrolling(toggled);
+    if(toggled && currentWindow === "https://www.youtube.com/"){
+        toggleInfScrolling(true);
+    }
+    else{
+        toggleInfScrolling(false);
+    }
 }
 
 function onToggleYouTubeFeed(toggled: boolean){
     const currentWindow = window.top.location.href;
-    if (currentWindow !== "https://www.youtube.com/") {
+    if (getCurrentPage() !== "YouTube"){
         return;
     }
     const selectors = [
@@ -918,7 +924,7 @@ function onToggleYouTubeFeed(toggled: boolean){
         // "See More" button when finite scrolling is activated
         $("#tisd-show-more"),
     ];
-    if (toggled) {
+    if (toggled && currentWindow === "https://www.youtube.com/") {
         hideSelectors(selectors);
     } else {
         showSelectors(selectors);
