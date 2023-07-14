@@ -69,7 +69,7 @@ function ButtonSwitch({label, storage_var, current_status}){
   return (
     <div className="columns is-mobile">
       <div id={label}
-        className="column">
+        className="column is-three-fifths">
           <span className="icon-text">
             <span className="tag is-white">{label}:</span>
             <span className="icon">
@@ -390,8 +390,7 @@ function AutoPlaySwitch(){
     useChromeStorageLocal("YouTubeAutoplay", false);
 
   return (
-    <div className="box">
-      <h6 className="title is-6">Block autoplay</h6>
+    <div>
 
       <ButtonSwitch
       label="Twitter"
@@ -445,7 +444,10 @@ function ExpandableMenu({name, matchURL, Switches}) {
   useEffect(() => {
     const fetchURL = async () => {
       const url = await getTabURL();
-      if (url.includes(matchURL)) {
+      if (matchURL === ""){
+        setExpanded(false);
+      }
+      else if (url.includes(matchURL)) {
         setExpanded(true);
       }
     }
@@ -547,9 +549,14 @@ function IndexPopup() {
       </div>
     </nav> */}
 
-    
-      <AutoPlaySwitch/>
-      
+      <div className="block">  
+        <ExpandableMenu
+            name="Block autoplay setting"
+            matchURL=""
+            Switches={AutoPlaySwitch}
+            />
+      </div>
+
       <div className="box hero is-primary">
         <ToggleSwitch
           label="Purpose Mode Enable"
@@ -562,6 +569,18 @@ function IndexPopup() {
         enabled &&
         <div>
           <ExpandableMenu
+           name="Twitter"
+           matchURL="https://twitter.com"
+           Switches={TwitterSwitches}
+          />
+
+          <ExpandableMenu
+           name="YouTube"
+           matchURL="https://www.youtube.com"
+           Switches={YouTubeSwitches}
+          />
+          
+          <ExpandableMenu
            name="Facebook"
            matchURL="https://www.facebook.com"
            Switches={FacebookSwitches}
@@ -573,17 +592,6 @@ function IndexPopup() {
            Switches={LinkedInSwitches}
           />
 
-          <ExpandableMenu
-           name="Twitter"
-           matchURL="https://twitter.com"
-           Switches={TwitterSwitches}
-          />
-
-          <ExpandableMenu
-           name="YouTube"
-           matchURL="https://www.youtube.com"
-           Switches={YouTubeSwitches}
-          />
         </div>
       }
   </div>
