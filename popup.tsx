@@ -5,10 +5,11 @@ import { sendToBackground } from "@plasmohq/messaging"
 import { useChromeStorageLocal } from "use-chrome-storage";
 import "./ToggleSwitch.css";
 import "./mystyles.css";
-// import "./ui.js";
 import yesIcon from "data-base64:~assets/yes.png";
 import noIcon from "data-base64:~assets/no.png";
 import setting from "data-base64:~assets/settings.png";
+import upIcon from "data-base64:~assets/up.png";
+import downIcon from "data-base64:~assets/down.png";
 
 const extName = "Purpose Mode";
 
@@ -21,7 +22,7 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
   return (
     <div className="columns is-mobile">
       <div className="column is-two-thirds">
-        <span className="tag">
+        <span className="tag is-white">
           {label}
         </span>
       </div>
@@ -70,7 +71,7 @@ function ButtonSwitch({label, storage_var, current_status}){
       <div id={label}
         className="column">
           <span className="icon-text">
-            <span className="tag">{label}:</span>
+            <span className="tag is-white">{label}:</span>
             <span className="icon">
             <img className="image is-16x16 fas fa-home" src={currentStatus}></img>
             </span>
@@ -125,7 +126,7 @@ function FacebookSwitches() {
     useChromeStorageLocal("FacebookDesaturate", false);
 
   return (
-    <div>
+    <div className="content">
       <ToggleSwitch
        label="Compact layout"
        storage_var="FacebookCompact"
@@ -453,18 +454,34 @@ function ExpandableMenu({name, matchURL, Switches}) {
 
   return (
     <div className="collapsible">
-      <div className="box">
-        <div className="header" {...getToggleProps({
+      <div className="card">
+        <div className="header card-header" {...getToggleProps({
           onClick: () => setExpanded((prevExpanded) => !prevExpanded),
         })}>
           { isExpanded ?
-            <h6 className="title is-6">{name}</h6>
+            <p className="card-header-title">{name}
+              <span className="icon">
+                <img src={upIcon}
+                style={{
+                  width: "10px",
+                  height: "10px"
+                }}></img>
+              </span>
+            </p>
             :
-            <h6 className="title is-6">{name} »</h6>
+            <p className="card-header-title">{name} 
+              <span className="icon">
+                <img src={downIcon}
+                style={{
+                  width: "10px",
+                  height: "10px"
+                }}></img>
+              </span>
+            </p>
           }
         </div>
 
-        <div {...getCollapseProps()}>
+        <div className="card-content" {...getCollapseProps()}>
           <Switches />
         </div>
       </div>
@@ -506,7 +523,7 @@ function IndexPopup() {
           </div>
         </div>
         <div className="has-text-centered">
-          <h2 className="title is-4"> {extName}</h2>
+          <h2 className="title is-6"> {extName}</h2>
         </div>
       </div>
     </div>
