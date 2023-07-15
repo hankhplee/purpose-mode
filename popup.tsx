@@ -601,7 +601,13 @@ function IndexPopup() {
     </nav>
     <nav className="level is-mobile">
       <div className="level-item has-text-centered">
-        <button className="button is-info is-small" id="questionnaire">Questionnaire</button>
+        <button className="button is-info is-small" id="questionnaire"
+          onClick={(e) => {
+            const resp = sendToBackground({
+            name: "open questionnaire",
+          })
+          }} 
+        >Questionnaire</button>
       </div>
     </nav>
 
