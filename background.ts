@@ -33,6 +33,31 @@ function settingAutoPlay(site: string, toggled: boolean){
     }
 }
 
+function openQuestionnaire(){
+    /*insert fake data for demo purpose*/
+    //get current time
+    var date = new Date(Date.now());
+    var current_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
+    var esm = {};
+    esm['esm_site'] = "Twitter";
+    esm['esm_time'] = current_time;
+    
+    var distractions = {};
+    distractions['has_infinite_scrolling'] = 0;
+    distractions['has_autoplay'] = 0;
+    distractions['has_notifications'] = 0;
+    distractions['has_recommendations'] = 0;
+    distractions['has_cluttered_UI'] = 0;
+    distractions['has_colorfulness'] = 0;
+    esm['distractions'] = distractions;
+    chrome.storage.local.set({"sampled_esm": esm});
+    /*END*/
+    console.log("open questionnaire");
+    // open ESM questionnaire page
+    console.log(chrome.runtime.getURL("tabs/esm.html"));
+    chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
+}
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.name === "autoplay") {
         console.log("UI wants the autoplay of " + msg.body.site +
@@ -48,6 +73,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             "title": "You have a questionnaire to fill!",
             "message": "Click this notification to answer the questionnaire.",
         });
+    }
+    else if(msg.name === "open questionnaire"){
+        openQuestionnaire();
     }
 })
 
