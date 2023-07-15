@@ -1,6 +1,52 @@
+import { useChromeStorageLocal } from "use-chrome-storage";
+
 import "../mystyles.css";
+import facebookIcon from "data-base64:~assets/Facebook.png";
+import twitterIcon from "data-base64:~assets/Twitter.png";
+import linkedInIcon from "data-base64:~assets/LinkedIn.png";
+import youTubeIcon from "data-base64:~assets/YouTube.png";
+
 
 function ESMPage() {
+
+    const [esm] = useChromeStorageLocal("sampled_esm");
+
+    if(!esm){
+        return(
+            <div>
+                No ESM at this moment. Please check in later.
+            </div>
+        );
+    }
+
+    console.log("ESM", esm);
+    // get site name
+    const esmSite = esm.esm_site;
+    if(esmSite != "Twitter" && esmSite != "Facebook" && esmSite != "LinkedIn" && esmSite != "YouTube"){
+        return(
+            <div>
+                No ESM at this moment. Please check in later.
+            </div>
+        );
+    }
+    // get site logo
+    var siteLogo;
+    if(esmSite === "Twitter"){
+        siteLogo = twitterIcon;
+    }
+    else if(esmSite === "Facebook"){
+        siteLogo = facebookIcon;
+    }
+    else if(esmSite === "YouTube"){
+        siteLogo = youTubeIcon;
+    }
+    else if(esmSite === "LinkedIn"){
+        siteLogo = linkedInIcon;
+    }
+    // get esm time
+    const timestamp = esm.esm_time;
+
+
     return (
     <div>
         <section className="hero is-primary">
@@ -17,22 +63,20 @@ function ESMPage() {
                 <div className="box">
                     <div className="container">
                         <p className="content">
-                            <br />
-                            We notice that you are currently browsing <span id="esm_site">[the site]</span> 
-                            <img id="site_logo" 
+                            We notice that you are currently browsing <span>{esmSite}</span> {" "}
+                            <img 
                             style={{height: "20px", 
                                     width: "20px"}}
-                            src=""></img>. Let us know what your experience is!
+                            src={siteLogo}></img>. Let us know what your experience is!
                             <br />
-                            Current as of: <span id="esm_time">[timestamp]</span>
-                            <br />
+                            Current as of: <span id="esm_time">{timestamp}</span>
                         </p>
                     </div>
                 </div>
                 <div>
                     <div className="box">
                         <label className="label">
-                            1. Please briefly describe what you are currently doing on [the site]: 
+                            1. Please briefly describe what you are currently doing on {esmSite}: 
                             <span style={{color:"red"}}>*</span>
                         </label>
                         <div className="control">
@@ -42,7 +86,7 @@ function ESMPage() {
                     </div>
                     <div className="box">
                         <label className="label">
-                            2. Which of the following best describes your purpose for browsing [the site] at the moment:
+                            2. Which of the following best describes your purpose for browsing {esmSite} at the moment:
                             <span style={{color:"red"}}>*</span>
                         </label>    
                         <div className="control">
@@ -78,7 +122,7 @@ function ESMPage() {
                     <div className="box">
                         <div className="field">
                             <label className="label">
-                                3.1. How will you describe the distractions you feel right now when browsing [the site]:
+                                3.1. How will you describe the distractions you feel right now when browsing {esmSite}:
                                 <span style={{color:"red"}}>*</span>
                             </label>
                             <div className="control">
@@ -95,7 +139,7 @@ function ESMPage() {
 
                         <div className="field">
                             <label className="label">
-                                3.2. Please explain what things about [the site] lead you to feel distracted or not distracted (based on your answer to Q3.1):
+                                3.2. Please explain what things about {esmSite} lead you to feel distracted or not distracted (based on your answer to Q3.1):
                                 <span style={{color:"red"}}>*</span>
                             </label>
                             <div className="control">
@@ -107,7 +151,7 @@ function ESMPage() {
 
                     <div className="box">
                         <p className="label">
-                            Reflecting on your current browsing experience on [the site]:
+                            Reflecting on your current browsing experience on {esmSite}:
                         </p>
                         <br/>
                         
@@ -231,7 +275,8 @@ function ESMPage() {
             <div id="app"></div>
         </div>
     </div>
-)}
+    )
+}
 
 export default ESMPage
 
