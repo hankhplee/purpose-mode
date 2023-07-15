@@ -79,6 +79,7 @@ function ESMPage() {
                             1. Please briefly describe what you are currently doing on {esmSite}: 
                             <span style={{color:"red"}}>*</span>
                         </label>
+                        <p className="help">your response to this question will be used in the interview to help you recall your memory about this moment. Please note any information that will help you to remember.</p><br/>
                         <div className="control">
                             <input className="input" type="q_activity" id="q_activity" required
                             />
@@ -91,7 +92,15 @@ function ESMPage() {
                         </label>    
                         <div className="control">
                             <div className="select">
-                                <select id="q_purpose">
+                                <select id="q_purpose"
+                                onChange={(e) => {
+                                    console.log("Others onchange");
+                                    if(e.target.value=="Others"){
+                                        document.getElementById("q_purpose_others").disabled = false;
+                                    }else{
+                                        document.getElementById("q_purpose_others").disabled = true;
+                                    }
+                                  }}>
                                     <option></option>
                                     <option
                                         value="Finding">
@@ -109,7 +118,7 @@ function ESMPage() {
                                         Others (Fill in the blank if you choose 'Others')</option>
                                 </select>
                             </div>
-                            <p className="content is-small has-text-danger">
+                            <p className="help has-text-danger">
                                 <br/>
                                 Fill in the following blank if you choose 'Others':
                             </p>
@@ -127,18 +136,29 @@ function ESMPage() {
                             </label>
                             <div className="control">
                                 <label className="radio">
-                                    <input type="radio" value="Yes" name="q_distraction"/>
+                                    <input type="radio" value="Yes" name="q_distraction"
+                                    onClick={(e) => {
+                                        if(e.target.checked){
+                                            document.getElementById("q_distraction_detail").innerHTML = "3.2. Please explain what things about " + esmSite + " lead you to feel distracted: <span style='color:red'>*</span>";
+                                        }
+                                    }}
+                                    />
                                     {" "}I am distracted.<br/>
                                 </label>
                                 <label className="radio">
-                                    <input type="radio" value="No" name="q_distraction"/>
+                                    <input type="radio" value="No" name="q_distraction"
+                                    onClick={(e) => {
+                                        if(e.target.checked){
+                                            document.getElementById("q_distraction_detail").innerHTML = "3.2. Please explain what things about " + esmSite + " lead you to feel not distracted: <span style='color:red'>*</span>";
+                                        }
+                                    }}/>
                                     {" "}I am <i>NOT</i> distracted.<br/>
                                 </label>
                             </div>
                         </div>
 
                         <div className="field">
-                            <label className="label">
+                            <label className="label" id="q_distraction_detail">
                                 3.2. Please explain what things about {esmSite} lead you to feel distracted or not distracted (based on your answer to Q3.1):
                                 <span style={{color:"red"}}>*</span>
                             </label>
