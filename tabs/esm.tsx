@@ -131,7 +131,7 @@ function ESMPage() {
                     <div className="box">
                         <div className="field">
                             <label className="label">
-                                3.1. How will you describe the distractions you feel right now when browsing {esmSite}:
+                                3. How will you describe the distractions you feel right now when browsing {esmSite}:
                                 <span style={{color:"red"}}>*</span>
                             </label>
                             <div className="control">
@@ -139,7 +139,7 @@ function ESMPage() {
                                     <input type="radio" value="Yes" name="q_distraction"
                                     onClick={(e) => {
                                         if(e.target.checked){
-                                            document.getElementById("q_distraction_detail").innerHTML = "3.2. Please explain what things about " + esmSite + " lead you to feel distracted: <span style='color:red'>*</span>";
+                                            document.getElementById("q_distraction_detail").innerHTML = "4. Please explain what things about " + esmSite + " lead you to feel distracted: <span style='color:red'>*</span>";
                                         }
                                     }}
                                     />
@@ -149,7 +149,7 @@ function ESMPage() {
                                     <input type="radio" value="No" name="q_distraction"
                                     onClick={(e) => {
                                         if(e.target.checked){
-                                            document.getElementById("q_distraction_detail").innerHTML = "3.2. Please explain what things about " + esmSite + " lead you to feel not distracted: <span style='color:red'>*</span>";
+                                            document.getElementById("q_distraction_detail").innerHTML = "4. Please explain what things about " + esmSite + " lead you to feel not distracted: <span style='color:red'>*</span>";
                                         }
                                     }}/>
                                     {" "}I am <i>NOT</i> distracted.<br/>
@@ -159,11 +159,11 @@ function ESMPage() {
 
                         <div className="field">
                             <label className="label" id="q_distraction_detail">
-                                3.2. Please explain what things about {esmSite} lead you to feel distracted or not distracted (based on your answer to Q3.1):
+                                4. Please explain what things about {esmSite} lead you to feel distracted or not distracted (based on your answer to Q3):
                                 <span style={{color:"red"}}>*</span>
                             </label>
                             <div className="control">
-                                <input className="input" type="q_explanation" id="q_explanation" required
+                                <input className="input" type="q_explanation" id="q_distraction_text" required
                                     />
                             </div>
                         </div>
@@ -177,7 +177,7 @@ function ESMPage() {
                         
                         <div className="field">
                             <p className="label">
-                                4.1 How much do you feel out of or in control?<span style={{color:"red"}}>*</span>
+                                5. How much do you feel out of or in control?<span style={{color:"red"}}>*</span>
                             </p>
                             <div className="columns">
                                 <div className="column has-text-centered">
@@ -215,7 +215,7 @@ function ESMPage() {
 
                         <div className="field">
                             <p className="label">
-                                4.2 How much do you feel dissatisfied or satisfied?<span style={{color:"red"}}>*</span>
+                                6. How much do you feel dissatisfied or satisfied?<span style={{color:"red"}}>*</span>
                             </p>
                             <div className="columns">
                                 <div className="column has-text-centered">
@@ -253,7 +253,7 @@ function ESMPage() {
 
                         <div className="field">
                             <p className="label">
-                                4.3 How much does the current browsing experience conflict with or support your personal goals?<span style={{color:"red"}}>*</span>
+                                7. How much does the current browsing experience conflict with or support your personal goals?<span style={{color:"red"}}>*</span>
                             </p>
                             <div className="columns">
                                 <div className="column has-text-centered">
@@ -289,10 +289,117 @@ function ESMPage() {
                             </div>
                         </div>
                     </div>
-                    <button className="button is-primary" id="btn_submit">Submit</button>
+                    <button className="button is-primary" id="btn_submit"
+                        onClick={(e) => {
+                            var answers = {};
+                            var required_check = [
+                                false, // current_activity
+                                false, // purpose
+                                false, // distraction
+                                false, // distraction_text
+                                false, // agency
+                                false, // satisfaction
+                                false  // goal_alignment
+                                ]
+                            
+                            // current browsing activity
+                            answers["current_activity"] = document.getElementById("q_activity").value;
+                            if (answers["current_activity"]) {
+                                required_check[0] = true;
+                            }
+
+                            // browsing purpose
+                            var q_purpose = document.getElementById("q_purpose");
+                            var q_purpose_index = q_purpose.selectedIndex;
+                            if (q_purpose[q_purpose_index].value == "Others") {
+                                var q_purpose_others = document.getElementById("q_purpose_others");
+                                answers["purpose_other"] = q_purpose_others.value;
+                            }
+                            answers["purpose"] = q_purpose[q_purpose_index].value;
+
+                            if (answers["purpose"] == "Others"){
+                                if(answers["purpose_other"]){
+                                    required_check[1] = true;
+                                }
+                            }
+                            else{
+                                if (answers["purpose"]){
+                                    required_check[1] = true;
+                                }
+                            }
+                            
+                            // distraction
+                            var required_distraction = false;
+                            var q_distraction = document.getElementsByName("q_distraction");
+                            for (var i = 0; i < q_distraction.length; ++i) {
+                                if (q_distraction[i].checked) {
+                                    answers["distraction"] = q_distraction[i].value;
+                                    required_distraction = true;
+                                    break;
+                                }
+                            }
+                            required_check[2] = required_distraction;
+                            
+                            // distraction text
+                            answers["distraction_text"] = document.getElementById("q_distraction_text").value;
+                            if (answers["distraction_text"]) {
+                                required_check[3] = true;
+                            }
+                            
+                            // agency
+                            var required_control = false;
+                            var q_control = document.getElementsByName("q_control");
+                            for (var i = 0; i < q_control.length; ++i) {
+                                if (q_control[i].checked) {
+                                    answers["agency"] = q_control[i].value;
+                                    required_control = true;
+                                    break;
+                                }
+                            }
+                            required_check[4] = required_control;
+
+                            // satisfaction
+                            var required_satisfaction = false;
+                            var q_satisfaction = document.getElementsByName("q_satisfaction");
+                            for (var i = 0; i < q_satisfaction.length; ++i) {
+                                if (q_satisfaction[i].checked) {
+                                    answers["satisfaction"] = q_satisfaction[i].value;
+                                    required_satisfaction = true;
+                                    break;
+                                }
+                            }
+                            required_check[5] = required_satisfaction;
+
+                            // goal alignment
+                            var required_goal_alignment = false;
+                            var q_goal_alignment = document.getElementsByName("q_goal");
+                            for (var i = 0; i < q_goal_alignment.length; ++i) {
+                                if (q_goal_alignment[i].checked) {
+                                    answers["goal_alignment"] = q_goal_alignment[i].value;
+                                    required_goal_alignment = true;
+                                    break;
+                                }
+                            }
+                            required_check[6] = required_goal_alignment;
+                            
+                            //check required fields
+                            var pass_requirement_check = true;
+                            var alarmIndex = [];
+                            for (var i = 0; i < required_check.length; ++i) {
+                                if (!required_check[i]) {
+                                    pass_requirement_check = false;
+                                    alarmIndex.push(i + 1);
+                                }
+                            }
+                            if (!pass_requirement_check) {
+                                var alert_message = "Please answer the following questions: " + alarmIndex.join(',');
+                                alert(alert_message);
+                            }
+                            
+                          }}
+                    >Submit</button>
                     </div>
                 </div>
-            <div id="app"></div>
         </div>
     </div>
     )
