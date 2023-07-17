@@ -1,6 +1,7 @@
 import $ from "jquery";
 import "../finite_scroll_style.css";
 import twitterIcon from "data-base64:~assets/twitter.ico";
+import { sendToBackground } from "@plasmohq/messaging"
 
 const extName = "Purpose Mode";
 const settingToHandler = {
@@ -1337,8 +1338,33 @@ function onYouTubeAutoPlay(toggled: boolean){
     }
 }
 
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.name !== "toggle") {
+    if (msg.name === "create ESM" && window.self === window.top){ // only capture the top window's browsing context
+        console.log("Create ESM");
+        var currentWindowURL = window.location.href;
+        var date = new Date(Date.now());
+        var current_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
+        var esm = {};
+        esm['esm_url'] = currentWindowURL;
+        esm['esm_site'] = getCurrentPage();
+        esm['esm_time'] = current_time;
+        var distractions = {};
+        // TODO: update pattern detection
+        distractions['has_infinite_scrolling'] = 0;
+        distractions['has_autoplay'] = 0;
+        distractions['has_notifications'] = 0;
+        distractions['has_recommendations'] = 0;
+        distractions['has_cluttered_UI'] = 0;
+        distractions['has_colorfulness'] = 0;
+        esm['distractions'] = distractions;
+        const resp = sendToBackground({
+            name: "cache ESM",
+            esm: esm,
+        })
+
+    }
+    else if (msg.name !== "toggle") {
         console.log("Ignoring non-toggle event.");
         return;
     }

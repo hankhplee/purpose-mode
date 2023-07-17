@@ -33,6 +33,6 @@
     "host_permissions": [
       "https://*/*"
     ],
-    "permissions": ["notifications"]
+    "permissions": ["notifications","activeTab"]
   }
 }
