@@ -958,20 +958,6 @@ function onToggleYouTubeRecomm(toggled: boolean) {
             $('button[aria-label="Next"]'),
             // Video ad on the home page.
             $('div#masthead-ad'),
-            // Shorts.
-            $('ytd-rich-shelf-renderer[is-shorts]'),
-            // Recommended primetime movies.
-            $('a[title="Recommended Primetime movies"]').closest('ytd-rich-section-renderer'),
-            // Top news.
-            $('span[id="title"]:contains("Top news")').closest('ytd-rich-section-renderer'),
-            // Breaking news.
-            $('span[id="title"]:contains("Breaking news")').closest('ytd-rich-section-renderer'),
-            // Latest YouTube posts.
-            $('span[id="title"]:contains("Latest YouTube posts")').closest('ytd-rich-section-renderer'),
-            // "Discover your next favorite movie".
-            $('yt-formatted-string[id="item-title"]:contains("Discover your next favorite movie")').closest('ytd-rich-section-renderer'),
-            // YouTube premium event
-            $('yt-formatted-string[id="subtitle"]:contains("Premium membership")').closest('ytd-rich-section-renderer'),
         ]);
     // Recommendations on the "watch" page.
     } else if (currentWindow.includes("https://www.youtube.com/watch?")) {
@@ -979,38 +965,60 @@ function onToggleYouTubeRecomm(toggled: boolean) {
             // Video recommendations.
             $('div#secondary-inner'),
         ]);
-    } else if (currentWindow.includes("results?search_query")) {
-        selectors = selectors.concat([
-            // "People also watched".
-            $('span[id="title"]:contains("People also watched")').closest('ytd-shelf-renderer'),
-            // "Channels new to you".
-            $('span[id="title"]:contains("Channels new to you")').closest('ytd-shelf-renderer'),
-            // "For you".
-            $('span[id="title"]:contains("For you")').closest('ytd-shelf-renderer'),
-            // "Previously watched".
-            $('span[id="title"]:contains("Previously watched")').closest('ytd-shelf-renderer'),
-            // "From related searches".
-            $('span[id="title"]:contains("From related searches")').closest('ytd-shelf-renderer'),
-            // "Top news"
-            $('span[id="title"]:contains("Top news")').closest('ytd-shelf-renderer'),
-            // Recently uploaded Shorts
-            // $('span[id="title"]:contains("Recently uploaded Shorts")').closest('ytd-reel-shelf-renderer'),
-            // People also search for
-            $('yt-formatted-string[id="title"]:contains("People also search for")').closest('ytd-horizontal-card-list-renderer'),
-        ]);
-    }
+    } 
 
     if (toggled) {
         hideSelectors(selectors);
-        // all shorts
-        $('ytd-reel-shelf-renderer').each(function(){
-            $( this ).hide();
-        });
+        if(currentWindow === "https://www.youtube.com/"){
+            // all section drawers on landing page
+            $('ytd-rich-section-renderer').each(function(){
+                $( this ).hide();
+            });
+        }
+        else if(currentWindow.includes("results?search_query")){
+            // all shorts on search
+            $('ytd-reel-shelf-renderer').each(function(){
+                $( this ).hide();
+            });
+            // add ads on serach
+            $('ytd-in-feed-ad-layout-renderer').each(function(){
+                $( this ).hide();
+            });
+            // all shelf recommendations
+            $('ytd-shelf-renderer').each(function(){
+                $( this ).hide();
+            });
+            // card list recommendations
+            $('ytd-horizontal-card-list-renderer').each(function(){
+                $( this ).hide();
+            });
+        }
     } else {
         showSelectors(selectors);
-        $('ytd-reel-shelf-renderer').each(function(){
-            $( this ).show();
-        });
+        if(currentWindow === "https://www.youtube.com/"){
+            // all section drawers on landing page
+            $('ytd-rich-section-renderer').each(function(){
+                $( this ).show();
+            });
+        }
+        else if(currentWindow.includes("results?search_query")){
+            // all shorts on search
+            $('ytd-reel-shelf-renderer').each(function(){
+                $( this ).show();
+            });
+            // add ads on serach
+            $('ytd-in-feed-ad-layout-renderer').each(function(){
+                $( this ).show();
+            });
+            // all shelf recommendations
+            $('ytd-shelf-renderer').each(function(){
+                $( this ).show();
+            });
+            // card list recommendations
+            $('ytd-horizontal-card-list-renderer').each(function(){
+                $( this ).show();
+            });
+        }
     }
 }
 
