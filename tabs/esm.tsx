@@ -62,6 +62,11 @@ function ESMPage() {
             <div className="section">
                 <div className="box">
                     <div className="container">
+                        <p className="content has-text-centered">Webpage Screenshot</p>
+                        <figure className="image block">
+                            <img id="webpage_screenshot" style={{marginLeft: "auto", marginRight: "auto"}} src={esm.esm_screenshot}/>
+                        </figure>
+                        <br/>
                         <p className="content">
                             We notice that you are currently browsing <span>{esmSite}</span> {" "}
                             <img 
