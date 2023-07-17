@@ -468,7 +468,6 @@ function onToggleLinkedInDeclutter(toggled: boolean) {
     }
     else{
         elements.push($('footer.global-footer'));
-        elements.push($('section.ad-banner-container'));
     }
 
     if (toggled) {
@@ -521,7 +520,12 @@ function onToggleLinkedInRecomms(toggled: boolean) {
         $('aside.scaffold-layout__aside').children('section').each(function(){
             elements.push($( this ));
         });
-        // advertisements
+        $('aside.scaffold-layout__aside').children('div').each(function(){
+            if(!this.className.includes("profile-info-section")){
+                elements.push($( this ));
+            }
+        });
+        // Profile advertisements
         elements.push($('aside.scaffold-layout__aside[aria-label="Advertisement"]'));
     }
     if (toggled) {
