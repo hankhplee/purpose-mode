@@ -1,4 +1,5 @@
 import surveyIcon from "data-base64:~assets/survey.png";
+import { sendToContentScript } from "@plasmohq/messaging"
 const extName = "Purpose Mode";
 
 // Initialize storage variables at installation time.
@@ -33,28 +34,29 @@ function settingAutoPlay(site: string, toggled: boolean){
     }
 }
 
-function openQuestionnaire(){
-    /*insert fake data for demo purpose*/
-    //get current time
-    var date = new Date(Date.now());
-    var current_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
-    var esm = {};
-    esm['esm_site'] = "Twitter";
-    esm['esm_time'] = current_time;
-    
-    var distractions = {};
-    distractions['has_infinite_scrolling'] = 0;
-    distractions['has_autoplay'] = 0;
-    distractions['has_notifications'] = 0;
-    distractions['has_recommendations'] = 0;
-    distractions['has_cluttered_UI'] = 0;
-    distractions['has_colorfulness'] = 0;
-    esm['distractions'] = distractions;
+function cacheESM(esm, webpage_screenshot) {
+    esm['esm_screenshot'] = webpage_screenshot;
+    // console.log("screenshot: ",webpage_screenshot);
     chrome.storage.local.set({"sampled_esm": esm});
-    /*END*/
-    console.log("open questionnaire");
-    // open ESM questionnaire page
-    console.log(chrome.runtime.getURL("tabs/esm.html"));
+
+    // for ESM testing
+    openTestQuestionnaire();
+}
+
+function openQuestionnaire(){
+    /* send message to content script to capture the current browsing context*/
+    const resp = sendToContentScript({
+        name: "create ESM",
+    })
+
+    /* comment out the following code for the actual study*/
+    // console.log("open questionnaire");
+    // console.log(chrome.runtime.getURL("tabs/esm.html"));
+    // chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
+}
+
+function openTestQuestionnaire(){
+    console.log("open test questionnaire");
     chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
 }
 
@@ -76,6 +78,30 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
     else if(msg.name === "open questionnaire"){
         openQuestionnaire();
+    }
+    else if(msg.name === "cache ESM"){
+        console.log("cache ESM");
+        if (msg.esm) {
+            chrome.tabs.query({
+                url: msg.esm["esm_url"],
+                active: true,
+                lastFocusedWindow: true,
+            }).then(tabs => {
+              if (tabs.length > 0) {
+                var current_tab = tabs[0];
+                chrome.tabs.captureVisibleTab(current_tab.windowId).then(webpage_screenshot => {
+                    cacheESM(msg.esm,webpage_screenshot); 
+                });
+              }
+              else {
+                console.error('no tab to screenshot');
+              }
+            });
+          }
+    }
+    // for ESM questionnaire testing
+    else if(msg.name === "open test questionnaire"){
+        openTestQuestionnaire();
     }
 })
 
