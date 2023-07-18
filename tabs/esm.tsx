@@ -10,6 +10,7 @@ import axios from 'axios';
 function ESMPage() {
 
     const [esm] = useChromeStorageLocal("sampled_esm");
+    const [uid] = useChromeStorageLocal("uid");
 
     if(!esm){
         return(
@@ -403,7 +404,9 @@ function ESMPage() {
                             else{
                                 console.log(answers);
                                 axios.post('https://purpose-mode-backend.nymity.ch/submit', {
-                                    ESM: answers
+                                    uid: uid,
+                                    type: "esm",
+                                    data: answers
                                   })
                                   .then(function (response) {
                                     console.log(response);
