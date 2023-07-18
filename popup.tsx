@@ -535,6 +535,7 @@ function ExpandableMenu({name, matchURL, Switches}) {
 
 function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);
+  const uid = useChromeStorageLocal("uid");
 
   return (
     <div
@@ -568,7 +569,7 @@ function IndexPopup() {
               <div className="dropdown-content has-text-centered">
                 <div className="dropdown-item">
                   <p className="heading">ID</p> 
-                  <p id="userId">user id</p>
+                  <p id="userId">{uid}</p>
                 </div> 
                 <div className="dropdown-item">
                   <button className="button is-small" id="test_notification"

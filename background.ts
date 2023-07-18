@@ -2,6 +2,14 @@ import surveyIcon from "data-base64:~assets/survey.png";
 import { sendToContentScript } from "@plasmohq/messaging"
 const extName = "Purpose Mode";
 
+// show welcome page upon installation
+chrome.runtime.onInstalled.addListener(function (details) {
+    console.log("details:",details);
+    if (details.reason === "install") {
+      chrome.tabs.create({ url: chrome.runtime.getURL("tabs/start.html")});
+    }
+  });
+
 // Initialize storage variables at installation time.
 chrome.runtime.onInstalled.addListener(init);
 
