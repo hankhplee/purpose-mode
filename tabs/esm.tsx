@@ -5,7 +5,7 @@ import facebookIcon from "data-base64:~assets/Facebook.png";
 import twitterIcon from "data-base64:~assets/Twitter.png";
 import linkedInIcon from "data-base64:~assets/LinkedIn.png";
 import youTubeIcon from "data-base64:~assets/YouTube.png";
-
+import axios from 'axios';
 
 function ESMPage() {
 
@@ -399,6 +399,21 @@ function ESMPage() {
                             if (!pass_requirement_check) {
                                 var alert_message = "Please answer the following questions: " + alarmIndex.join(',');
                                 alert(alert_message);
+                            }
+                            else{
+                                console.log(answers);
+                                axios.post('https://purpose-mode-backend.nymity.ch/submit', {
+                                    ESM: answers
+                                  })
+                                  .then(function (response) {
+                                    console.log(response);
+                                    alert("Response submitted!");
+                                    window.close();
+                                  })
+                                  .catch(function (error) {
+                                    console.log(error);
+                                    alert("Submission failed: "+ error);
+                                  });
                             }
                             
                           }}
