@@ -63,15 +63,9 @@ function ESMPage() {
             <div className="section">
                 <div className="box">
                     <div className="container">
-<<<<<<< HEAD
                         <p className="content has-text-centered subtitle is-5">Webpage Screenshot</p>
                         <figure className="image block">
                             <img id="webpage_screenshot" style={{marginLeft: "auto", marginRight: "auto", border: "solid", borderWidth: "5px", borderColor: "hsl(171, 100%, 41%)"}} src={esm.esm_screenshot}/>
-=======
-                        <p className="content has-text-centered">Webpage Screenshot</p>
-                        <figure className="image block">
-                            <img id="webpage_screenshot" style={{marginLeft: "auto", marginRight: "auto"}} src={esm.esm_screenshot}/>
->>>>>>> 787b978 (Added web screenshot to ESM)
                         </figure>
                         <br/>
                         <p className="content">
