@@ -50,7 +50,7 @@ function ESMPage() {
 
     return (
     <div>
-        <section className="hero is-primary">
+        <section className="hero is-primary is-small">
             <div className="hero-body">
                 <div className="container">
                     <h1 className="title">
@@ -63,9 +63,9 @@ function ESMPage() {
             <div className="section">
                 <div className="box">
                     <div className="container">
-                        <p className="content has-text-centered">Webpage Screenshot</p>
+                        <p className="content has-text-centered subtitle is-5">Webpage Screenshot</p>
                         <figure className="image block">
-                            <img id="webpage_screenshot" style={{marginLeft: "auto", marginRight: "auto"}} src={esm.esm_screenshot}/>
+                            <img id="webpage_screenshot" style={{marginLeft: "auto", marginRight: "auto", border: "solid", borderWidth: "5px", borderColor: "hsl(171, 100%, 41%)"}} src={esm.esm_screenshot}/>
                         </figure>
                         <br/>
                         <p className="content">
