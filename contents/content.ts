@@ -790,6 +790,8 @@ function onToggleFacebookDeclutter(toggled: boolean) {
         $('a[aria-label="Home"]'),
         // Watch button.
         $('a[aria-label="Watch"]'),
+        // Watch button.
+        $('a[aria-label="Video"]'),
         // Marketplace button.
         $('a[aria-label="Marketplace"]'),
         // Groups button.
