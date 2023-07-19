@@ -52,6 +52,65 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
   );
 }
 
+function GlobalSwitch({ label, storage_var, checked, update }) {
+  var switchColor;
+  var switchText;
+  if(checked){
+    switchColor = "is-primary";
+    switchText = "On";
+  }
+  else{
+    switchColor = "is-danger";
+    switchText = "Off";
+  }
+  
+  return (
+  <div className={"box hero "+switchColor}>
+    <div className="columns is-mobile"
+    style={{height: "55px"}}
+    >
+        <div className="column is-two-thirds">
+          <span className={"tag is-medium " + switchColor}>
+            {label}
+          </span>
+        </div>
+        {/* <div className="column">
+          <span className={"tag is-light " + switchColor}>
+            {switchText}
+          </span>
+        </div> */}
+        <div className="column">
+          <div className="toggle-switch">
+            <input type="checkbox"
+                  className="toggle-checkbox"
+                  name={storage_var}
+                  id={storage_var}
+                  checked={checked}
+                  onChange={(e) => {
+                    update(e.target.checked);
+                    setBool(storage_var, e.target.checked);
+                    const resp = sendToContentScript({
+                      name: "toggle",
+                      body: {"button": storage_var, "state": e.target.checked}
+                    })
+                  }} />
+
+            <label className="label" htmlFor={storage_var}>
+              <span className="toggleswitch-inner" />
+              <span className="toggleswitch-switch" />
+            </label>
+          </div>
+          <p className="is-size-7	has-text-centered"
+            style={{width: "37px"}}>
+            {switchText}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+}
+
 function ButtonSwitch({label, storage_var, current_status}){
   let currentStatus;
   let buttonText = "";
@@ -88,23 +147,6 @@ function ButtonSwitch({label, storage_var, current_status}){
                 }} 
         >{buttonText}</button>
       </div>
-    </div>
-  );
-}
-
-function GlobalSwitches() {
-  const [desaturate, setDesaturate] =
-    useChromeStorageLocal("Desaturate", false);
-
-  return (
-    <div>
-    <h3>All sites</h3>
-    <ToggleSwitch
-      label="Desaturate"
-      storage_var="Desaturate"
-      checked={desaturate}
-      update={setDesaturate}
-    />
     </div>
   );
 }
@@ -557,14 +599,12 @@ function IndexPopup() {
             />
       </div>
 
-      <div className="box hero is-primary">
-        <ToggleSwitch
-          label="Purpose Mode Enable"
+      <GlobalSwitch
+          label="Purpose Mode"
           storage_var="Enable"
           checked={enabled}
           update={setEnabled}
         />
-      </div>
       {
         enabled &&
         <div>
