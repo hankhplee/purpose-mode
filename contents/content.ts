@@ -1413,6 +1413,7 @@ function detectNotifications(){
         return false;
     }
     else if(currentSite === "YouTube"){
+        const currentWindowURL = window.location.href;
         const selectors = [
             // Notification icons.
             $("div.yt-spec-icon-badge-shape__badge"),
@@ -1422,14 +1423,16 @@ function detectNotifications(){
                 return true;
             }
         }
-        var newnessDotCheck = false;
-        $("div[id=newness-dot]").each(function(){
-            if($( this ).css('display') !== 'none'){
-                newnessDotCheck = true;
+        if(currentWindowURL === "https://www.youtube.com/"){ // check newnessDot only on landing page
+            var newnessDotCheck = false;
+            $("div[id=newness-dot]").each(function(){
+                if($( this ).css('display') !== 'none'){
+                    newnessDotCheck = true;
+                }
+            });
+            if(newnessDotCheck === true){
+                return true;
             }
-        });
-        if(newnessDotCheck === true){
-            return true;
         }
         return false;
     }
