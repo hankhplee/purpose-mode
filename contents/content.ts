@@ -83,7 +83,7 @@ function isHomePage(): boolean {
     const currentWindowURL = window.location.href;
     if (currentWindowURL.includes("https://twitter.com/home") ||
         currentWindowURL === "https://www.facebook.com/" ||
-        currentWindowURL === "https://www.youtube.com/" ||
+        currentWindowURL === "https://www.youtube.com/" || currentWindowURL === "https://www.youtube.com/?bp=wgUCEAE%3D" ||
         currentWindowURL === "https://www.linkedin.com/feed/"){
         return true;
     } else {
@@ -94,6 +94,16 @@ function isHomePage(): boolean {
 function isYouTubeVideo(): boolean{
     const currentWindowURL = window.location.href;
     if (currentWindowURL.includes("https://www.youtube.com/watch?")){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+function isYouTubeSearch(): boolean{
+    const currentWindowURL = window.location.href;
+    if (currentWindowURL.includes("results?search_query")){
         return true;
     }
     else{
@@ -917,11 +927,10 @@ function onToggleFacebookNotif(toggled: boolean) {
 }
 
 function onToggleYouTubeInfinite(toggled: boolean) {
-    const currentWindow = window.top.location.href;
     if (getCurrentPage() !== "YouTube") {
         return;
     }
-    if(toggled && currentWindow === "https://www.youtube.com/"){
+    if(toggled && isHomePage()){
         toggleInfScrolling(true);
     }
     else{
@@ -930,7 +939,6 @@ function onToggleYouTubeInfinite(toggled: boolean) {
 }
 
 function onToggleYouTubeFeed(toggled: boolean){
-    const currentWindow = window.top.location.href;
     if (getCurrentPage() !== "YouTube"){
         return;
     }
@@ -944,7 +952,7 @@ function onToggleYouTubeFeed(toggled: boolean){
         // "See More" button when finite scrolling is activated
         $("#tisd-show-more"),
     ];
-    if (toggled && currentWindow === "https://www.youtube.com/") {
+    if (toggled && isHomePage()) {
         hideSelectors(selectors);
     } else {
         showSelectors(selectors);
@@ -966,9 +974,11 @@ function onToggleYouTubeRecomm(toggled: boolean) {
     }
 
     let selectors = [];
-    const currentWindow = window.top.location.href;
+    const homePage = isHomePage();
+    const watchPage = isYouTubeVideo();
+    const searchPage = isYouTubeSearch();
     // Landing page.
-    if (currentWindow === "https://www.youtube.com/") {
+    if (homePage) {
         selectors = selectors.concat([
             // Recommendation tags on top of the page.
             $('div#scroll-container'),
@@ -978,7 +988,7 @@ function onToggleYouTubeRecomm(toggled: boolean) {
             $('div#masthead-ad'),
         ]);
     // Recommendations on the "watch" page.
-    } else if (currentWindow.includes("https://www.youtube.com/watch?")) {
+    } else if (watchPage) {
         selectors = selectors.concat([
             // Video recommendations.
             $('div#secondary-inner'),
@@ -987,13 +997,13 @@ function onToggleYouTubeRecomm(toggled: boolean) {
 
     if (toggled) {
         hideSelectors(selectors);
-        if(currentWindow === "https://www.youtube.com/"){
+        if(homePage){
             // all section drawers on landing page
             $('ytd-rich-section-renderer').each(function(){
                 $( this ).hide();
             });
         }
-        else if(currentWindow.includes("results?search_query")){
+        else if(searchPage){
             // all shorts on search
             $('ytd-reel-shelf-renderer').each(function(){
                 $( this ).hide();
@@ -1013,13 +1023,13 @@ function onToggleYouTubeRecomm(toggled: boolean) {
         }
     } else {
         showSelectors(selectors);
-        if(currentWindow === "https://www.youtube.com/"){
+        if(homePage){
             // all section drawers on landing page
             $('ytd-rich-section-renderer').each(function(){
                 $( this ).show();
             });
         }
-        else if(currentWindow.includes("results?search_query")){
+        else if(searchPage){
             // all shorts on search
             $('ytd-reel-shelf-renderer').each(function(){
                 $( this ).show();
@@ -1070,12 +1080,11 @@ function onToggleYouTubeDeclutter(toggled: boolean) {
     if (getCurrentPage() !== "YouTube") {
         return;
     }
-    const currentWindow = window.top.location.href;
     const selectors = [
         // Hamburger menu.
         $('div#guide-content'),
     ]
-    if (currentWindow.includes("https://www.youtube.com/watch?")) {
+    if (isYouTubeVideo()) {
         selectors.push($("ytd-comments#comments")); // Comments.
     }
 
