@@ -1329,31 +1329,273 @@ function onYouTubeAutoPlay(toggled: boolean){
     }
 }
 
+function detectVideos(){
+    var currentSite = getCurrentPage();
+    if(currentSite === "Twitter" || currentSite === "Facebook" || currentSite === "LinkedIn"){
+        const videos = $('video');
+        if(videos.length > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else if(currentSite === "YouTube"){
+        const currentWindowURL = window.location.href;
+        if (currentWindowURL.includes("https://www.youtube.com/watch?")){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+}
+
+function detectNotifications(){
+    var currentSite = getCurrentPage();
+    if(currentSite === "Twitter"){
+        const selectors = [
+            // Blue notification circle on top of home icon.
+            $('div[aria-label="undefined unread items"]'),
+            // Blue button that promotes new tweets.
+            $('div[aria-label="New Tweets are available. Push the period key to go to the them."]'),
+            // DM box notification
+            $('svg[aria-label="New Direct Message"]'),
+            // Notifications
+            $('div[aria-label*="unread"]')
+        ]
+        for (const s of selectors) {
+            if(s.length>0){
+                return true;
+            }
+        }
+        return false;
+    }
+    else if(currentSite === "Facebook"){
+        const selectors = [
+            // "Red dot" update notification.
+            $('div[aria-label*="Notifications"][tabindex="-1"]'),
+            // "Red dot" notification for Messenger.
+            $('div[aria-label*="Messenger"][tabindex="-1"]'),
+            // "New posts" push notification
+            $('button:has(> div > span:contains("New posts"))'),
+            // DM bubble
+            $('div[aria-label*="Open chat"]').find('div[aria-label*="unread"]'),
+        ]
+        for (const s of selectors) {
+            if(s.length>0){
+                return true;
+            }
+        }
+        return false;
+    }
+    else if(currentSite === "LinkedIn"){
+        const selectors = [
+            // DM notification
+            $('mark.msg-overlay-bubble-header__unread-count'),
+            // "Red dot" notification icon.
+            $('span.notification-badge--show'),
+        ]
+        for (const s of selectors) {
+            if(s.length>0){
+                return true;
+            }
+        }
+        return false;
+    }
+    else if(currentSite === "YouTube"){
+        const selectors = [
+            // Notification icons.
+            $("div.yt-spec-icon-badge-shape__badge"),
+        ]
+        for (const s of selectors) {
+            if(s.length>0){
+                return true;
+            }
+        }
+        var newnessDotCheck = false;
+        $("div[id=newness-dot]").each(function(){
+            if($( this ).css('display') !== 'none'){
+                newnessDotCheck = true;
+            }
+        });
+        if(newnessDotCheck === true){
+            return true;
+        }
+        return false;
+    }
+}
+
+function distractionDetection(){
+    var distractions = {};
+    // Infinite newsfeed scrolling
+    distractions['infinite_newsfeed_scrolling'] = isHomePage();
+    // Autoplay video
+    distractions['autoplay_video'] = detectVideos();
+    // Notifications
+    distractions['notifications'] = detectNotifications();
+    // Newsfeed recommendations
+    distractions['newsfeed_recommendations'] = isHomePage();
+    // Cluttered layout
+    distractions['cluttered_layout'] = true;
+    // Saturation
+    distractions['saturation'] = true;
+
+    console.log("distractions:", distractions);
+    return distractions;
+}
+
+function getCurrentFeatures(currentSite){
+    return new Promise((resolve) =>{
+        var compact_key;
+        var finite_key;
+        var feed_key;
+        var notif_key;
+        var desaturate_key;
+        var autoplay_key;
+
+        if(currentSite === "Twitter"){
+            compact_key = "TwitterCompact";
+            finite_key  = "TwitterInfinite";
+            notif_key   = "TwitterNotif";
+            feed_key    = "TwitterFeed";
+            desaturate_key = "TwitterDesaturate";
+            autoplay_key   = "TwitterAutoplay";
+            const keys = [compact_key,finite_key,notif_key,feed_key,desaturate_key,autoplay_key];
+            chrome.storage.local.get(keys).then(function (features) {
+                var current_features = {};
+                current_features["compact_layout"] = features.TwitterCompact;
+                current_features["hide_notification"] = features.TwitterNotif;
+                current_features["finite_newsfeed_scrolling"] = features.TwitterInfinite;
+                current_features["hide_newsfeed"] = features.TwitterFeed;
+                current_features["desaturate"] = features.TwitterDesaturate;
+                current_features["block_autoplay"] = features.TwitterAutoplay;
+                console.log("Current feature:", current_features);
+                resolve(current_features);
+            });
+        }
+        else if(currentSite === "Facebook"){
+            compact_key = "FacebookCompact";
+            notif_key   = "FacebookNotif";
+            finite_key  = "FacebookInfinite";
+            feed_key    = "FacebookFeed";
+            desaturate_key = "FacebookDesaturate";
+            autoplay_key   = "FacebookAutoplay";
+            const keys = [compact_key,finite_key,notif_key,feed_key,desaturate_key,autoplay_key];
+            chrome.storage.local.get(keys).then(function (features) {
+                var current_features = {};
+                current_features["compact_layout"] = features.FacebookCompact;
+                current_features["hide_notification"] = features.FacebookNotif;
+                current_features["finite_newsfeed_scrolling"] = features.FacebookInfinite;
+                current_features["hide_newsfeed"] = features.FacebookFeed;
+                current_features["desaturate"] = features.FacebookDesaturate;
+                current_features["block_autoplay"] = features.FacebookAutoplay;
+                console.log("Current feature:", current_features);
+                resolve(current_features);
+            });
+        }
+        else if(currentSite === "LinkedIn"){
+            compact_key = "LinkedInCompact";
+            notif_key   = "LinkedInNotif";
+            finite_key  = "LinkedInInfinite";
+            feed_key    = "LinkedInFeed";
+            desaturate_key = "LinkedInDesaturate";
+            autoplay_key   = "LinkedInAutoplay";
+            const keys = [compact_key,finite_key,notif_key,feed_key,desaturate_key,autoplay_key];
+            chrome.storage.local.get(keys).then(function (features) {
+                var current_features = {};
+                current_features["compact_layout"] = features.LinkedInCompact;
+                current_features["hide_notification"] = features.LinkedInNotif;
+                current_features["finite_newsfeed_scrolling"] = features.LinkedInInfinite;
+                current_features["hide_newsfeed"] = features.LinkedInFeed;
+                current_features["desaturate"] = features.LinkedInDesaturate;
+                current_features["block_autoplay"] = features.LinkedInAutoplay;
+                console.log("Current feature:", current_features);
+                resolve(current_features);
+            });
+        }
+        else if(currentSite === "YouTube"){
+            compact_key = "YouTubeCompact";
+            notif_key   = "YouTubeNotif";
+            finite_key  = "YouTubeInfinite";
+            feed_key    = "YouTubeFeed";
+            desaturate_key = "YouTubeDesaturate";
+            autoplay_key   = "YouTubeAutoplay";
+            const keys = [compact_key,finite_key,notif_key,feed_key,desaturate_key,autoplay_key];
+            chrome.storage.local.get(keys).then(function (features) {
+                var current_features = {};
+                current_features["compact_layout"] = features.YouTubeCompact;
+                current_features["hide_notification"] = features.YouTubeNotif;
+                current_features["finite_newsfeed_scrolling"] = features.YouTubeInfinite;
+                current_features["hide_newsfeed"] = features.YouTubeFeed;
+                current_features["desaturate"] = features.YouTubeDesaturate;
+                current_features["block_autoplay"] = features.YouTubeAutoplay;
+                console.log("Current feature:", current_features);
+                resolve(current_features);
+            });
+        }
+        else{
+            console.error("Unknown page for purpose mode.");
+        }
+    });
+}
+
+function adjustedDistractionDetection(distractions,current_features){
+    var adjusted_distractions = {};
+
+    var infinite_newsfeed_scrolling = distractions["infinite_newsfeed_scrolling"];
+    var autoplay_video              = distractions["autoplay_video"];
+    var notifications               = distractions["notifications"];
+    var newsfeed_recommendations    = distractions["newsfeed_recommendations"];
+
+    var compact = current_features["compact_layout"];
+    var finite  = current_features["finite_newsfeed_scrolling"];
+    var feed    = current_features["hide_newsfeed"];
+    var notif   = current_features["hide_notification"];
+    var desaturate = current_features["desaturate"];
+    var autoplay   = current_features["block_autoplay"];
+
+    // Adjusted infinite scrolling
+    adjusted_distractions['adj_infinite_newsfeed_scrolling'] = infinite_newsfeed_scrolling && (!finite) && (!feed);
+    // Adjusted autoplay video
+    adjusted_distractions['adj_autoplay_video'] = autoplay_video && (!autoplay);
+    // Adjusted notifications
+    adjusted_distractions['adj_notifications'] = notifications && (!notif);
+    // Adjusted newsfeed recommendations
+    adjusted_distractions['adj_newsfeed_recommendations'] = newsfeed_recommendations && (!feed);
+    // Adjusted cluttered layout
+    adjusted_distractions['adj_cluttered_layout'] = (!compact);
+    // Adjusted Saturation
+    adjusted_distractions['adj_saturation'] = (!desaturate);
+
+    console.log("Adjsuted distractions:", adjusted_distractions);
+    return adjusted_distractions;
+}
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.name === "create ESM" && window.self === window.top){ // only capture the top window's browsing context
+        var currentSite = getCurrentPage();
+        if (currentSite !== "Twitter" && currentSite !== "Facebook" && currentSite !== "YouTube" && currentSite !== "LinkedIn") {
+            return;
+        }
         console.log("Create ESM");
         var currentWindowURL = window.location.href;
         var date = new Date(Date.now());
         var current_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
-        var esm = {};
-        esm['esm_url'] = currentWindowURL;
-        esm['esm_site'] = getCurrentPage();
-        esm['esm_time'] = current_time;
-        var distractions = {};
-        // TODO: update pattern detection
-        distractions['has_infinite_scrolling'] = 0;
-        distractions['has_autoplay'] = 0;
-        distractions['has_notifications'] = 0;
-        distractions['has_recommendations'] = 0;
-        distractions['has_cluttered_UI'] = 0;
-        distractions['has_colorfulness'] = 0;
-        esm['distractions'] = distractions;
-        const resp = sendToBackground({
-            name: "cache ESM",
-            esm: esm,
-        })
-
+        getCurrentFeatures(currentSite).then((features: JSON) => {
+            var esm = {};
+            esm['esm_url'] = currentWindowURL;
+            esm['esm_site'] = currentSite;
+            esm['esm_time'] = current_time;
+            esm['distractions'] = distractionDetection();
+            esm['features'] = features;
+            esm['adjusted_distractions'] = adjustedDistractionDetection(esm['distractions'],features);
+            const resp = sendToBackground({
+                name: "cache ESM",
+                esm: esm,
+            })
+        });
+        return;
     }
     else if (msg.name !== "toggle") {
         console.log("Ignoring non-toggle event.");
