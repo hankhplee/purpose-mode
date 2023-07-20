@@ -1366,8 +1366,8 @@ function detectNotifications(){
         const selectors = [
             // Blue notification circle on top of home icon.
             $('div[aria-label="undefined unread items"]'),
-            // Blue button that promotes new tweets.
-            $('div[aria-label="New Tweets are available. Push the period key to go to the them."]'),
+            // Blue button that promotes new tweets. (this button will be on the page even when unvisible)
+            // $('div[aria-label="New Tweets are available. Push the period key to go to the them."]'),
             // DM box notification
             $('svg[aria-label="New Direct Message"]'),
             // Notifications
@@ -1383,9 +1383,9 @@ function detectNotifications(){
     else if(currentSite === "Facebook"){
         const selectors = [
             // "Red dot" update notification.
-            $('div[aria-label*="Notifications"][tabindex="-1"]'),
+            $('div[aria-label*="Notifications"][aria-label*="unread"][tabindex="-1"]'),
             // "Red dot" notification for Messenger.
-            $('div[aria-label*="Messenger"][tabindex="-1"]'),
+            $('div[aria-label*="Messenger"][aria-label*="unread"][tabindex="-1"]'),
             // "New posts" push notification
             $('button:has(> div > span:contains("New posts"))'),
             // DM bubble
@@ -1413,7 +1413,6 @@ function detectNotifications(){
         return false;
     }
     else if(currentSite === "YouTube"){
-        const currentWindowURL = window.location.href;
         const selectors = [
             // Notification icons.
             $("div.yt-spec-icon-badge-shape__badge"),
@@ -1423,7 +1422,7 @@ function detectNotifications(){
                 return true;
             }
         }
-        if(currentWindowURL === "https://www.youtube.com/"){ // check newnessDot only on landing page
+        if(isHomePage()){ // check newnessDot only on landing page
             var newnessDotCheck = false;
             $("div[id=newness-dot]").each(function(){
                 if($( this ).css('display') !== 'none'){
@@ -1570,7 +1569,12 @@ function adjustedDistractionDetection(distractions,current_features){
     // Adjusted infinite scrolling
     adjusted_distractions['adj_infinite_newsfeed_scrolling'] = infinite_newsfeed_scrolling && (!finite) && (!feed);
     // Adjusted autoplay video
-    adjusted_distractions['adj_autoplay_video'] = autoplay_video && (!autoplay);
+    if(newsfeed_recommendations && feed){
+        adjusted_distractions['adj_autoplay_video'] = false; // autoplay video will also be removed when newsfeeds are remvoed
+    }
+    else{
+        adjusted_distractions['adj_autoplay_video'] = autoplay_video && (!autoplay);
+    }
     // Adjusted notifications
     adjusted_distractions['adj_notifications'] = notifications && (!notif);
     // Adjusted newsfeed recommendations
