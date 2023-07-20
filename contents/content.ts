@@ -1419,6 +1419,7 @@ function detectNotifications(){
         return false;
     }
     else if(currentSite === "YouTube"){
+        const currentWindowURL = window.location.href;
         const selectors = [
             // Notification icons.
             $("div.yt-spec-icon-badge-shape__badge"),
