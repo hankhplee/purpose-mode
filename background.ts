@@ -16,7 +16,32 @@ chrome.runtime.onInstalled.addListener(init);
 function init() {
     console.log("Initializing " + extName + " background script.");
 
-    // initialize local storage
+    /* initialize local storage */
+    chrome.storage.local.set({"TwitterCompact": false});
+    chrome.storage.local.set({"TwitterInfinite": false});
+    chrome.storage.local.set({"TwitterNotif": false});
+    chrome.storage.local.set({"TwitterFeed": false});
+    chrome.storage.local.set({"TwitterDesaturate": false});
+
+    chrome.storage.local.set({"FacebookCompact": false});
+    chrome.storage.local.set({"FacebookInfinite": false});
+    chrome.storage.local.set({"FacebookNotif": false});
+    chrome.storage.local.set({"FacebookFeed": false});
+    chrome.storage.local.set({"FacebookDesaturate": false});
+
+    chrome.storage.local.set({"LinkedInCompact": false});
+    chrome.storage.local.set({"LinkedInInfinite": false});
+    chrome.storage.local.set({"LinkedInNotif": false});
+    chrome.storage.local.set({"LinkedInFeed": false});
+    chrome.storage.local.set({"LinkedInDesaturate": false});
+
+    chrome.storage.local.set({"YouTubeCompact": false});
+    chrome.storage.local.set({"YouTubeInfinite": false});
+    chrome.storage.local.set({"YouTubeNotif": false});
+    chrome.storage.local.set({"YouTubeFeed": false});
+    chrome.storage.local.set({"YouTubeDesaturate": false});
+
+    // autoplay setting
     chrome.storage.local.set({"TwitterAutoplay": false});
     chrome.storage.local.set({"SetTwitterAutoplay": false});
     chrome.storage.local.set({"LinkedInAutoplay": false});
@@ -24,6 +49,7 @@ function init() {
     chrome.storage.local.set({"FacebookAutoplay": false});
     chrome.storage.local.set({"SetFacebookAutoplay": false});
     chrome.storage.local.set({"YouTubeAutoplay": false});
+
 }
 
 function settingAutoPlay(site: string, toggled: boolean){
