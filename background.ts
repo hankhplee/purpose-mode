@@ -75,12 +75,13 @@ function settingAutoPlay(site: string, toggled: boolean){
 }
 
 function cacheESM(esm, webpage_screenshot) {
-    console.log("cache ESM");
+    console.log("cache ESM in background...");
     esm['esm_screenshot'] = webpage_screenshot;
     // console.log("screenshot: ",webpage_screenshot);
     chrome.storage.local.set({"sampled_esm": esm});
     var timestamp = new Date().getTime();
     var questionnaireNotification = "questionnaire-notification" + timestamp;
+    console.log("send notification for a new ESM...");
     chrome.notifications.create(questionnaireNotification, {
         "type": "basic",
         "iconUrl": surveyIcon,

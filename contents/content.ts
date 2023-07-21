@@ -1621,7 +1621,7 @@ function run() {
 }
 
 function create_esm(){
-    console.log("Create ESM");
+    console.log("Create new ESM...");
     var currentWindowURL = window.location.href;
     var date = new Date(Date.now());
     var esm_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
@@ -1683,7 +1683,7 @@ function esm_clock(){
         }
         setTimeout(() => {
             console.log("try to resample ESM..."); 
-            sample_esm(); 
+            esm_clock(); 
         }, 60*1000); // check the status for every minute
     });
 }
