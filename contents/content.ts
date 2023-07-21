@@ -1360,7 +1360,7 @@ function detectVideos(){
     }
 }
 
-function detectNotifications(){
+function detectNotifications(features){
     var currentSite = getCurrentPage();
     if(currentSite === "Twitter"){
         const selectors = [
@@ -1422,7 +1422,7 @@ function detectNotifications(){
                 return true;
             }
         }
-        if(isHomePage()){ // check newnessDot only on landing page
+        if(isHomePage() && !features["compact_layout"]){ // check newnessDot only on landing page && compact layout is disabled
             var newnessDotCheck = false;
             $("div[id=newness-dot]").each(function(){
                 if($( this ).css('display') !== 'none'){
@@ -1437,14 +1437,14 @@ function detectNotifications(){
     }
 }
 
-function distractionDetection(){
+function distractionDetection(features){
     var distractions = {};
     // Infinite newsfeed scrolling
     distractions['infinite_newsfeed_scrolling'] = isHomePage();
     // Autoplay video
     distractions['autoplay_video'] = detectVideos();
     // Notifications
-    distractions['notifications'] = detectNotifications();
+    distractions['notifications'] = detectNotifications(features);
     // Newsfeed recommendations
     distractions['newsfeed_recommendations'] = isHomePage();
     // Cluttered layout
@@ -1632,7 +1632,7 @@ function create_esm(){
         esm['esm_site'] = currentPage;
         esm['esm_time'] = esm_time;
         esm['esm_time_unix_second'] = current_time;
-        esm['distractions'] = distractionDetection();
+        esm['distractions'] = distractionDetection(features);
         esm['features'] = features;
         esm['adjusted_distractions'] = adjustedDistractionDetection(esm['distractions'],features);
         const resp = sendToBackground({
