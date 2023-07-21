@@ -1589,31 +1589,15 @@ function adjustedDistractionDetection(distractions,current_features){
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.name === "create ESM" && window.self === window.top){ // only capture the top window's browsing context
-        var currentSite = getCurrentPage();
-        if (currentSite !== "Twitter" && currentSite !== "Facebook" && currentSite !== "YouTube" && currentSite !== "LinkedIn") {
-            return;
+    if (msg.name === "test questionnaire"){ // backdoor to manually generate questionnaire
+        if (window.self === window.top){
+            if (currentPage !== "Twitter" && currentPage !== "Facebook" && currentPage !== "YouTube" && currentPage !== "LinkedIn") {
+                return;
+            }
+            create_esm();
         }
-        console.log("Create ESM");
-        var currentWindowURL = window.location.href;
-        var date = new Date(Date.now());
-        var current_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
-        getCurrentFeatures(currentSite).then((features: JSON) => {
-            var esm = {};
-            esm['esm_url'] = currentWindowURL;
-            esm['esm_site'] = currentSite;
-            esm['esm_time'] = current_time;
-            esm['distractions'] = distractionDetection();
-            esm['features'] = features;
-            esm['adjusted_distractions'] = adjustedDistractionDetection(esm['distractions'],features);
-            const resp = sendToBackground({
-                name: "cache ESM",
-                esm: esm,
-            })
-        });
-        return;
     }
-    else if (msg.name !== "toggle") {
+    if (msg.name !== "toggle") {
         console.log("Ignoring non-toggle event.");
         return;
     }
@@ -1634,16 +1618,78 @@ function run() {
     if(isAutoPlaySettingPage()){
         setAutoPlay();
     }
-    // if(isYouTubeVideo()){
-    //     chrome.storage.local.get("YouTubeAutoplay", (result) => {
-    //         setTimeout(() => {
-    //             onYouTubeAutoPlay(result.YouTubeAutoplay);
-    //         }, 7000);
-    //     });
-    // }
+}
+
+function create_esm(){
+    console.log("Create ESM");
+    var currentWindowURL = window.location.href;
+    var date = new Date(Date.now());
+    var esm_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
+    getCurrentFeatures(currentPage).then((features: JSON) => {
+        var esm = {};
+        esm['esm_url'] = currentWindowURL;
+        esm['esm_site'] = currentPage;
+        esm['esm_time'] = esm_time;
+        esm['distractions'] = distractionDetection();
+        esm['features'] = features;
+        esm['adjusted_distractions'] = adjustedDistractionDetection(esm['distractions'],features);
+        const resp = sendToBackground({
+            name: "cache ESM",
+            esm: esm,
+        })
+    });
+}
+
+function sample_esm(){
+    if (window.self === window.top){ // only capture the top window's browsing context
+        if (currentPage !== "Twitter" && currentPage !== "Facebook" && currentPage !== "YouTube" && currentPage !== "LinkedIn") {
+            return;
+        }
+        const keys = ["sampled_esm","last_esm_time","esm_counter_today"];
+        chrome.storage.local.get(keys).then(function (esm_status) {
+            var current_time = new Date().getTime()/1000;
+            var last_esm_time_diff = current_time - esm_status.last_esm_time;
+            if(
+                esm_status.sampled_esm===null &&
+                last_esm_time_diff >= 60*60 &&
+                esm_status.esm_counter_today < 6
+            ){
+                create_esm();
+            }
+            else{
+                console.log("ESM sampling criteria do not fulfill:");
+                console.log("exising ESM:",esm_status.sampled_esm);
+                console.log("since last submitted ESM (seconds):",last_esm_time_diff);
+                console.log("completed ESM today:", esm_status.esm_counter_today);
+            }
+        });
+    }
+}
+
+function esm_clock(){
+    const key = "Enable";
+    chrome.storage.local.get(key, (result) => {
+        if (!result.hasOwnProperty(key)) {
+            console.error("'" + key + "' property unset in configuration.");
+            return
+        }
+        if(result.Enable){ // if the purpose mode is enabled, count down for 30 seconds to sample the ESM
+            if(currentPage === "Twitter" || currentPage === "Facebook" || currentPage === "YouTube" || currentPage === "LinkedIn"){
+                setTimeout(() => {
+                    console.log("try to sample ESM after 30 seconds.");
+                    sample_esm();
+                }, 30*1000);
+            }
+        }
+        setTimeout(() => {
+            console.log("try to resample ESM..."); 
+            sample_esm(); 
+        }, 60*1000); // check the status for every minute
+    });
 }
 
 console.log(__filename + " running.");
 run();
+esm_clock();
 
 export {};
