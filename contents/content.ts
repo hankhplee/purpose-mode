@@ -790,10 +790,9 @@ function onToggleFacebookDeclutter(toggled: boolean) {
     if (getCurrentPage() !== "Facebook") {
         return;
     }
+    const currentWindowURL = window.location.href;
 
     const selectors = [
-        // Right column.
-        $('div[role="complementary"]'),
         // Hamburger menu on the left.
         $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))'),
         // Buttons at the top of the page.
@@ -813,6 +812,10 @@ function onToggleFacebookDeclutter(toggled: boolean) {
         // New message box.
         $('div[aria-label="New message"'),
     ];
+    if(!currentWindowURL.includes("/photo/")){
+        // Right column.
+        selectors.push($('div[role="complementary"]'));
+    }
     if (toggled) {
         for (const s of selectors) {
             s.each(() => { s.hide() });
