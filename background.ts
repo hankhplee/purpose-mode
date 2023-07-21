@@ -102,6 +102,7 @@ function openQuestionnaire(){
 
 // check ESM status every 1 minute
 setInterval(function () {
+    console.log("check ESM status...");
     var current_time = new Date().getTime()/1000;
     var current_date = new Date(Date.now());
     const keys = ["sampled_esm","last_active_date"];
