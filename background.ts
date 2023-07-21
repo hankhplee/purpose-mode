@@ -56,6 +56,11 @@ function init() {
     chrome.storage.local.set({"esm_counter_today": 0});
     chrome.storage.local.set({"esm_counter_total": 0});
     chrome.storage.local.set({"last_active_date": null});
+
+    // feature questionnaire sampling
+    chrome.storage.local.set({"sampling_feature_lock": false});
+    chrome.storage.local.set({"sampling_feature_site": false});
+    chrome.storage.local.set({"feature_before": false});
 }
 
 function settingAutoPlay(site: string, toggled: boolean){
@@ -165,6 +170,64 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
               }
             });
           }
+    }
+    else if(msg.name === "feature change"){
+        console.log("Changed feature:", msg.body["changed_feature"]);
+        console.log("Value before change:", msg.body["initial_value"]);
+        const keys = ["sampling_feature_lock",
+        "TwitterCompact","TwitterInfinite","TwitterNotif","TwitterFeed","TwitterDesaturate","TwitterAutoplay",
+        "LinkedInCompact","LinkedInInfinite","LinkedInNotif","LinkedInFeed","LinkedInDesaturate","LinkedInAutoplay",
+        "FacebookCompact","FacebookInfinite","FacebookNotif","FacebookFeed","FacebookDesaturate","FacebookAutoplay",
+        "YouTubeCompact","YouTubeInfinite","YouTubeNotif","YouTubeFeed","YouTubeDesaturate","YouTubeAutoplay",
+        ];
+        chrome.storage.local.get(keys).then(function (lock) {
+            if(lock){
+                return;
+            }else{
+                chrome.storage.local.set({"sampling_feature_lock": true});
+                var sample_site;
+                var feature_before = {};
+                // determine the sampling site and log current site-specific features
+                if(msg.body["changed_feature"].includes("Twitter")){
+                    sample_site = "Twitter";
+                    feature_before["Compact"]     = lock.TwitterCompact;
+                    feature_before["Infinite"]    = lock.TwitterInfinite;
+                    feature_before["Notif"]       = lock.TwitterNotif;
+                    feature_before["Feed"]        = lock.TwitterFeed; 
+                    feature_before["Desaturate"]  = lock.TwitterDesaturate;
+                    feature_before["Autoplay"]    = lock.TwitterAutoplay;
+                }
+                else if(msg.body["changed_feature"].includes("Facebook")){
+                    sample_site = "Facebook";
+                    feature_before["Compact"]     = lock.FacebookCompact;
+                    feature_before["Infinite"]    = lock.FacebookInfinite;
+                    feature_before["Notif"]       = lock.FacebookNotif;
+                    feature_before["Feed"]        = lock.FacebookFeed; 
+                    feature_before["Desaturate"]  = lock.FacebookDesaturate;
+                    feature_before["Autoplay"]    = lock.FacebookAutoplay;
+                }
+                else if(msg.body["changed_feature"].includes("LinkedIn")){
+                    sample_site = "LinkedIn";
+                    feature_before["Compact"]     = lock.LinkedInCompact;
+                    feature_before["Infinite"]    = lock.LinkedInInfinite;
+                    feature_before["Notif"]       = lock.LinkedInNotif;
+                    feature_before["Feed"]        = lock.LinkedInFeed; 
+                    feature_before["Desaturate"]  = lock.LinkedInDesaturate;
+                    feature_before["Autoplay"]    = lock.LinkedInAutoplay;
+                }
+                else if(msg.body["changed_feature"].includes("YouTube")){
+                    sample_site = "YouTube";
+                    feature_before["Compact"]     = lock.YouTubeCompact;
+                    feature_before["Infinite"]    = lock.YouTubeInfinite;
+                    feature_before["Notif"]       = lock.YouTubeNotif;
+                    feature_before["Feed"]        = lock.YouTubeFeed; 
+                    feature_before["Desaturate"]  = lock.YouTubeDesaturate;
+                    feature_before["Autoplay"]    = lock.YouTubeAutoplay;
+                }
+                // update the changed value
+                // trigger sampling countdown
+            }
+        });
     }
 })
 

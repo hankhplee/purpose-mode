@@ -13,6 +13,13 @@ import downIcon from "data-base64:~assets/down.png";
 
 const extName = "Purpose Mode";
 
+function startFeatureSampling(storage_var,current_status){
+  const resp = sendToBackground({
+    name: "feature change",
+    body: {"changed_feature": storage_var, "initial_value": current_status}
+  });
+}
+
 function setBool(key: string, value: boolean) {
     console.log("Setting '" + key + "' to '" + value + "'.");
     chrome.storage.local.set({key: JSON.stringify(value)});
@@ -40,6 +47,7 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
                     name: "toggle",
                     body: {"button": storage_var, "state": e.target.checked}
                   })
+                  startFeatureSampling(storage_var,checked);
                 }} />
 
           <label className="label" htmlFor={storage_var}>
@@ -143,7 +151,8 @@ function ButtonSwitch({label, storage_var, current_status}){
                   const resp = sendToBackground({
                   name: "autoplay",
                   body: {"site": storage_var, "state": !current_status}
-                })
+                  });
+                  startFeatureSampling(storage_var,current_status);
                 }} 
         >{buttonText}</button>
       </div>
