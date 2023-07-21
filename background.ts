@@ -119,10 +119,10 @@ setInterval(function () {
             chrome.action.setBadgeText({ text: ""});
         }
         //check if daily ESM counter needs to be upated
-        if(status.last_active_date !== current_date){
+        if(status.last_active_date !== current_date.getDate()){
             console.log("reset ESM daily counter...");
             chrome.storage.local.set({"esm_counter_today": 0});
-            chrome.storage.local.set({"last_active_date": current_date});
+            chrome.storage.local.set({"last_active_date": current_date.getDate()});
         }
     });
 }, 60 * 1000);
