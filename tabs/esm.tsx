@@ -7,6 +7,37 @@ import linkedInIcon from "data-base64:~assets/LinkedIn.png";
 import youTubeIcon from "data-base64:~assets/YouTube.png";
 import axios from 'axios';
 
+function SkipButton({size}){
+    
+    return(
+        <button className={"button is-warning "+size}
+            onClick={(e) => {
+                var con = confirm("Are you sure to skip and quit this questionnaire?");
+                if (con) {
+                    chrome.storage.local.set({"sampled_esm": null}); // reset sampled ESM
+                    //close the window
+                    window.close();
+                }
+            }
+        }
+        >Skip & Close</button>
+    );
+}
+
+function NoESMPage(){
+    return(
+        <section className="hero is-primary">
+            <div className="hero-body">
+                <div className="container">
+                    <h1 className="title has-text-centered">
+                        No ESM to reply right now. Please close the page and check in later!
+                    </h1>
+                </div>
+            </div>
+        </section>
+    );
+}
+
 function ESMPage() {
 
     const [esm] = useChromeStorageLocal("sampled_esm");
@@ -14,9 +45,7 @@ function ESMPage() {
 
     if(!esm){
         return(
-            <div>
-                No ESM at this moment. Please check in later.
-            </div>
+            <NoESMPage/>
         );
     }
 
@@ -25,9 +54,7 @@ function ESMPage() {
     const esmSite = esm.esm_site;
     if(esmSite != "Twitter" && esmSite != "Facebook" && esmSite != "LinkedIn" && esmSite != "YouTube"){
         return(
-            <div>
-                No ESM at this moment. Please check in later.
-            </div>
+            <NoESMPage/>
         );
     }
     // get site logo
@@ -76,6 +103,9 @@ function ESMPage() {
                             src={siteLogo}></img>. Let us know what your experience is!
                             <br />
                             Current as of: <span id="esm_time">{timestamp}</span>
+                        </p>
+                        <p className="content">
+                            If you can not response to this questionnaire for any reason (e.g., this does not match their current browsing activity), please hit <SkipButton size="is-small"/> to skip this questionnaire.
                         </p>
                     </div>
                 </div>
@@ -295,7 +325,8 @@ function ESMPage() {
                             </div>
                         </div>
                     </div>
-                    <button className="button is-primary" id="btn_submit"
+                    <div className="buttons">
+                    <button className="button is-primary is-medium" id="btn_submit"
                         onClick={(e) => {
                             var answers = {};
                             var required_check = [
@@ -388,39 +419,59 @@ function ESMPage() {
                             }
                             required_check[6] = required_goal_alignment;
                             
-                            //check required fields
-                            var pass_requirement_check = true;
-                            var alarmIndex = [];
-                            for (var i = 0; i < required_check.length; ++i) {
-                                if (!required_check[i]) {
-                                    pass_requirement_check = false;
-                                    alarmIndex.push(i + 1);
+                            chrome.storage.local.get(["esm_counter_today","esm_counter_total","last_esm_time"]).then(function (esm_counters) {
+                                var current_time = new Date().getTime()/1000;
+                                var last_esm_time_diff = current_time - esm_counters.last_esm_time;
+                                if(esm_counters.esm_counter_today >= 6){
+                                    var alert_message = "You have reached your daily maximum!\nPlease close the questionnaire and come back tomorrow!";
+                                    alert(alert_message);
                                 }
-                            }
-                            if (!pass_requirement_check) {
-                                var alert_message = "Please answer the following questions: " + alarmIndex.join(',');
-                                alert(alert_message);
-                            }
-                            else{
-                                console.log(answers);
-                                axios.post('https://purpose-mode-backend.nymity.ch/submit', {
-                                    uid: uid,
-                                    type: "esm",
-                                    data: answers
-                                  })
-                                  .then(function (response) {
-                                    console.log(response);
-                                    alert("Response submitted!");
-                                    window.close();
-                                  })
-                                  .catch(function (error) {
-                                    console.log(error);
-                                    alert("Submission failed: "+ error);
-                                  });
-                            }
-                            
+                                else if(last_esm_time_diff < 60*60){
+                                    var alert_message = "You have submitted a questionnaire in an hour!\nPlease close the questionnaire and come back later!";
+                                    alert(alert_message);
+                                }
+                                else{
+                                    //esm counter checks and check required fields
+                                    var pass_requirement_check = true;
+                                    var alarmIndex = [];
+                                    for (var i = 0; i < required_check.length; ++i) {
+                                        if (!required_check[i]) {
+                                            pass_requirement_check = false;
+                                            alarmIndex.push(i + 1);
+                                        }
+                                    }
+                                    if (!pass_requirement_check) {
+                                        var alert_message = "Please answer the following questions: " + alarmIndex.join(',');
+                                        alert(alert_message);
+                                    }
+                                    else{
+                                        console.log(answers);
+                                        axios.post('https://purpose-mode-backend.nymity.ch/submit', {
+                                            uid: uid,
+                                            type: "esm",
+                                            data: answers
+                                        })
+                                        .then(function (response) {
+                                            console.log(response);
+                                            chrome.storage.local.set({"sampled_esm": null}); // reset sampled ESM
+                                            chrome.storage.local.set({"esm_counter_today": esm_counters.esm_counter_today+1}); // today's ESM counter ++
+                                            chrome.storage.local.set({"esm_counter_total": esm_counters.esm_counter_total+1}); // overall ESM counter ++
+                                            chrome.storage.local.set({"last_esm_time": current_time}); // record current time
+                                            alert("Response submitted!");
+                                            window.close();
+                                        })
+                                        .catch(function (error) {
+                                            console.log(error);
+                                            alert("Submission failed: "+ error);
+                                        });
+                                    }
+                                }
+                            });
                           }}
                     >Submit</button>
+                    <SkipButton
+                    size="is-medium"/>
+                    </div>
                     </div>
                 </div>
         </div>

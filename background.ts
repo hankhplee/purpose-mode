@@ -50,6 +50,12 @@ function init() {
     chrome.storage.local.set({"SetFacebookAutoplay": false});
     chrome.storage.local.set({"YouTubeAutoplay": false});
 
+    // data logging and questionnaire sampling
+    chrome.storage.local.set({"sampled_esm": null});
+    chrome.storage.local.set({"last_esm_time": 0});
+    chrome.storage.local.set({"esm_counter_today": 0});
+    chrome.storage.local.set({"esm_counter_total": 0});
+
 }
 
 function settingAutoPlay(site: string, toggled: boolean){
@@ -69,28 +75,26 @@ function settingAutoPlay(site: string, toggled: boolean){
 }
 
 function cacheESM(esm, webpage_screenshot) {
+    console.log("cache ESM");
     esm['esm_screenshot'] = webpage_screenshot;
     // console.log("screenshot: ",webpage_screenshot);
     chrome.storage.local.set({"sampled_esm": esm});
-
-    // for ESM testing
-    openTestQuestionnaire();
+    var timestamp = new Date().getTime();
+    var questionnaireNotification = "questionnaire-notification" + timestamp;
+    chrome.notifications.create(questionnaireNotification, {
+        "type": "basic",
+        "iconUrl": surveyIcon,
+        "title": "User study questionnaire",
+        "message": "Click this notification to answer the questionnaire.",
+    });
+    chrome.notifications.onClicked.addListener((notificationId) => {
+        if (notificationId == questionnaireNotification) {
+            chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
+        }
+    });
 }
 
 function openQuestionnaire(){
-    /* send message to content script to capture the current browsing context*/
-    const resp = sendToContentScript({
-        name: "create ESM",
-    })
-
-    /* comment out the following code for the actual study*/
-    // console.log("open questionnaire");
-    // console.log(chrome.runtime.getURL("tabs/esm.html"));
-    // chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
-}
-
-function openTestQuestionnaire(){
-    console.log("open test questionnaire");
     chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
 }
 
@@ -106,7 +110,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         chrome.notifications.create(questionnaireNotification, {
             "type": "basic",
             "iconUrl": surveyIcon,
-            "title": "You have a questionnaire to fill!",
+            "title": "User study questionnaire",
             "message": "Click this notification to answer the questionnaire.",
         });
     }
@@ -114,7 +118,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         openQuestionnaire();
     }
     else if(msg.name === "cache ESM"){
-        console.log("cache ESM");
         if (msg.esm) {
             chrome.tabs.query({
                 url: msg.esm["esm_url"],
@@ -132,10 +135,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
               }
             });
           }
-    }
-    // for ESM questionnaire testing
-    else if(msg.name === "open test questionnaire"){
-        openTestQuestionnaire();
     }
 })
 

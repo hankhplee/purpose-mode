@@ -535,7 +535,17 @@ function ExpandableMenu({name, matchURL, Switches}) {
 
 function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);
-  const uid = useChromeStorageLocal("uid");
+  const [uid] = useChromeStorageLocal("uid","Error");
+  const [sampled_esm] = useChromeStorageLocal("sampled_esm",null);
+  const [esm_counter_today] = useChromeStorageLocal("esm_counter_today",0);
+  const [esm_counter_total] = useChromeStorageLocal("esm_counter_total",0);
+  
+  var questionnaireText;
+  if(sampled_esm === null){
+    questionnaireText = "No Questionnaire";
+  } else{
+    questionnaireText = "Questionnaire";
+  }
 
   return (
     <div
@@ -580,6 +590,15 @@ function IndexPopup() {
                   }} 
                   >Test notification</button> 
                 </div>
+                <div className="dropdown-item">
+                  <button className="button is-small" id="test_questionnaire"
+                  onClick={(e) => {
+                    const resp = sendToContentScript({
+                    name: "test questionnaire"
+                    })
+                  }} 
+                  >Test questionnaire</button> 
+                </div>
               </div>
             </div>
           </div>
@@ -590,25 +609,26 @@ function IndexPopup() {
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Today Answered</p>
-          <p id="numTodayAnswered">0</p>
+          <p id="numTodayAnswered">{esm_counter_today}</p>
         </div>
       </div>
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Total Answered</p>
-          <p id="numTotalAnswered">0</p>
+          <p id="numTotalAnswered">{esm_counter_total}</p>
         </div>
       </div>
     </nav>
     <nav className="level is-mobile">
       <div className="level-item has-text-centered">
         <button className="button is-info is-small" id="questionnaire"
+        disabled = {sampled_esm===null}
           onClick={(e) => {
             const resp = sendToBackground({
             name: "open questionnaire",
           })
           }} 
-        >Questionnaire</button>
+        >{questionnaireText}</button>
       </div>
     </nav>
 
