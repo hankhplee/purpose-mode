@@ -986,6 +986,9 @@ function onToggleYouTubeRecomm(toggled: boolean) {
             $('button[aria-label="Next"]'),
             // Video ad on the home page.
             $('div#masthead-ad'),
+            // promotion banner
+            $('ytd-banner-promo-renderer'),
+            $('ytd-statement-banner-renderer'),
         ]);
     // Recommendations on the "watch" page.
     } else if (watchPage) {
