@@ -55,7 +55,7 @@ function init() {
     chrome.storage.local.set({"last_esm_time": 0});
     chrome.storage.local.set({"esm_counter_today": 0});
     chrome.storage.local.set({"esm_counter_total": 0});
-
+    chrome.storage.local.set({"last_active_date": null});
 }
 
 function settingAutoPlay(site: string, toggled: boolean){
@@ -93,11 +93,39 @@ function cacheESM(esm, webpage_screenshot) {
             chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
         }
     });
+    chrome.action.setBadgeText({ text: "+" });
 }
 
 function openQuestionnaire(){
     chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
 }
+
+// check ESM status every 1 minute
+setInterval(function () {
+    var current_time = new Date().getTime()/1000;
+    var current_date = new Date(Date.now());
+    const keys = ["sampled_esm","last_active_date"];
+    chrome.storage.local.get(keys).then(function (status) {
+        //check if ESM expire
+        if(status.sampled_esm !== null){
+            var esm_time = status.sampled_esm["esm_time_unix_second"];
+            if(current_time - esm_time > 5*60){
+                console.log("sampled ESM expired (5 min), clear sampled ESM...");
+                chrome.storage.local.set({"sampled_esm": null});
+                chrome.action.setBadgeText({ text: "" });
+            }
+        }
+        else{
+            chrome.action.setBadgeText({ text: ""});
+        }
+        //check if daily ESM counter needs to be upated
+        if(status.last_active_date !== current_date){
+            console.log("reset ESM daily counter...");
+            chrome.storage.local.set({"esm_counter_today": 0});
+            chrome.storage.local.set({"last_active_date": current_date});
+        }
+    });
+}, 60 * 1000);
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.name === "autoplay") {

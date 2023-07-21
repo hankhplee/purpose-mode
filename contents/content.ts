@@ -1621,8 +1621,9 @@ function run() {
 }
 
 function create_esm(){
-    console.log("Create new ESM...");
+    console.log("new ESM attempt...");
     var currentWindowURL = window.location.href;
+    var current_time = new Date().getTime()/1000;
     var date = new Date(Date.now());
     var esm_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
     getCurrentFeatures(currentPage).then((features: JSON) => {
@@ -1630,6 +1631,7 @@ function create_esm(){
         esm['esm_url'] = currentWindowURL;
         esm['esm_site'] = currentPage;
         esm['esm_time'] = esm_time;
+        esm['esm_time_unix_second'] = current_time;
         esm['distractions'] = distractionDetection();
         esm['features'] = features;
         esm['adjusted_distractions'] = adjustedDistractionDetection(esm['distractions'],features);
@@ -1663,6 +1665,9 @@ function sample_esm(){
                 console.log("completed ESM today:", esm_status.esm_counter_today);
             }
         });
+    }
+    else{
+        console.log("Page not on top; skip esm sampling...");
     }
 }
 
