@@ -458,6 +458,7 @@ function ESMPage() {
                                             chrome.storage.local.set({"esm_counter_total": esm_counters.esm_counter_total+1}); // overall ESM counter ++
                                             chrome.storage.local.set({"last_esm_time": current_time}); // record current time
                                             alert("Response submitted!");
+                                            chrome.action.setBadgeText({ text: "" });
                                             window.close();
                                         })
                                         .catch(function (error) {
