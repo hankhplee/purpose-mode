@@ -15,6 +15,7 @@ function SkipButton({size}){
                 var con = confirm("Are you sure to skip and quit this questionnaire?");
                 if (con) {
                     chrome.storage.local.set({"sampled_esm": null}); // reset sampled ESM
+                    chrome.action.setBadgeText({ text: "" }); // remove badge notification
                     //close the window
                     window.close();
                 }
