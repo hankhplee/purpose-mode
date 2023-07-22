@@ -795,6 +795,8 @@ function onToggleFacebookDeclutter(toggled: boolean) {
     const selectors = [
         // Hamburger menu on the left.
         $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))'),
+        // Hamburger menu on the left (A/B testing)
+        $('div[data-pagelet="LeftRail"]'),
         // Buttons at the top of the page.
         $('a[aria-label="Home"]'),
         // Watch button.
@@ -847,6 +849,7 @@ function onToggleFacebookFeed(toggled: boolean){
         $('div[role="tablist"]:has(> div > div > div > div > div > span:contains("Stories"))'),
         // newsfeed
         $('div:has(>span[id="ssrb_feed_start"])'),
+        $('div:has(>h3:contains("News Feed posts"))'),
         // "See More" button when finite scrolling is activated
         $("#tisd-show-more"),
 
