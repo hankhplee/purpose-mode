@@ -446,11 +446,22 @@ function ESMPage() {
                                         alert(alert_message);
                                     }
                                     else{
-                                        console.log(answers);
+                                        console.log("ESM responses:", answers);
+                                        var esm_record = {};
+                                        esm_record["esm_responses"]              = answers;
+                                        esm_record["esm_site"]                   = esm.esm_site;
+                                        esm_record["esm_time"]                   = esm.esm_time;
+                                        esm_record["esm_time_unix_second"]       = esm.esm_time_unix_second;
+                                        esm_record["distractions"]               = esm.distractions;
+                                        esm_record["features"]                   = esm.features;
+                                        esm_record["adjusted_distractions"]      = esm.adjusted_distractions;
+                                        
+                                        console.log("ESM record:", esm_record);
+
                                         axios.post('https://purpose-mode-backend.nymity.ch/submit', {
                                             uid: uid,
                                             type: "esm",
-                                            data: answers
+                                            data: esm_record
                                         })
                                         .then(function (response) {
                                             console.log(response);

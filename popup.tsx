@@ -546,6 +546,7 @@ function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);
   const [uid] = useChromeStorageLocal("uid","Error");
   const [sampled_esm] = useChromeStorageLocal("sampled_esm",null);
+  const [sampled_feature_change] = useChromeStorageLocal("sampled_feature_questioinnaire",null);
   const [esm_counter_today] = useChromeStorageLocal("esm_counter_today",0);
   const [esm_counter_total] = useChromeStorageLocal("esm_counter_total",0);
   
@@ -554,6 +555,16 @@ function IndexPopup() {
     questionnaireText = "No Questionnaire";
   } else{
     questionnaireText = "Questionnaire";
+  }
+
+  var featureQuestionnaireText;
+  var featureButtonHeight;
+  if(sampled_feature_change === null){
+    featureQuestionnaireText = "No feature chages made";
+    featureButtonHeight = "35px";
+  } else{
+    featureQuestionnaireText = "Feature(s) changed! Tell us why!";
+    featureButtonHeight = "55px";
   }
 
   return (
@@ -630,7 +641,9 @@ function IndexPopup() {
     </nav>
     <nav className="level is-mobile">
       <div className="level-item has-text-centered">
-        <button className="button is-info is-small" id="questionnaire"
+      <div className="buttons">
+        <button className="button is-primary is-small" id="questionnaire"
+        style={{width:"120px",height:"35px"}}
         disabled = {sampled_esm===null}
           onClick={(e) => {
             const resp = sendToBackground({
@@ -638,6 +651,16 @@ function IndexPopup() {
           })
           }} 
         >{questionnaireText}</button>
+        <button className="button is-info is-small" id="feature_questionnaire"
+        style={{width:"120px", height:featureButtonHeight, whiteSpace: "normal"}}
+        disabled = {sampled_feature_change===null}
+          onClick={(e) => {
+            const resp = sendToBackground({
+            name: "open feature questionnaire",
+          })
+          }} 
+        >{featureQuestionnaireText}</button>
+        </div>
       </div>
     </nav>
 
