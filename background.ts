@@ -17,6 +17,8 @@ function init() {
     console.log("Initializing " + extName + " background script.");
 
     /* initialize local storage */
+    chrome.storage.local.set({"enableIntervention": false});
+
     chrome.storage.local.set({"TwitterCompact": false});
     chrome.storage.local.set({"TwitterInfinite": false});
     chrome.storage.local.set({"TwitterNotif": false});
