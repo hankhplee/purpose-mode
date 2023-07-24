@@ -207,50 +207,55 @@ function FeatureQuestionnairePage() {
                                 required_check[1] = true;
                             }
                             
-                            //esm counter checks and check required fields
-                            var pass_requirement_check = true;
-                            var alarmIndex = [];
-                            for (var i = 0; i < required_check.length; ++i) {
-                                if (!required_check[i]) {
-                                    pass_requirement_check = false;
-                                    alarmIndex.push(i + 1);
+                            chrome.storage.local.get(["sampled_esm"]).then(function (status) {
+                                //esm counter checks and check required fields
+                                var pass_requirement_check = true;
+                                var alarmIndex = [];
+                                for (var i = 0; i < required_check.length; ++i) {
+                                    if (!required_check[i]) {
+                                        pass_requirement_check = false;
+                                        alarmIndex.push(i + 1);
+                                    }
                                 }
-                            }
-                            if (!pass_requirement_check) {
-                                var alert_message = "Please answer the following questions: " + alarmIndex.join(',');
-                                alert(alert_message);
-                            }
-                            else{
-                                console.log("feature questionnaire responses: ",answers);
-                                var feature_questionnaire_record = {};
-                                feature_questionnaire_record["questionnaire_responses"]       =  answers;
-                                feature_questionnaire_record["sampled_time"]                  =  questionnaire.sampled_time;
-                                feature_questionnaire_record["sampled_time_unix_second"]      =  questionnaire.sampled_time_unix_second;
-                                feature_questionnaire_record["sampled_site"]                  =  questionnaire.sampled_site;
-                                feature_questionnaire_record["feature_changed"]               =  questionnaire.feature_changed;
-                                
-                                console.log("feature questionnaire record:", feature_questionnaire_record);
+                                if (!pass_requirement_check) {
+                                    var alert_message = "Please answer the following questions: " + alarmIndex.join(',');
+                                    alert(alert_message);
+                                }
+                                else{
+                                    console.log("feature questionnaire responses: ",answers);
+                                    var feature_questionnaire_record = {};
+                                    feature_questionnaire_record["questionnaire_responses"]       =  answers;
+                                    feature_questionnaire_record["sampled_time"]                  =  questionnaire.sampled_time;
+                                    feature_questionnaire_record["sampled_time_unix_second"]      =  questionnaire.sampled_time_unix_second;
+                                    feature_questionnaire_record["sampled_site"]                  =  questionnaire.sampled_site;
+                                    feature_questionnaire_record["feature_changed"]               =  questionnaire.feature_changed;
+                                    
+                                    console.log("feature questionnaire record:", feature_questionnaire_record);
 
-                                axios.post('https://purpose-mode-backend.nymity.ch/submit', {
-                                    uid: uid,
-                                    type: "feature_feedback_questionnaire",
-                                    data: feature_questionnaire_record
-                                })
-                                .then(function (response) {
-                                    console.log(response);
-                                    var current_time = new Date().getTime()/1000;
-                                    // reset feature change cache
-                                    chrome.storage.local.set({"last_feature_questionnaire_time": current_time});
-                                    chrome.storage.local.set({"sampled_feature_questioinnaire": null});
-                                    chrome.storage.local.set({"sampling_feature_lock": false});
-                                    alert("Response submitted!");
-                                    window.close();
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                    alert("Submission failed: "+ error);
-                                });
-                            }
+                                    axios.post('https://purpose-mode-backend.nymity.ch/submit', {
+                                        uid: uid,
+                                        type: "feature_feedback_questionnaire",
+                                        data: feature_questionnaire_record
+                                    })
+                                    .then(function (response) {
+                                        console.log(response);
+                                        var current_time = new Date().getTime()/1000;
+                                        // reset feature change cache
+                                        chrome.storage.local.set({"last_feature_questionnaire_time": current_time});
+                                        chrome.storage.local.set({"sampled_feature_questioinnaire": null});
+                                        chrome.storage.local.set({"sampling_feature_lock": false});
+                                        alert("Response submitted!");
+                                        if(status.sampled_esm === null){
+                                            chrome.action.setBadgeText({ text: "" });
+                                        }
+                                        window.close();
+                                    })
+                                    .catch(function (error) {
+                                        console.log(error);
+                                        alert("Submission failed: "+ error);
+                                    });
+                                }
+                            });
                           }}
                     >Submit</button>
                     <SkipButton

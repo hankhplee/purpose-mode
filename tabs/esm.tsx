@@ -420,7 +420,7 @@ function ESMPage() {
                             }
                             required_check[6] = required_goal_alignment;
                             
-                            chrome.storage.local.get(["esm_counter_today","esm_counter_total","last_esm_time"]).then(function (esm_counters) {
+                            chrome.storage.local.get(["esm_counter_today","esm_counter_total","last_esm_time","sampled_feature_questioinnaire"]).then(function (esm_counters) {
                                 var current_time = new Date().getTime()/1000;
                                 var last_esm_time_diff = current_time - esm_counters.last_esm_time;
                                 if(esm_counters.esm_counter_today >= 6){
@@ -470,7 +470,9 @@ function ESMPage() {
                                             chrome.storage.local.set({"esm_counter_total": esm_counters.esm_counter_total+1}); // overall ESM counter ++
                                             chrome.storage.local.set({"last_esm_time": current_time}); // record current time
                                             alert("Response submitted!");
-                                            chrome.action.setBadgeText({ text: "" });
+                                            if(esm_counters.sampled_feature_questioinnaire === null){
+                                                chrome.action.setBadgeText({ text: "" });
+                                            }
                                             window.close();
                                         })
                                         .catch(function (error) {

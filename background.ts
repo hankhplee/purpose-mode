@@ -199,6 +199,7 @@ function featureQuestionnaireCountdown(countdown){
                         chrome.tabs.create({ url: chrome.runtime.getURL("tabs/feature_feedback.html")});
                     }
                 });
+                chrome.action.setBadgeText({ text: "+" });
             }
             else{
                 console.log("no feature changes at the end of the lock...");
@@ -224,18 +225,24 @@ setInterval(function () {
             if(current_time - esm_time > 5*60){
                 console.log("sampled ESM expired (5 min), clear sampled ESM...");
                 chrome.storage.local.set({"sampled_esm": null});
-                chrome.action.setBadgeText({ text: "" });
+                if(status.sampled_feature_questioinnaire === null){
+                    chrome.action.setBadgeText({ text: "" });
+                }
             }
         }
         else{
-            chrome.action.setBadgeText({ text: ""});
+            if(status.sampled_feature_questioinnaire === null){
+                chrome.action.setBadgeText({ text: "" });
+            }
         }
+
         //check if daily ESM counter needs to be upated
         if(status.last_active_date !== current_date.getDate()){
             console.log("reset ESM daily counter...");
             chrome.storage.local.set({"esm_counter_today": 0});
             chrome.storage.local.set({"last_active_date": current_date.getDate()});
         }
+
         // check if feature questionnaire expires
         if(status.sampled_feature_questioinnaire !== null){
             var qusetionnaire_time = status.sampled_feature_questioinnaire["sampled_time_unix_second"];
@@ -244,6 +251,14 @@ setInterval(function () {
                 // reset feature change cache
                 chrome.storage.local.set({"sampled_feature_questioinnaire": null});
                 chrome.storage.local.set({"sampling_feature_lock": false});
+                if(status.sampled_esm === null){
+                    chrome.action.setBadgeText({ text: "" });
+                }
+            }
+        }
+        else{
+            if(status.sampled_esm === null){
+                chrome.action.setBadgeText({ text: "" });
             }
         }
     });
