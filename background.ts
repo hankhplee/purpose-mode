@@ -65,6 +65,12 @@ function init() {
     chrome.storage.local.set({"sampling_feature_site": null});
     chrome.storage.local.set({"feature_before": null});
     chrome.storage.local.set({"sampled_feature_questioinnaire": null});
+
+    // feature use
+    chrome.storage.local.set({"TwitterSeeMoreClick": 0});
+    chrome.storage.local.set({"FacebookSeeMoreClick": 0});
+    chrome.storage.local.set({"YouTubeSeeMoreClick": 0});
+    chrome.storage.local.set({"LinkedInSeeMoreClick": 0});
 }
 
 function settingAutoPlay(site: string, toggled: boolean){

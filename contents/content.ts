@@ -200,7 +200,24 @@ function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
         container.css("min-height", `${feedHeight}px`);
     }
     button.css("top", `${feedHeight+containerTop-100}px`);
-};
+    // update show more button click time
+    var keys=["TwitterSeeMoreClick","FacebookSeeMoreClick","LinkedInSeeMoreClick","YouTubeSeeMoreClick"];
+
+    chrome.storage.local.get(keys).then(function (counter) {
+        if (currentPage == "Twitter") {
+            chrome.storage.local.set({"TwitterSeeMoreClick": counter.TwitterSeeMoreClick+1});
+        }
+        else if(currentPage == "Facebook"){
+            chrome.storage.local.set({"FacebookSeeMoreClick": counter.FacebookSeeMoreClick+1});
+        }
+        else if(currentPage == "LinkedIn"){
+            chrome.storage.local.set({"LinkedInSeeMoreClick": counter.LinkedInSeeMoreClick+1});
+        }
+        else if(currentPage == "YouTube"){
+            chrome.storage.local.set({"YouTubeSeeMoreClick": counter.YouTubeSeeMoreClick+1});
+        }
+    });
+}; 
 
 
 var mutationObserver = new MutationObserver(function(mutations) {
