@@ -2,6 +2,54 @@ import $ from "jquery";
 import "../finite_scroll_style.css";
 import twitterIcon from "data-base64:~assets/twitter.ico";
 import { sendToBackground } from "@plasmohq/messaging"
+import BrowserInteractionTime from 'browser-interaction-time';
+
+// The time (in milliseconds) after which our updateTimeSpent callback is
+// being called.
+const timeSpentGranularityInMs = 1000;
+const cb = {
+    multiplier: (time: number) => time + timeSpentGranularityInMs,
+    timeInMilliseconds: 0,
+    callback: updateTimeSpent
+}
+
+function formatSecs(secs: number): string {
+    const hours = Math.floor(secs / 60 / 60);
+    const minutes = Math.floor(secs / 60 % 60);
+    const seconds = Math.floor(secs % 60);
+    return hours + "h " + minutes + "m " + seconds + "s";
+}
+
+// Continuously write the time spent on the current site to local storage.
+// The service worker periodically reads local storage and submits the
+// "time spent on site"t o our backend.
+function updateTimeSpent(ms) {
+    const key = "TimeSpentOn" + getCurrentPage();
+    chrome.storage.local.get(key, (result) => {
+        let alreadySpent = result[key];
+        if (alreadySpent === undefined) {
+            alreadySpent = 0;
+        }
+        const newlySpent = timeSpentGranularityInMs / 1000;
+        const totalSpent = alreadySpent + newlySpent;
+
+        chrome.storage.local.set({[key]: totalSpent}, () => {
+            console.log(formatSecs(totalSpent) + " spent on this type of site.");
+        });
+    });
+}
+
+// Keep track of the time spent on this site.
+const timer = new BrowserInteractionTime({
+    timeIntervalEllapsedCallbacks: [cb],
+    absoluteTimeEllapsedCallbacks: [],
+    browserTabInactiveCallbacks: [],
+    browserTabActiveCallbacks: [],
+    idleTimeoutMs: 1000 * 60, // One minute.
+    checkCallbacksIntervalMs: 250
+})
+
+timer.startTimer();
 
 const extName = "Purpose Mode";
 const settingToHandler = {
@@ -63,7 +111,9 @@ function showSelectors(selectors: Array<JQuery>) {
 
 function getCurrentPage(): string {
     const currentWindowURL = window.location.href;
-    // console.log("current url", currentWindowURL);
+
+    // Note: When we update the values below, we also need to update
+    // the onAlarm listener in the service worker.
     if (currentWindowURL.includes("twitter.com")){
         return "Twitter";
     }
@@ -76,7 +126,7 @@ function getCurrentPage(): string {
     else if (currentWindowURL.includes("linkedin.com")){
         return "LinkedIn";
     } else {
-        return "NA";
+        return "Other";
     }
 }
 

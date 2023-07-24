@@ -16,6 +16,15 @@ chrome.runtime.onInstalled.addListener(init);
 function init() {
     console.log("Initializing " + extName + " background script.");
 
+    // Create an alarm that fires every periodInMinutes minutes.
+    // Our event handler sends a ping to the backend every time the event fires.
+    chrome.alarms.create(extName + " ping", {
+        delayInMinutes: 0,
+        periodInMinutes: 1,
+    }, () => {
+        console.log("Created repeating alarm for backend pings.");
+    });
+
     /* initialize local storage */
     chrome.storage.local.set({"enableIntervention": false});
 
@@ -271,6 +280,38 @@ setInterval(function () {
         }
     });
 }, 60 * 1000);
+
+// This callback sends a ping to our backend containing all the variables that
+// are set in the extension's local storage. For the purposes of the ping
+// message, we need to know:
+//   1) The time spent on the sites we're analyzing.
+//   2) What features are toggled.
+//   3) The user's UID.
+chrome.alarms.onAlarm.addListener((alarm) => {
+    chrome.storage.local.get(null, (result) => {
+        // To preserve privacy, don't send the screenshot and window URL
+        // that's part of the ESM data.
+        const esmAttr = "sampled_esm";
+        if (esmAttr in result && result[esmAttr] !== null) {
+            result[esmAttr].esm_screenshot = undefined;
+            result[esmAttr].esm_url = undefined;
+        }
+
+        // Make it clear to the backend that this is a ping message.
+        result.type = "ping";
+        let blob = new Blob(
+            [JSON.stringify(result)],
+            { type: "application/json" }
+        )
+        fetch("https://purpose-mode-backend.nymity.ch/submit", {
+            method: "POST",
+            body: blob,
+        }).then((response) => {
+            console.log("Backend responded to ping with status code: " +
+                        response.status);
+        })
+    });
+});
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.name === "autoplay") {
