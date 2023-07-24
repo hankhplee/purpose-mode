@@ -76,6 +76,7 @@ function StudyToggleSwitch({storage_var, checked, update }) {
                 onChange={(e) => {
                   update(e.target.checked);
                   setBool(storage_var, e.target.checked);
+                  chrome.storage.local.set({"esm_counter_today": 0});
                   // const resp = sendToBackground({
                   //   name: "study switch",
                   //   body: {"interventions": e.target.checked}
