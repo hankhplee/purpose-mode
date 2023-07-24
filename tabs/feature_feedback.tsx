@@ -195,13 +195,13 @@ function FeatureQuestionnairePage() {
                                 false, // reason
                                 ]
 
-                            // reason of change(s)
+                            // current browsing activity
                             answers["current_activity"] = document.getElementById("q_activity").value;
                             if (answers["current_activity"]) {
                                 required_check[0] = true;
                             }
 
-                            // current browsing activity
+                            // reason of change(s)                            
                             answers["reason"] = document.getElementById("q_reason").value;
                             if (answers["reason"]) {
                                 required_check[1] = true;

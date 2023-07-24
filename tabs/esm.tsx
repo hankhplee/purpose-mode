@@ -332,6 +332,7 @@ function ESMPage() {
                     <button className="button is-primary is-medium" id="btn_submit"
                         onClick={(e) => {
                             var answers = {};
+                            var onboarding = false;
                             var required_check = [
                                 false, // current_activity
                                 false, // purpose
@@ -346,6 +347,9 @@ function ESMPage() {
                             answers["current_activity"] = document.getElementById("q_activity").value;
                             if (answers["current_activity"]) {
                                 required_check[0] = true;
+                                if(answers["current_activity"] === "study onboarding"){
+                                    onboarding = true;
+                                }
                             }
 
                             // browsing purpose
@@ -468,8 +472,10 @@ function ESMPage() {
                                         .then(function (response) {
                                             console.log(response);
                                             chrome.storage.local.set({"sampled_esm": null}); // reset sampled ESM
-                                            chrome.storage.local.set({"esm_counter_today": esm_counters.esm_counter_today+1}); // today's ESM counter ++
-                                            chrome.storage.local.set({"esm_counter_total": esm_counters.esm_counter_total+1}); // overall ESM counter ++
+                                            if(!onboarding){
+                                                chrome.storage.local.set({"esm_counter_today": esm_counters.esm_counter_today+1}); // today's ESM counter ++
+                                                chrome.storage.local.set({"esm_counter_total": esm_counters.esm_counter_total+1}); // overall ESM counter ++
+                                            }
                                             chrome.storage.local.set({"last_esm_time": current_time}); // record current time
                                             alert("Response submitted!");
                                             if(esm_counters.sampled_feature_questioinnaire === null){
