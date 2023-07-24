@@ -41,12 +41,9 @@ function NoESMPage(){
 
 function ESMPage() {
 
-    const [esm_data] = useChromeStorageLocal("sampled_esm");
+    const [esm] = useChromeStorageLocal("sampled_esm");
     const [uid] = useChromeStorageLocal("uid");
-
-    // to keep the data while participant is completing the qusetionnaire
-    const esm = esm_data;
-
+    
     if(!esm){
         return(
             <NoESMPage/>
@@ -96,7 +93,9 @@ function ESMPage() {
                     <div className="container">
                         <p className="content has-text-centered subtitle is-5">Webpage Screenshot</p>
                         <figure className="image block">
-                            <img id="webpage_screenshot" style={{marginLeft: "auto", marginRight: "auto", border: "solid", borderWidth: "5px", borderColor: "hsl(171, 100%, 41%)"}} src={esm.esm_screenshot}/>
+                            <img id="webpage_screenshot" 
+                            style={{height: "450px", width: "auto", marginLeft: "auto", marginRight: "auto", border: "solid", borderWidth: "5px", borderColor: "hsl(171, 100%, 41%)"}} 
+                            src={esm.esm_screenshot}/>
                         </figure>
                         <br/>
                         <p className="content">
@@ -140,7 +139,7 @@ function ESMPage() {
                                     }else{
                                         document.getElementById("q_purpose_others").disabled = true;
                                     }
-                                  }}>
+                                }}>
                                     <option></option>
                                     <option
                                         value="Finding">
@@ -485,7 +484,7 @@ function ESMPage() {
                                     }
                                 }
                             });
-                          }}
+                        }}
                     >Submit</button>
                     <SkipButton
                     size="is-medium"/>
