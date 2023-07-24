@@ -63,6 +63,7 @@ function init() {
 
     // data logging and questionnaire sampling
     chrome.storage.local.set({"sampled_esm": null});
+    chrome.storage.local.set({"esm_in_progress": null});
     chrome.storage.local.set({"last_esm_time": 0});
     chrome.storage.local.set({"esm_counter_today": 0});
     chrome.storage.local.set({"esm_counter_total": 0});
@@ -74,6 +75,7 @@ function init() {
     chrome.storage.local.set({"sampling_feature_site": null});
     chrome.storage.local.set({"feature_before": null});
     chrome.storage.local.set({"sampled_feature_questioinnaire": null});
+    chrome.storage.local.set({"sampled_feature_questioinnaire_in_progress": null});
 
     // feature use
     chrome.storage.local.set({"TwitterSeeMoreClick": 0});
@@ -114,18 +116,25 @@ function cacheESM(esm, webpage_screenshot) {
     });
     chrome.notifications.onClicked.addListener((notificationId) => {
         if (notificationId == questionnaireNotification) {
-            chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
+            openQuestionnaire();
         }
     });
     chrome.action.setBadgeText({ text: "+" });
 }
 
 function openQuestionnaire(){
-    chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
+    // move the sampled esm into in progress cache
+    chrome.storage.local.get("sampled_esm").then(function (esm) {
+        chrome.storage.local.set({"esm_in_progress": esm.sampled_esm});
+        chrome.tabs.create({ url: chrome.runtime.getURL("tabs/esm.html")});
+    });
 }
 
 function openFeatureQuestionnaire(){
-    chrome.tabs.create({ url: chrome.runtime.getURL("tabs/feature_feedback.html")});
+    chrome.storage.local.get("sampled_feature_questioinnaire").then(function (questionnaire) {
+        chrome.storage.local.set({"sampled_feature_questioinnaire_in_progress": questionnaire.sampled_feature_questioinnaire});
+        chrome.tabs.create({ url: chrome.runtime.getURL("tabs/feature_feedback.html")});
+    });
 }
 
 function diffAfterFeature(feature_before,feature_after){
@@ -213,7 +222,7 @@ function featureQuestionnaireCountdown(countdown){
                 });
                 chrome.notifications.onClicked.addListener((notificationId) => {
                     if (notificationId == questionnaireNotification) {
-                        chrome.tabs.create({ url: chrome.runtime.getURL("tabs/feature_feedback.html")});
+                        openFeatureQuestionnaire();
                     }
                 });
                 chrome.action.setBadgeText({ text: "+" });

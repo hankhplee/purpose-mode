@@ -92,7 +92,7 @@ function ChangeSummary(changes){
 
 function FeatureQuestionnairePage() {
 
-    const [questionnaire] = useChromeStorageLocal("sampled_feature_questioinnaire");
+    const [questionnaire] = useChromeStorageLocal("sampled_feature_questioinnaire_in_progress");
     const [uid] = useChromeStorageLocal("uid");
 
     if(!questionnaire){

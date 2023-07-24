@@ -41,7 +41,7 @@ function NoESMPage(){
 
 function ESMPage() {
 
-    const [esm] = useChromeStorageLocal("sampled_esm");
+    const [esm] = useChromeStorageLocal("esm_in_progress");
     const [uid] = useChromeStorageLocal("uid");
     
     if(!esm){
