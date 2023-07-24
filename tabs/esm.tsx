@@ -41,8 +41,11 @@ function NoESMPage(){
 
 function ESMPage() {
 
-    const [esm] = useChromeStorageLocal("sampled_esm");
+    const [esm_data] = useChromeStorageLocal("sampled_esm");
     const [uid] = useChromeStorageLocal("uid");
+
+    // to keep the data while participant is completing the qusetionnaire
+    const esm = esm_data;
 
     if(!esm){
         return(
