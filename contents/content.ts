@@ -797,6 +797,8 @@ function onToggleFacebookDeclutter(toggled: boolean) {
         $('div[role="navigation"]:has(> div > div > div > h2:contains("Facebook Menu"))'),
         // Hamburger menu on the left (A/B testing)
         $('div[data-pagelet="LeftRail"]'),
+        // Hamburger menu on the left (A/B testing)
+        $('a[aria-label="Home"]').closest('div[data-isanimatedlayout="true"]'),
         // Buttons at the top of the page.
         $('a[aria-label="Home"]'),
         // Watch button.
