@@ -60,6 +60,38 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
   );
 }
 
+function StudyToggleSwitch({storage_var, checked, update }) {
+  return (
+    <div className="columns is-mobile">
+      <div className="column is-two-thirds">
+        <span className="tag is-warning">Study condition</span>
+      </div>
+      <div className="column">
+        <div className="toggle-switch">
+          <input type="checkbox"
+                className="toggle-checkbox"
+                name={storage_var}
+                id={storage_var}
+                checked={checked}
+                onChange={(e) => {
+                  update(e.target.checked);
+                  setBool(storage_var, e.target.checked);
+                  // const resp = sendToBackground({
+                  //   name: "study switch",
+                  //   body: {"interventions": e.target.checked}
+                  // })
+                }} />
+
+          <label className="label" htmlFor={storage_var}>
+            <span className="toggleswitch-inner" />
+            <span className="toggleswitch-switch" />
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function GlobalSwitch({ label, storage_var, checked, update }) {
   var switchColor;
   var switchText;
@@ -544,6 +576,7 @@ function ExpandableMenu({name, matchURL, Switches}) {
 
 function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);
+  const [intervention, setIntervention] = useChromeStorageLocal("enableIntervention", false);
   const [uid] = useChromeStorageLocal("uid","Error");
   const [sampled_esm] = useChromeStorageLocal("sampled_esm",null);
   const [sampled_feature_change] = useChromeStorageLocal("sampled_feature_questioinnaire",null);
@@ -600,7 +633,7 @@ function IndexPopup() {
                 <div className="dropdown-item">
                   <p className="heading">ID</p> 
                   <p id="userId">{uid}</p>
-                </div> 
+                </div>
                 <div className="dropdown-item">
                   <button className="button is-small" id="test_notification"
                   onClick={(e) => {
@@ -618,6 +651,15 @@ function IndexPopup() {
                     })
                   }} 
                   >Test questionnaire</button> 
+                </div>
+                <hr/>
+                <div className="content is-small">
+                  <p>Please follow the research team's instructions for the following:</p>
+                  <StudyToggleSwitch
+                  storage_var = "enableIntervention"
+                  checked = {intervention}
+                  update  = {setIntervention}
+                  /> 
                 </div>
               </div>
             </div>
@@ -664,7 +706,7 @@ function IndexPopup() {
       </div>
     </nav>
 
-      <div className="block">  
+      <div className="block" hidden = {!intervention}>  
         <ExpandableMenu
             name="Block autoplay setting"
             matchURL=""
@@ -679,8 +721,8 @@ function IndexPopup() {
           update={setEnabled}
         />
       {
-        enabled &&
-        <div>
+        enabled && 
+        <div hidden = {!intervention}>
           <ExpandableMenu
            name="Twitter"
            matchURL="https://twitter.com"
