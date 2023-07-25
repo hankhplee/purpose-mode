@@ -44,11 +44,13 @@ function StartPage() {
                                 var ping = {};
                                 var date = new Date(Date.now());
                                 var current_time = date.toString().replace(/ \(.*\)/ig, '');
+                                var unix_time = new Date().getTime();
                                 ping["timestamp"] = current_time;
-                                ping["week"] = 1;
+                                ping["unix_time"] = unix_time;
+                                ping["status"] = "participant registered";
                                 axios.post('https://purpose-mode-backend.nymity.ch/submit', {
                                     uid: uid,
-                                    type:"ping",
+                                    type:"study_status",
                                     data: ping
                                   })
                                   .then(function (response) {
