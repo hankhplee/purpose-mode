@@ -298,6 +298,9 @@ setInterval(function () {
 //   3) The user's UID.
 chrome.alarms.onAlarm.addListener((alarm) => {
     chrome.storage.local.get(null, (result) => {
+        // add timestamp
+        result["timestamp"] = new Date().getTime();
+
         // To preserve privacy, don't send the screenshot and window URL
         // that's part of the ESM data.
         const esmAttr = "sampled_esm";
