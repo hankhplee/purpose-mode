@@ -322,7 +322,7 @@ function ESMPage() {
                                 <div className="column has-text-centered">
                                     <label className="radio has-text-centered">
                                         5: Very supported <br />
-                                        <input type="radio" value="5" name="q_satisfaction"/>
+                                        <input type="radio" value="5" name="q_goal"/>
                                     </label>
                                 </div>
                             </div>
