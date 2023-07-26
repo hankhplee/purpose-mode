@@ -10,6 +10,10 @@ import noIcon from "data-base64:~assets/no.png";
 import setting from "data-base64:~assets/settings.png";
 import upIcon from "data-base64:~assets/up.png";
 import downIcon from "data-base64:~assets/down.png";
+import facebookIcon from "data-base64:~assets/Facebook.png";
+import twitterIcon from "data-base64:~assets/Twitter.png";
+import linkedInIcon from "data-base64:~assets/LinkedIn.png";
+import youTubeIcon from "data-base64:~assets/YouTube.png";
 import axios from 'axios';
 
 const extName = "Purpose Mode";
@@ -620,7 +624,7 @@ function IndexPopup() {
   var featureButtonHeight;
   if(sampled_feature_change === null){
     featureQuestionnaireText = "No feature chages made";
-    featureButtonHeight = "35px";
+    featureButtonHeight = "40px";
   } else{
     featureQuestionnaireText = "Feature(s) changed! Tell us why!";
     featureButtonHeight = "55px";
@@ -711,14 +715,34 @@ function IndexPopup() {
       <div className="level-item has-text-centered">
       <div className="buttons">
         <button className="button is-primary is-small" id="questionnaire"
-        style={{width:"120px",height:"35px"}}
+        style={{width:"120px",height:"40px"}}
         disabled = {sampled_esm===null}
           onClick={(e) => {
             const resp = sendToBackground({
             name: "open questionnaire",
           })
           }} 
-        >{questionnaireText}</button>
+        >
+        <span>
+        {questionnaireText} <br />
+          <img 
+              className="image is-16x16"
+              src={twitterIcon}>
+          </img> {" "}
+          <img 
+              className="image is-16x16"
+              src={facebookIcon}>
+          </img> {" "}
+          <img 
+              className="image is-16x16"
+              src={linkedInIcon}>
+          </img> {" "}
+          <img 
+              className="image is-16x16"
+              src={youTubeIcon}>
+          </img>
+        </span>
+        </button>
         <button className="button is-info is-small" id="feature_questionnaire"
         style={{width:"120px", height:featureButtonHeight, whiteSpace: "normal"}}
         disabled = {sampled_feature_change===null}
