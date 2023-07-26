@@ -154,7 +154,7 @@ function FeatureQuestionnairePage() {
                         <ChangeSummary 
                             changes={questionnaire.feature_changed}
                         />
-                        Current as of: <span id="esm_time">{timestamp}</span>
+                        Time when the change(s) were captured: <span id="esm_time">{timestamp}</span>
                         <br />
                         <p className="content">
                             If you can not response to this questionnaire for any reason (e.g., this does not match their current browsing activity), please hit <SkipButton size="is-small"/> to skip this questionnaire.
@@ -164,7 +164,7 @@ function FeatureQuestionnairePage() {
                 <div>
                     <div className="box">
                         <label className="label">
-                            1. Please briefly describe what you are currently doing on {esmSite}: 
+                            1. Please briefly describe what you were doing on {esmSite}: 
                             <span style={{color:"red"}}>*</span>
                         </label>
                         <p className="help">your response to this question will be used in the interview to help you recall your memory about this moment. Please note any information that will help you to remember.</p><br/>
@@ -176,7 +176,7 @@ function FeatureQuestionnairePage() {
                     
                     <div className="box">
                         <label className="label">
-                            2. Please elaborate on why you make those feature changes on {esmSite}: 
+                            2. Please elaborate on why you made those feature changes on {esmSite}: 
                             <span style={{color:"red"}}>*</span>
                         </label>
                         <p className="help">your response to this question will be used in the interview to help you recall your memory about this moment. Please note any information that will help you to remember.</p><br/>
