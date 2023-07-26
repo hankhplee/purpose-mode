@@ -743,7 +743,9 @@ function IndexPopup() {
           </img>
         </span>
         </button>
-        <button className="button is-info is-small" id="feature_questionnaire"
+        <div hidden = {!intervention} >
+        <button 
+        className="button is-info is-small" id="feature_questionnaire"
         style={{width:"120px", height:featureButtonHeight, whiteSpace: "normal"}}
         disabled = {sampled_feature_change===null}
           onClick={(e) => {
@@ -752,6 +754,7 @@ function IndexPopup() {
           })
           }} 
         >{featureQuestionnaireText}</button>
+        </div>
         </div>
       </div>
     </nav>
