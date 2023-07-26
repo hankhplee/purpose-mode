@@ -682,9 +682,13 @@ function IndexPopup() {
                   }} 
                   >Test questionnaire</button> 
                 </div>
+                <br/>
+                <div className="content is-small">
+                  For any questions, contact us at haopingl@cs.cmu.edu
+                </div>
                 <hr/>
                 <div className="content is-small">
-                  <p>Please follow the research team's instructions for the following:</p>
+                  <p>Please follow the research team's instructions for the setting:</p>
                   <StudyToggleSwitch
                   storage_var = "enableIntervention"
                   checked = {intervention}
