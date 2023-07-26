@@ -347,7 +347,7 @@ function ESMPage() {
                             answers["current_activity"] = document.getElementById("q_activity").value;
                             if (answers["current_activity"]) {
                                 required_check[0] = true;
-                                if(answers["current_activity"] === "study onboarding"){
+                                if(answers["current_activity"].includes("study onboarding")){
                                     onboarding = true;
                                 }
                             }
