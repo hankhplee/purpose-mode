@@ -554,11 +554,14 @@ function ExpandableMenu({name, matchURL, Switches}) {
     setExpanded,
   } = useCollapse();
 
+  var isSetting = false;
+
   useEffect(() => {
     const fetchURL = async () => {
       const url = await getTabURL();
-      if (matchURL === ""){
+      if (matchURL === "setting"){
         setExpanded(false);
+        isSetting = true;
       }
       else if (url.includes(matchURL)) {
         setExpanded(true);
@@ -574,7 +577,14 @@ function ExpandableMenu({name, matchURL, Switches}) {
           onClick: () => setExpanded((prevExpanded) => !prevExpanded),
         })}>
           { isExpanded ?
-            <p className="card-header-title">{name}
+            <p className="card-header-title">
+              <div hidden = {!isSetting}>
+                <img
+                  className="image is-16x16"
+                  src={setting}>
+                </img>
+              </div>
+              {name}
               <span className="icon">
                 <img src={upIcon}
                 style={{
@@ -584,7 +594,14 @@ function ExpandableMenu({name, matchURL, Switches}) {
               </span>
             </p>
             :
-            <p className="card-header-title">{name} 
+            <p className="card-header-title">
+              <div hidden = {!isSetting}>
+                <img
+                  className="image is-16x16"
+                  src={setting}>
+                </img>
+              </div>
+              {name} 
               <span className="icon">
                 <img src={downIcon}
                 style={{
@@ -683,6 +700,14 @@ function IndexPopup() {
                   >Test questionnaire</button> 
                 </div>
                 <br/>
+                <div className="content is-small" hidden = {!intervention}>
+                  Forgot about what each feature does?{" "}
+                  <a
+                  onClick={(e) => {
+                    chrome.tabs.create({url: "https://docs.google.com/presentation/d/1Rnzz-iJ-d7cDc__P5x9M3aNJk5M5tPrnQelOa5ts5ZE/edit?usp=sharing"});
+                  }}
+                  >feature knowledge bank</a>
+                </div>
                 <div className="content is-small">
                   For any questions, contact us at haopingl@cs.cmu.edu
                 </div>
@@ -766,7 +791,7 @@ function IndexPopup() {
       <div className="block" hidden = {!intervention}>  
         <ExpandableMenu
             name="Block autoplay setting"
-            matchURL=""
+            matchURL="setting"
             Switches={AutoPlaySwitch}
             />
       </div>
