@@ -555,13 +555,15 @@ function ExpandableMenu({name, matchURL, Switches}) {
   } = useCollapse();
 
   var isSetting = false;
+  if (matchURL === "setting"){
+    isSetting = true;
+  }
 
   useEffect(() => {
     const fetchURL = async () => {
       const url = await getTabURL();
       if (matchURL === "setting"){
         setExpanded(false);
-        isSetting = true;
       }
       else if (url.includes(matchURL)) {
         setExpanded(true);
@@ -640,7 +642,7 @@ function IndexPopup() {
   var featureQuestionnaireText;
   var featureButtonHeight;
   if(sampled_feature_change === null){
-    featureQuestionnaireText = "No feature chages made";
+    featureQuestionnaireText = "No feature changes made";
     featureButtonHeight = "40px";
   } else{
     featureQuestionnaireText = "Feature(s) changed! Tell us why!";
