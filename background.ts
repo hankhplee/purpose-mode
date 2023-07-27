@@ -72,6 +72,7 @@ function init() {
 
     // feature questionnaire sampling
     chrome.storage.local.set({"sampling_feature_lock": false});
+    chrome.storage.local.set({"sampling_feature_lock_timer": 0});
     chrome.storage.local.set({"last_feature_questionnaire_time": 0});
     chrome.storage.local.set({"sampling_feature_site": null});
     chrome.storage.local.set({"feature_before": null});
@@ -148,95 +149,93 @@ function diffAfterFeature(feature_before,feature_after){
     return diff;
 }
 
-function featureQuestionnaireCountdown(countdown){
-    console.log("start feature questionnaire countdown: ",countdown/1000," seconds...");
-    setTimeout(() => {
-        const keys = ["sampling_feature_lock","feature_before","sampling_feature_site",
-        "TwitterCompact","TwitterInfinite","TwitterNotif","TwitterFeed","TwitterDesaturate","TwitterAutoplay",
-        "LinkedInCompact","LinkedInInfinite","LinkedInNotif","LinkedInFeed","LinkedInDesaturate","LinkedInAutoplay",
-        "FacebookCompact","FacebookInfinite","FacebookNotif","FacebookFeed","FacebookDesaturate","FacebookAutoplay",
-        "YouTubeCompact","YouTubeInfinite","YouTubeNotif","YouTubeFeed","YouTubeDesaturate","YouTubeAutoplay",
-        ];
-        chrome.storage.local.get(keys).then(function (status) {
-            var sampled_site = status.sampling_feature_site;
-            var feature_before = status.feature_before;
-            var feature_after = {};
-            if(sampled_site === "Twitter"){
-                feature_after["Compact"]     = status.TwitterCompact;
-                feature_after["Infinite"]    = status.TwitterInfinite;
-                feature_after["Notif"]       = status.TwitterNotif;
-                feature_after["Feed"]        = status.TwitterFeed; 
-                feature_after["Desaturate"]  = status.TwitterDesaturate;
-                feature_after["Autoplay"]    = status.TwitterAutoplay;
+function createFeatureQuestionnaire(){
+    console.log("attempt to create feature questionnarie after 3 minutes...");
+    
+    const keys = ["sampling_feature_lock","feature_before","sampling_feature_site",
+    "TwitterCompact","TwitterInfinite","TwitterNotif","TwitterFeed","TwitterDesaturate","TwitterAutoplay",
+    "LinkedInCompact","LinkedInInfinite","LinkedInNotif","LinkedInFeed","LinkedInDesaturate","LinkedInAutoplay",
+    "FacebookCompact","FacebookInfinite","FacebookNotif","FacebookFeed","FacebookDesaturate","FacebookAutoplay",
+    "YouTubeCompact","YouTubeInfinite","YouTubeNotif","YouTubeFeed","YouTubeDesaturate","YouTubeAutoplay",
+    ];
+    chrome.storage.local.get(keys).then(function (status) {
+        var sampled_site = status.sampling_feature_site;
+        var feature_before = status.feature_before;
+        var feature_after = {};
+        if(sampled_site === "Twitter"){
+            feature_after["Compact"]     = status.TwitterCompact;
+            feature_after["Infinite"]    = status.TwitterInfinite;
+            feature_after["Notif"]       = status.TwitterNotif;
+            feature_after["Feed"]        = status.TwitterFeed; 
+            feature_after["Desaturate"]  = status.TwitterDesaturate;
+            feature_after["Autoplay"]    = status.TwitterAutoplay;
+        }
+        else if(sampled_site === "Facebook"){
+            feature_after["Compact"]     = status.FacebookCompact;
+            feature_after["Infinite"]    = status.FacebookInfinite;
+            feature_after["Notif"]       = status.FacebookNotif;
+            feature_after["Feed"]        = status.FacebookFeed; 
+            feature_after["Desaturate"]  = status.FacebookDesaturate;
+            feature_after["Autoplay"]    = status.FacebookAutoplay;
+        }
+        else if(sampled_site === "LinkedIn"){
+            feature_after["Compact"]     = status.LinkedInCompact;
+            feature_after["Infinite"]    = status.LinkedInInfinite;
+            feature_after["Notif"]       = status.LinkedInNotif;
+            feature_after["Feed"]        = status.LinkedInFeed; 
+            feature_after["Desaturate"]  = status.LinkedInDesaturate;
+            feature_after["Autoplay"]    = status.LinkedInAutoplay;
+        }
+        else if(sampled_site === "YouTube"){
+            feature_after["Compact"]     = status.YouTubeCompact;
+            feature_after["Infinite"]    = status.YouTubeInfinite;
+            feature_after["Notif"]       = status.YouTubeNotif;
+            feature_after["Feed"]        = status.YouTubeFeed; 
+            feature_after["Desaturate"]  = status.YouTubeDesaturate;
+            feature_after["Autoplay"]    = status.YouTubeAutoplay;
+        }
+        // compare features before and after
+        var sampled_feature_questioinnaire = {};
+        var feature_changed = {};
+        var feature_has_changed = false;
+        for (const [key, value] of Object.entries(feature_before)) {
+            if(feature_after[key] !== feature_before[key]){
+                feature_changed[key] = feature_after[key];
+                feature_has_changed = true;
             }
-            else if(sampled_site === "Facebook"){
-                feature_after["Compact"]     = status.FacebookCompact;
-                feature_after["Infinite"]    = status.FacebookInfinite;
-                feature_after["Notif"]       = status.FacebookNotif;
-                feature_after["Feed"]        = status.FacebookFeed; 
-                feature_after["Desaturate"]  = status.FacebookDesaturate;
-                feature_after["Autoplay"]    = status.FacebookAutoplay;
-            }
-            else if(sampled_site === "LinkedIn"){
-                feature_after["Compact"]     = status.LinkedInCompact;
-                feature_after["Infinite"]    = status.LinkedInInfinite;
-                feature_after["Notif"]       = status.LinkedInNotif;
-                feature_after["Feed"]        = status.LinkedInFeed; 
-                feature_after["Desaturate"]  = status.LinkedInDesaturate;
-                feature_after["Autoplay"]    = status.LinkedInAutoplay;
-            }
-            else if(sampled_site === "YouTube"){
-                feature_after["Compact"]     = status.YouTubeCompact;
-                feature_after["Infinite"]    = status.YouTubeInfinite;
-                feature_after["Notif"]       = status.YouTubeNotif;
-                feature_after["Feed"]        = status.YouTubeFeed; 
-                feature_after["Desaturate"]  = status.YouTubeDesaturate;
-                feature_after["Autoplay"]    = status.YouTubeAutoplay;
-            }
-            // compare features before and after
-            var sampled_feature_questioinnaire = {};
-            var feature_changed = {};
-            var feature_has_chagned = false;
-            for (const [key, value] of Object.entries(feature_before)) {
-                if(feature_after[key] !== feature_before[key]){
-                    feature_changed[key] = feature_after[key];
-                    feature_has_chagned = true;
+        }
+        if(feature_has_changed){
+            console.log("changed features: ",feature_changed);
+            var current_time = new Date().getTime()/1000;
+            var date = new Date(Date.now());
+            var sampled_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
+            sampled_feature_questioinnaire["sampled_time_unix_second"] = current_time;
+            sampled_feature_questioinnaire["sampled_time"] = sampled_time;
+            sampled_feature_questioinnaire["sampled_site"] = sampled_site;
+            sampled_feature_questioinnaire["feature_changed"] = feature_changed;
+            chrome.storage.local.set({"sampled_feature_questioinnaire": sampled_feature_questioinnaire});
+            var questionnaireNotification = "questionnaire-notification" + current_time;
+            console.log("send notification for a new feature questionnaire...");
+            chrome.notifications.create(questionnaireNotification, {
+                "type": "basic",
+                "iconUrl": surveyIcon,
+                "title": "It seems that you made some change(s) on purpose mode!",
+                "message": "Click this notification to answer the questionnaire and let us know why!",
+            });
+            chrome.notifications.onClicked.addListener((notificationId) => {
+                if (notificationId == questionnaireNotification) {
+                    openFeatureQuestionnaire();
                 }
-            }
-            if(feature_has_chagned){
-                console.log("changed features: ",feature_changed);
-                var current_time = new Date().getTime()/1000;
-                var date = new Date(Date.now());
-                var sampled_time = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
-                sampled_feature_questioinnaire["sampled_time_unix_second"] = current_time;
-                sampled_feature_questioinnaire["sampled_time"] = sampled_time;
-                sampled_feature_questioinnaire["sampled_site"] = sampled_site;
-                sampled_feature_questioinnaire["feature_changed"] = feature_changed;
-                chrome.storage.local.set({"sampled_feature_questioinnaire": sampled_feature_questioinnaire});
-                var questionnaireNotification = "questionnaire-notification" + current_time;
-                console.log("send notification for a new feature questionnaire...");
-                chrome.notifications.create(questionnaireNotification, {
-                    "type": "basic",
-                    "iconUrl": surveyIcon,
-                    "title": "It seems that you made some change(s) on purpose mode!",
-                    "message": "Click this notification to answer the questionnaire and let us know why!",
-                });
-                chrome.notifications.onClicked.addListener((notificationId) => {
-                    if (notificationId == questionnaireNotification) {
-                        openFeatureQuestionnaire();
-                    }
-                });
-                chrome.action.setBadgeText({ text: "+" });
-            }
-            else{
-                console.log("no feature changes at the end of the lock...");
-                // reset feature change cache
-                chrome.storage.local.set({"sampled_feature_questioinnaire": null});
-                chrome.storage.local.set({"sampling_feature_lock": false});
-            }
-        });
-    },
-    countdown);
+            });
+            chrome.action.setBadgeText({ text: "+" });
+        }
+        else{
+            console.log("no feature changes at the end of the lock...");
+            // reset feature change cache
+            chrome.storage.local.set({"sampled_feature_questioinnaire": null});
+            chrome.storage.local.set({"sampling_feature_lock": false});
+        }
+    });
 }
 
 // check ESM and feature questionnaire status every 1 minute
@@ -244,7 +243,7 @@ setInterval(function () {
     console.log("check ESM status...");
     var current_time = new Date().getTime()/1000;
     var current_date = new Date(Date.now());
-    const keys = ["sampled_esm","sampled_feature_questioinnaire","last_active_date"];
+    const keys = ["sampled_esm","sampled_feature_questioinnaire","last_active_date","sampling_feature_lock","sampling_feature_lock_timer","sampled_feature_questioinnaire"];
     chrome.storage.local.get(keys).then(function (status) {
         //check if ESM expires
         if(status.sampled_esm !== null){
@@ -268,6 +267,12 @@ setInterval(function () {
             console.log("reset ESM daily counter...");
             chrome.storage.local.set({"esm_counter_today": 0});
             chrome.storage.local.set({"last_active_date": current_date.getDate()});
+        }
+
+        // check if feature questionnaire clock is up and try to create a questionnaire
+        if(status.sampling_feature_lock && status.sampled_feature_questioinnaire === null && current_time-status.sampling_feature_lock_timer > 180){
+            console.log("create a feature questionnaire");
+            createFeatureQuestionnaire();
         }
 
         // check if feature questionnaire expires
@@ -392,6 +397,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 return;
             }else{
                 chrome.storage.local.set({"sampling_feature_lock": true});
+                chrome.storage.local.set({"sampling_feature_lock_timer": current_time});
                 var sample_site;
                 var feature_before = {};
                 // determine the sampling site and log current site-specific features
@@ -440,8 +446,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 console.log("before change setting:", feature_before);
                 chrome.storage.local.set({"sampling_feature_site": sample_site});
                 chrome.storage.local.set({"feature_before": feature_before});
-                // trigger sampling countdown
-                featureQuestionnaireCountdown(3*60*1000);
             }
         });
     }
