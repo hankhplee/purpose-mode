@@ -426,7 +426,7 @@ function ESMPage() {
                             }
                             required_check[6] = required_goal_alignment;
                             
-                            chrome.storage.local.get(["esm_counter_today","esm_counter_total","last_esm_time","sampled_feature_questioinnaire"]).then(function (esm_counters) {
+                            chrome.storage.local.get(["esm_counter_today","esm_counter_total","last_esm_time","sampled_feature_questioinnaire","enableIntervention"]).then(function (esm_counters) {
                                 var current_time = new Date().getTime()/1000;
                                 var last_esm_time_diff = current_time - esm_counters.last_esm_time;
                                 if(esm_counters.esm_counter_today >= 6){
@@ -461,6 +461,7 @@ function ESMPage() {
                                         esm_record["distractions"]               = esm.distractions;
                                         esm_record["features"]                   = esm.features;
                                         esm_record["adjusted_distractions"]      = esm.adjusted_distractions;
+                                        esm_record["study_status_intervention"]  = esm_counters.enableIntervention;
                                         
                                         console.log("ESM record:", esm_record);
 
