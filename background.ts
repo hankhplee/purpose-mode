@@ -26,6 +26,7 @@ function init() {
     });
 
     /* initialize local storage */
+    chrome.storage.local.set({"Enable": false});
     chrome.storage.local.set({"enableIntervention": false});
 
     chrome.storage.local.set({"TwitterCompact": false});
@@ -308,6 +309,12 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             result[esmAttr].esm_screenshot = undefined;
             result[esmAttr].esm_url = undefined;
         }
+        // remove esm in progress to ping
+        const esmInProgress = "esm_in_progress";
+        if (esmInProgress in result) {
+            result[esmInProgress] = undefined;
+        }
+
 
         // Make it clear to the backend that this is a ping message.
         result.type = "ping";
