@@ -296,7 +296,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         "FacebookNotif",
         "FacebookFeed",
 
-        "YouTubeAutoplay",
+        // "YouTubeAutoplay",
         "YouTubeCompact",
         // "YouTubeRecomm",
         // "YouTubeDeclutter",
@@ -1392,27 +1392,59 @@ function setAutoPlay(){
     }
 }
 
+// trigger youtube autoplay blocking
+function triggerYouTubeAutoplayBlocker() {
+    if(isYouTubeVideo()){
+        console.log("triggre autoplay blocking on YouTube watch page...");
+        const key = "YouTubeAutoplay";
+        chrome.storage.local.get(key, (toggled) => {
+            setTimeout(() => {onYouTubeAutoPlay(toggled.YouTubeAutoplay);}, 2500);
+        });
+    }
+}
+if(currentPage === "YouTube"){
+    document.addEventListener('yt-navigate-start', triggerYouTubeAutoplayBlocker);
+    // Choose a different event depending on when you want to apply the change
+    // document.addEventListener('yt-navigate-finish', process);
+
+    if (document.body) triggerYouTubeAutoplayBlocker();
+    else document.addEventListener('DOMContentLoaded', triggerYouTubeAutoplayBlocker);
+}
+
 function onYouTubeAutoPlay(toggled: boolean){
     if(!isYouTubeVideo()){
         return;
     }
-    let autoPlayTarget;
+    var currentlyBlocked;
     const autoPlayTargetOn = $('button[aria-label="Autoplay is on"]');
     const autoPlayTargetOff = $('button[aria-label="Autoplay is off"]');
     if(autoPlayTargetOn.length === 0 && autoPlayTargetOff.length === 0){
-        setTimeout(() => {onYouTubeAutoPlay(toggled);}, 500);
+        console.log("Cant get the youtube autoplay button. wait for .5 second and try again...");
+        const key = "YouTubeAutoplay";
+        chrome.storage.local.get(key, (toggled) => {
+            setTimeout(() => {onYouTubeAutoPlay(toggled.YouTubeAutoplay);}, 500);
+            return;
+        });
         return;
-    }
-    if(toggled === true){
-        console.log("Turn off autoplay on YouTube: ",autoPlayTarget);
-        if(autoPlayTargetOn){
-            autoPlayTargetOn.click();
+    }else{
+        if(autoPlayTargetOn.length > 0){
+            currentlyBlocked = false; 
         }
-    }else {
-        console.log("Turn on autoplay on YouTube: ",autoPlayTarget);
-        if(autoPlayTargetOff){
+        else{
+            currentlyBlocked = true; 
+        }
+    }
+
+    if(toggled !== currentlyBlocked){
+        if(toggled === true){
+            console.log("Turn off autoplay on YouTube: ",autoPlayTargetOn);
+            autoPlayTargetOn.click();
+        }else {
+            console.log("Turn on autoplay on YouTube: ",autoPlayTargetOff);
             autoPlayTargetOff.click();
         }
+    } else {
+        console.log("'Current state': ", currentlyBlocked, "is identifcal to 'YouTube autoplay' blocking: ", toggled);
     }
 }
 
