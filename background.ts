@@ -121,7 +121,9 @@ function cacheESM(esm, webpage_screenshot) {
             openQuestionnaire();
         }
     });
-    chrome.action.setBadgeText({ text: "+" });
+    chrome.action.setBadgeText({ text: "!" });
+    chrome.action.setBadgeTextColor({ color: "white"});
+    chrome.action.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
 }
 
 function openQuestionnaire(){
@@ -227,7 +229,9 @@ function createFeatureQuestionnaire(){
                     openFeatureQuestionnaire();
                 }
             });
-            chrome.action.setBadgeText({ text: "+" });
+            chrome.action.setBadgeText({ text: "!" });
+            chrome.action.setBadgeTextColor({ color: "white"});
+            chrome.action.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         }
         else{
             console.log("no feature changes at the end of the lock...");
