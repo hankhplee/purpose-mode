@@ -170,7 +170,7 @@ function ESMPage() {
                     <div className="box">
                         <div className="field">
                             <label className="label">
-                                3. How will you describe the distractions you feel right now when browsing {esmSite}:
+                                3. Reflecting on your current browsing experience on {esmSite}, how will you describe the distractions you feel?
                                 <span style={{color:"red"}}>*</span>
                             </label>
                             <div className="control">
