@@ -108,7 +108,7 @@ function ESMPage() {
                             Current as of: <span id="esm_time">{timestamp}</span>
                         </p>
                         <p className="content">
-                            If you can not response to this questionnaire for any reason (e.g., this does not match their current browsing activity), please hit <SkipButton size="is-small"/> to skip this questionnaire.
+                            If you can not response to this questionnaire for any reason (e.g., this does not match your current browsing activity), please hit <SkipButton size="is-small"/> to skip this questionnaire.
                         </p>
                     </div>
                 </div>
