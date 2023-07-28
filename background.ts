@@ -238,64 +238,6 @@ function createFeatureQuestionnaire(){
     });
 }
 
-// check ESM and feature questionnaire status every 1 minute
-setInterval(function () {
-    console.log("check ESM status...");
-    var current_time = new Date().getTime()/1000;
-    var current_date = new Date(Date.now());
-    const keys = ["sampled_esm","sampled_feature_questioinnaire","last_active_date","sampling_feature_lock","sampling_feature_lock_timer","sampled_feature_questioinnaire"];
-    chrome.storage.local.get(keys).then(function (status) {
-        //check if ESM expires
-        if(status.sampled_esm !== null){
-            var esm_time = status.sampled_esm["esm_time_unix_second"];
-            if(current_time - esm_time > 5*60){
-                console.log("sampled ESM expired (5 min), clear sampled ESM...");
-                chrome.storage.local.set({"sampled_esm": null});
-                if(status.sampled_feature_questioinnaire === null){
-                    chrome.action.setBadgeText({ text: "" });
-                }
-            }
-        }
-        else{
-            if(status.sampled_feature_questioinnaire === null){
-                chrome.action.setBadgeText({ text: "" });
-            }
-        }
-
-        //check if daily ESM counter needs to be upated
-        if(status.last_active_date !== current_date.getDate()){
-            console.log("reset ESM daily counter...");
-            chrome.storage.local.set({"esm_counter_today": 0});
-            chrome.storage.local.set({"last_active_date": current_date.getDate()});
-        }
-
-        // check if feature questionnaire clock is up and try to create a questionnaire
-        if(status.sampling_feature_lock && status.sampled_feature_questioinnaire === null && current_time-status.sampling_feature_lock_timer > 180){
-            console.log("create a feature questionnaire");
-            createFeatureQuestionnaire();
-        }
-
-        // check if feature questionnaire expires
-        if(status.sampled_feature_questioinnaire !== null){
-            var qusetionnaire_time = status.sampled_feature_questioinnaire["sampled_time_unix_second"];
-            if(current_time - qusetionnaire_time > 30*60){
-                console.log("sampled feature questionnaire expired (30 min), clear sampled feature questionnaire...");
-                // reset feature change cache
-                chrome.storage.local.set({"sampled_feature_questioinnaire": null});
-                chrome.storage.local.set({"sampling_feature_lock": false});
-                if(status.sampled_esm === null){
-                    chrome.action.setBadgeText({ text: "" });
-                }
-            }
-        }
-        else{
-            if(status.sampled_esm === null){
-                chrome.action.setBadgeText({ text: "" });
-            }
-        }
-    });
-}, 60 * 1000);
-
 // This callback sends a ping to our backend containing all the variables that
 // are set in the extension's local storage. For the purposes of the ping
 // message, we need to know:
@@ -304,6 +246,61 @@ setInterval(function () {
 //   3) The user's UID.
 chrome.alarms.onAlarm.addListener((alarm) => {
     chrome.storage.local.get(null, (result) => {
+        /* update questionnaire status */
+        console.log("check ESM status...");
+        var current_time = new Date().getTime()/1000;
+        var current_date = new Date(Date.now());
+        
+        //check if ESM expires
+        if(result.sampled_esm !== null){
+            var esm_time = result.sampled_esm["esm_time_unix_second"];
+            if(current_time - esm_time > 5*60){
+                console.log("sampled ESM expired (5 min), clear sampled ESM...");
+                chrome.storage.local.set({"sampled_esm": null});
+                if(result.sampled_feature_questioinnaire === null){
+                    chrome.action.setBadgeText({ text: "" });
+                }
+            }
+        }
+        else{
+            if(result.sampled_feature_questioinnaire === null){
+                chrome.action.setBadgeText({ text: "" });
+            }
+        }
+
+        //check if daily ESM counter needs to be upated
+        if(result.last_active_date !== current_date.getDate()){
+            console.log("reset ESM daily counter...");
+            chrome.storage.local.set({"esm_counter_today": 0});
+            chrome.storage.local.set({"last_active_date": current_date.getDate()});
+        }
+
+        // check if feature questionnaire clock is up and try to create a questionnaire
+        if(result.sampling_feature_lock && result.sampled_feature_questioinnaire === null && current_time-result.sampling_feature_lock_timer > 180){
+            console.log("create a feature questionnaire");
+            createFeatureQuestionnaire();
+        }
+
+        // check if feature questionnaire expires
+        if(result.sampled_feature_questioinnaire !== null){
+            var qusetionnaire_time = result.sampled_feature_questioinnaire["sampled_time_unix_second"];
+            if(current_time - qusetionnaire_time > 30*60){
+                console.log("sampled feature questionnaire expired (30 min), clear sampled feature questionnaire...");
+                // reset feature change cache
+                chrome.storage.local.set({"sampled_feature_questioinnaire": null});
+                chrome.storage.local.set({"sampling_feature_lock": false});
+                if(result.sampled_esm === null){
+                    chrome.action.setBadgeText({ text: "" });
+                }
+            }
+        }
+        else{
+            if(result.sampled_esm === null){
+                chrome.action.setBadgeText({ text: "" });
+            }
+        }
+        
+        /* process ping */
         // add timestamp
         result["timestamp"] = new Date().getTime();
 
