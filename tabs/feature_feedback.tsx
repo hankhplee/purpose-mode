@@ -207,7 +207,7 @@ function FeatureQuestionnairePage() {
                                 required_check[1] = true;
                             }
                             
-                            chrome.storage.local.get(["sampled_esm"]).then(function (status) {
+                            chrome.storage.local.get(["sampled_esm","feature_questionnaire_counter_total"]).then(function (status) {
                                 //esm counter checks and check required fields
                                 var pass_requirement_check = true;
                                 var alarmIndex = [];
@@ -244,6 +244,7 @@ function FeatureQuestionnairePage() {
                                         chrome.storage.local.set({"last_feature_questionnaire_time": current_time});
                                         chrome.storage.local.set({"sampled_feature_questioinnaire": null});
                                         chrome.storage.local.set({"sampling_feature_lock": false});
+                                        chrome.storage.local.set({"feature_questionnaire_counter_total": status.feature_questionnaire_counter_total+1});
                                         alert("Response submitted!");
                                         if(status.sampled_esm === null){
                                             chrome.action.setBadgeText({ text: "" });

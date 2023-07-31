@@ -74,6 +74,7 @@ function init() {
     chrome.storage.local.set({"sampling_feature_lock": false});
     chrome.storage.local.set({"sampling_feature_lock_timer": 0});
     chrome.storage.local.set({"last_feature_questionnaire_time": 0});
+    chrome.storage.local.set({"feature_questionnaire_counter_total": 0});
     chrome.storage.local.set({"sampling_feature_site": null});
     chrome.storage.local.set({"feature_before": null});
     chrome.storage.local.set({"sampled_feature_questioinnaire": null});
