@@ -1072,6 +1072,13 @@ function onToggleYouTubeRecomm(toggled: boolean) {
             // Video recommendations.
             $('div#secondary-inner'),
         ]);
+    } else if (searchPage){
+        selectors = selectors.concat([
+            // Recommendation tags on top of the page.
+            $('div#scroll-container'),
+            // "Next" button of the recommendation tags.
+            $('button[aria-label="Next"]'),
+        ]);
     } 
 
     if (toggled) {
