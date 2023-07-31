@@ -14,10 +14,15 @@ function SkipButton({size}){
             onClick={(e) => {
                 var con = confirm("Are you sure to skip and quit this questionnaire?");
                 if (con) {
-                    // reset feature change cache
-                    chrome.storage.local.set({"sampled_feature_questioinnaire": null});
-                    chrome.storage.local.set({"sampling_feature_lock": false});
-                    window.close();
+                    chrome.storage.local.get(["sampled_esm"]).then(function (esm_status) {
+                        // reset feature change cache
+                        chrome.storage.local.set({"sampled_feature_questioinnaire": null});
+                        chrome.storage.local.set({"sampling_feature_lock": false});
+                        if(esm_status.sampled_esm === null){
+                            chrome.action.setBadgeText({ text: "" }); // remove badge notification
+                        }
+                        window.close();
+                    });
                 }
             }
         }

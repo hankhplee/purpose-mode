@@ -14,10 +14,14 @@ function SkipButton({size}){
             onClick={(e) => {
                 var con = confirm("Are you sure to skip and quit this questionnaire?");
                 if (con) {
-                    chrome.storage.local.set({"sampled_esm": null}); // reset sampled ESM
-                    chrome.action.setBadgeText({ text: "" }); // remove badge notification
-                    //close the window
-                    window.close();
+                    chrome.storage.local.get(["sampled_feature_questioinnaire"]).then(function (questionnaire_status) {
+                        chrome.storage.local.set({"sampled_esm": null}); // reset sampled ESM
+                        if(questionnaire_status.sampled_feature_questioinnaire === null){
+                            chrome.action.setBadgeText({ text: "" }); // remove badge notification
+                        }
+                        //close the window
+                        window.close();
+                    });
                 }
             }
         }
