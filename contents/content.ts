@@ -40,12 +40,14 @@ function updateTimeSpent(ms) {
 }
 
 // Keep track of the time spent on this site.
+const minute = 1000 * 60;
 const timer = new BrowserInteractionTime({
     timeIntervalEllapsedCallbacks: [cb],
     absoluteTimeEllapsedCallbacks: [],
     browserTabInactiveCallbacks: [],
     browserTabActiveCallbacks: [],
-    idleTimeoutMs: 1000 * 60, // One minute.
+    // Idle timeout is 24 hours on YouTube and one minute for all other sites.
+    idleTimeoutMs: getCurrentPage() === "YouTube" ? minute * 60 * 24 : minute,
     checkCallbacksIntervalMs: 250
 })
 
