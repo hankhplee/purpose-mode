@@ -878,6 +878,8 @@ function onToggleFacebookRecomms(toggled: boolean) {
         $('span:contains("People you may know")').parent().parent().parent().parent().parent(),
         // Suggested groups.
         $('span:contains("Suggested groups")').parent().parent(),
+        // Suggetesd events
+        $('div:has(> div > div > div > h3 > span:contains("Events you may like"))'),
     ];
     if (toggled) {
         for (const s of selectors) {
