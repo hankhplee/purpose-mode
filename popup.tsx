@@ -238,6 +238,8 @@ function LinkedInSwitches() {
     useChromeStorageLocal("LinkedInFeed", false);
   const [desaturate, setDesaturate] =
     useChromeStorageLocal("LinkedInDesaturate", false);
+  const [comments, setComments] =
+    useChromeStorageLocal("LinkedInComments", false);
 
   return (
     <div>
@@ -282,6 +284,12 @@ function LinkedInSwitches() {
        storage_var="LinkedInDesaturate"
        checked={desaturate}
        update={setDesaturate}
+      />
+      <ToggleSwitch
+       label="Hide comments"
+       storage_var="LinkedInComments"
+       checked={comments}
+       update={setComments}
       />
     </div>
   )

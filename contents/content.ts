@@ -24,6 +24,7 @@ const settingToHandler = {
     "LinkedInNotif":     onToggleLinkedInNotif,
     "LinkedInFeed":      onToggleLinkedInFeed,
     "LinkedInDesaturate":onToggleLinkedInDesaturate,
+    "LinkedInComments":  onToggleLinkedInComments,
 
     "FacebookCompact":   onToggleFacebookCompact,
     // "FacebookDeclutter": onToggleFacebookDeclutter,
@@ -221,6 +222,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         // "LinkedInInfinite",
         "LinkedInNotif",
         "LinkedInFeed",
+        "LinkedInComments",
 
         "FacebookCompact",
         // "FacebookDeclutter",
@@ -1171,6 +1173,20 @@ function onToggleLinkedInDesaturate(toggled: boolean) {
         e.css({"filter": "saturate(10%)"});
     } else {
         e.css({"filter": "saturate(100%)"});
+    }
+}
+
+function onToggleLinkedInComments(toggled: boolean) {
+    if (getCurrentPage() !== "LinkedIn") {
+        return;
+    }
+    // The box underneath a post that contains Like/Comment/Repost/Send and
+    // reactions to the post.
+    const e = $('div[class*="social-details-social-activity"]');
+    if (toggled) {
+        e.hide();
+    } else {
+        e.show();
     }
 }
 
