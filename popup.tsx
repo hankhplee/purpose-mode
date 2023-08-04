@@ -166,6 +166,8 @@ function FacebookSwitches() {
     useChromeStorageLocal("FacebookFeed", false);
   const [desaturate, setDesaturate] =
     useChromeStorageLocal("FacebookDesaturate", false);
+  const [comments, setComments] =
+    useChromeStorageLocal("FacebookComments", false);
 
   return (
     <div className="content">
@@ -210,6 +212,12 @@ function FacebookSwitches() {
        storage_var="FacebookDesaturate"
        checked={desaturate}
        update={setDesaturate}
+      />
+      <ToggleSwitch
+       label="Hide comments"
+       storage_var="FacebookComments"
+       checked={comments}
+       update={setComments}
       />
     </div>
   )
