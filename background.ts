@@ -7,13 +7,24 @@ function init() {
     console.log("Initializing " + extName + " background script.");
 
     // initialize local storage
-    chrome.storage.local.set({"TwitterAutoplay": false});
-    chrome.storage.local.set({"SetTwitterAutoplay": false});
-    chrome.storage.local.set({"LinkedInAutoplay": false});
-    chrome.storage.local.set({"SetLinkedInAutoplay": false});
-    chrome.storage.local.set({"FacebookAutoplay": false});
-    chrome.storage.local.set({"SetFacebookAutoplay": false});
-    chrome.storage.local.set({"YouTubeAutoplay": false});
+    const keys = ["TwitterAutoplay",
+                "SetTwitterAutoplay",
+                "LinkedInAutoplay",
+                "SetLinkedInAutoplay",
+                "FacebookAutoplay",
+                "SetFacebookAutoplay",
+                "YouTubeAutoplay"
+                ]
+
+    chrome.storage.local.get(keys, (result) => {
+        for (const key of keys) {
+            let currentKeyValue = result[key];
+            if (currentKeyValue === undefined) {
+                let initKeyValue = false;
+                chrome.storage.local.set({[key]: initKeyValue});
+            }
+        }
+    });
 }
 
 function settingAutoPlay(site: string, toggled: boolean){
