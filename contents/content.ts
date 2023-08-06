@@ -24,7 +24,7 @@ const settingToHandler = {
     "LinkedInNotif":     onToggleLinkedInNotif,
     "LinkedInFeed":      onToggleLinkedInFeed,
     "LinkedInDesaturate":onToggleLinkedInDesaturate,
-    "LinkedInComments":  onToggleLinkedInComments,
+    // "LinkedInComments":  onToggleLinkedInComments,
 
     "FacebookCompact":   onToggleFacebookCompact,
     // "FacebookDeclutter": onToggleFacebookDeclutter,
@@ -33,7 +33,7 @@ const settingToHandler = {
     "FacebookNotif":     onToggleFacebookNotif,
     "FacebookFeed":      onToggleFacebookFeed,
     "FacebookDesaturate":onToggleFacebookDesaturate,
-    "FacebookComments":  onToggleFacebookComments,
+    // "FacebookComments":  onToggleFacebookComments,
 
     "YouTubeAutoplay":   onYouTubeAutoPlay,
     "YouTubeCompact":    onToggleYouTubeCompact,

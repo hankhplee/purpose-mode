@@ -166,8 +166,8 @@ function FacebookSwitches() {
     useChromeStorageLocal("FacebookFeed", false);
   const [desaturate, setDesaturate] =
     useChromeStorageLocal("FacebookDesaturate", false);
-  const [comments, setComments] =
-    useChromeStorageLocal("FacebookComments", false);
+  // const [comments, setComments] =
+  //   useChromeStorageLocal("FacebookComments", false);
 
   return (
     <div className="content">
@@ -213,12 +213,12 @@ function FacebookSwitches() {
        checked={desaturate}
        update={setDesaturate}
       />
-      <ToggleSwitch
+      {/* <ToggleSwitch
        label="Hide comments"
        storage_var="FacebookComments"
        checked={comments}
        update={setComments}
-      />
+      /> */}
     </div>
   )
 }
@@ -238,8 +238,8 @@ function LinkedInSwitches() {
     useChromeStorageLocal("LinkedInFeed", false);
   const [desaturate, setDesaturate] =
     useChromeStorageLocal("LinkedInDesaturate", false);
-  const [comments, setComments] =
-    useChromeStorageLocal("LinkedInComments", false);
+  // const [comments, setComments] =
+  //   useChromeStorageLocal("LinkedInComments", false);
 
   return (
     <div>
@@ -285,12 +285,12 @@ function LinkedInSwitches() {
        checked={desaturate}
        update={setDesaturate}
       />
-      <ToggleSwitch
+      {/* <ToggleSwitch
        label="Hide comments"
        storage_var="LinkedInComments"
        checked={comments}
        update={setComments}
-      />
+      /> */}
     </div>
   )
 }
