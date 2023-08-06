@@ -350,7 +350,10 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         
         /* process ping */
         // add timestamp
+        var date = new Date(Date.now());
+        var localReadableTime = date.toString().replace(/ \(.*\)/ig, '');//.replace(/(-|:|\.\d*)/g,'');//format: yyyyMMddThhmmssZ eg:19930728T183907Z
         result["timestamp"] = new Date().getTime();
+        result["local_readable_time"] = localReadableTime;
 
         // To preserve privacy, don't send the screenshot and window URL
         // that's part of the ESM data.
