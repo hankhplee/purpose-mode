@@ -25,66 +25,109 @@ function init() {
         console.log("Created repeating alarm for backend pings.");
     });
 
-    /* initialize local storage */
-    chrome.storage.local.set({"Enable": false});
-    chrome.storage.local.set({"enableIntervention": false});
+    // initialize local storage
+    // init value false
+    const toggle_keys = [
+        "Enable",
+        "enableIntervention",
 
-    chrome.storage.local.set({"TwitterCompact": false});
-    chrome.storage.local.set({"TwitterInfinite": false});
-    chrome.storage.local.set({"TwitterNotif": false});
-    chrome.storage.local.set({"TwitterFeed": false});
-    chrome.storage.local.set({"TwitterDesaturate": false});
+        "TwitterCompact",
+        "TwitterInfinite",
+        "TwitterNotif",
+        "TwitterFeed",
+        "TwitterDesaturate",
+            
+        "FacebookCompact",
+        "FacebookInfinite",
+        "FacebookNotif",
+        "FacebookFeed",
+        "FacebookDesaturate",
 
-    chrome.storage.local.set({"FacebookCompact": false});
-    chrome.storage.local.set({"FacebookInfinite": false});
-    chrome.storage.local.set({"FacebookNotif": false});
-    chrome.storage.local.set({"FacebookFeed": false});
-    chrome.storage.local.set({"FacebookDesaturate": false});
+        "LinkedInCompact",
+        "LinkedInInfinite",
+        "LinkedInNotif",
+        "LinkedInFeed",
+        "LinkedInDesaturate",
 
-    chrome.storage.local.set({"LinkedInCompact": false});
-    chrome.storage.local.set({"LinkedInInfinite": false});
-    chrome.storage.local.set({"LinkedInNotif": false});
-    chrome.storage.local.set({"LinkedInFeed": false});
-    chrome.storage.local.set({"LinkedInDesaturate": false});
+        "YouTubeCompact",
+        "YouTubeInfinite",
+        "YouTubeNotif",
+        "YouTubeFeed",
+        "YouTubeDesaturate",
+        
+        "TwitterAutoplay",
+        "SetTwitterAutoplay",
+        "LinkedInAutoplay",
+        "SetLinkedInAutoplay",
+        "FacebookAutoplay",
+        "SetFacebookAutoplay",
+        "YouTubeAutoplay",
 
-    chrome.storage.local.set({"YouTubeCompact": false});
-    chrome.storage.local.set({"YouTubeInfinite": false});
-    chrome.storage.local.set({"YouTubeNotif": false});
-    chrome.storage.local.set({"YouTubeFeed": false});
-    chrome.storage.local.set({"YouTubeDesaturate": false});
+        // feature questionnaire sampling
+        "sampling_feature_lock"
+        ]
+    
+    // init value null
+    const temp_storage_keys =[
+        // data logging and questionnaire sampling
+        "last_active_date",
+        "sampled_esm",
+        "esm_in_progress",
 
-    // autoplay setting
-    chrome.storage.local.set({"TwitterAutoplay": false});
-    chrome.storage.local.set({"SetTwitterAutoplay": false});
-    chrome.storage.local.set({"LinkedInAutoplay": false});
-    chrome.storage.local.set({"SetLinkedInAutoplay": false});
-    chrome.storage.local.set({"FacebookAutoplay": false});
-    chrome.storage.local.set({"SetFacebookAutoplay": false});
-    chrome.storage.local.set({"YouTubeAutoplay": false});
+        // feature questionnaire sampling
+        "sampling_feature_site",
+        "feature_before",
+        "sampled_feature_questioinnaire",
+        "sampled_feature_questioinnaire_in_progress"
 
-    // data logging and questionnaire sampling
-    chrome.storage.local.set({"sampled_esm": null});
-    chrome.storage.local.set({"esm_in_progress": null});
-    chrome.storage.local.set({"last_esm_time": 0});
-    chrome.storage.local.set({"esm_counter_today": 0});
-    chrome.storage.local.set({"esm_counter_total": 0});
-    chrome.storage.local.set({"last_active_date": null});
+    ]
 
-    // feature questionnaire sampling
-    chrome.storage.local.set({"sampling_feature_lock": false});
-    chrome.storage.local.set({"sampling_feature_lock_timer": 0});
-    chrome.storage.local.set({"last_feature_questionnaire_time": 0});
-    chrome.storage.local.set({"feature_questionnaire_counter_total": 0});
-    chrome.storage.local.set({"sampling_feature_site": null});
-    chrome.storage.local.set({"feature_before": null});
-    chrome.storage.local.set({"sampled_feature_questioinnaire": null});
-    chrome.storage.local.set({"sampled_feature_questioinnaire_in_progress": null});
+    // init value 0
+    const counter_keys = [
+        // data logging and questionnaire sampling
+        "last_esm_time",
+        "esm_counter_today",
+        "esm_counter_total",
 
-    // feature use
-    chrome.storage.local.set({"TwitterSeeMoreClick": 0});
-    chrome.storage.local.set({"FacebookSeeMoreClick": 0});
-    chrome.storage.local.set({"YouTubeSeeMoreClick": 0});
-    chrome.storage.local.set({"LinkedInSeeMoreClick": 0});
+        // feature questionnaire sampling
+        "sampling_feature_lock_timer",
+        "last_feature_questionnaire_time",
+        "feature_questionnaire_counter_total",
+
+        // feature use
+        "TwitterSeeMoreClick",
+        "FacebookSeeMoreClick",
+        "YouTubeSeeMoreClick",
+        "LinkedInSeeMoreClick"
+    ]
+
+
+    chrome.storage.local.get([toggle_keys,temp_storage_keys,counter_keys], (result) => {
+        // set init value to false
+        for (const key of toggle_keys) {
+            let currentKeyValue = result[key];
+            if (currentKeyValue === undefined) {
+                let initKeyValue = false;
+                chrome.storage.local.set({[key]: initKeyValue});
+            }
+        }
+        // set init value to null
+        for (const key of temp_storage_keys) {
+            let currentKeyValue = result[key];
+            if (currentKeyValue === undefined) {
+                let initKeyValue = null;
+                chrome.storage.local.set({[key]: initKeyValue});
+            }
+        }
+        // set init value to 0
+        for (const key of counter_keys) {
+            let currentKeyValue = result[key];
+            if (currentKeyValue === undefined) {
+                let initKeyValue = 0;
+                chrome.storage.local.set({[key]: initKeyValue});
+            }
+        }
+    });
 }
 
 function settingAutoPlay(site: string, toggled: boolean){
