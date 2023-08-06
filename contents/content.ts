@@ -876,7 +876,7 @@ function onToggleFacebookComments(toggled: boolean) {
     // there.  As far as I can tell, the "like" button is always supposed to be
     // there.
     const like = $('div[aria-label="Like"]');
-    const container = like.parent().parent().parent().parent().parent();
+    const container = like.parent().parent().parent().parent().parent().parent();
     if (toggled) {
         container.hide();
     } else {
