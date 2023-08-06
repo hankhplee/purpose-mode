@@ -101,8 +101,8 @@ function init() {
         "LinkedInSeeMoreClick"
     ]
 
-
-    chrome.storage.local.get([toggle_keys,temp_storage_keys,counter_keys], (result) => {
+    chrome.storage.local.get([...toggle_keys,...temp_storage_keys,...counter_keys], (result) => {
+        console.log(result);
         // set init value to false
         for (const key of toggle_keys) {
             let currentKeyValue = result[key];
