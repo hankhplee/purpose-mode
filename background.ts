@@ -50,6 +50,7 @@ function init() {
         "LinkedInDesaturate",
 
         "YouTubeCompact",
+        "YouTubeComments",
         "YouTubeInfinite",
         "YouTubeNotif",
         "YouTubeFeed",
