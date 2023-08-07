@@ -10,20 +10,8 @@ import noIcon from "data-base64:~assets/no.png";
 import setting from "data-base64:~assets/settings.png";
 import upIcon from "data-base64:~assets/up.png";
 import downIcon from "data-base64:~assets/down.png";
-import facebookIcon from "data-base64:~assets/Facebook.png";
-import twitterIcon from "data-base64:~assets/Twitter.png";
-import linkedInIcon from "data-base64:~assets/LinkedIn.png";
-import youTubeIcon from "data-base64:~assets/YouTube.png";
-import axios from 'axios';
 
 const extName = "Purpose Mode";
-
-function startFeatureSampling(storage_var,current_status){
-  const resp = sendToBackground({
-    name: "feature change",
-    body: {"changed_feature": storage_var, "initial_value": current_status}
-  });
-}
 
 function setBool(key: string, value: boolean) {
     console.log("Setting '" + key + "' to '" + value + "'.");
@@ -52,64 +40,6 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
                     name: "toggle",
                     body: {"button": storage_var, "state": e.target.checked}
                   })
-                  startFeatureSampling(storage_var,checked);
-                }} />
-
-          <label className="label" htmlFor={storage_var}>
-            <span className="toggleswitch-inner" />
-            <span className="toggleswitch-switch" />
-          </label>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StudyToggleSwitch({storage_var, checked, update }) {
-  return (
-    <div className="columns is-mobile">
-      <div className="column is-two-thirds">
-        <span className="tag is-warning">Study condition</span>
-      </div>
-      <div className="column">
-        <div className="toggle-switch">
-          <input type="checkbox"
-                className="toggle-checkbox"
-                name={storage_var}
-                id={storage_var}
-                checked={checked}
-                onChange={(e) => {
-                  var status_change = e.target.checked;
-                  update(e.target.checked);
-                  setBool(storage_var, e.target.checked);
-                  chrome.storage.local.set({"esm_counter_today": 0});
-                  
-                  // ping server
-                  chrome.storage.local.get("uid").then(function (uid) {
-                    var ping = {};
-                    var date = new Date(Date.now());
-                    var current_time = date.toString().replace(/ \(.*\)/ig, '');
-                    var unix_time = new Date().getTime();
-                    var status;
-                    if(status_change){
-                      status = "interventions enabled";
-                    }
-                    else{
-                      status = "interventions disabled";
-                    }
-                    ping["timestamp"] = current_time;
-                    ping["unix_time"] = unix_time
-                    ping["status"] = status;
-                    axios.post('https://purpose-mode-backend.nymity.ch/submit', {
-                        uid: uid.uid,
-                        type:"study_status",
-                        data: ping
-                      })
-                      .catch(function (error) {
-                        console.log(error);
-                        alert("ping failed: "+ error);
-                      });
-                    });
                 }} />
 
           <label className="label" htmlFor={storage_var}>
@@ -293,8 +223,7 @@ function ButtonSwitch({label, storage_var, current_status}){
                   const resp = sendToBackground({
                   name: "autoplay",
                   body: {"site": storage_var, "state": !current_status}
-                  });
-                  startFeatureSampling(storage_var,current_status);
+                })
                 }} 
         >{buttonText}</button>
       </div>
@@ -347,13 +276,13 @@ function FacebookSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Finite newsfeed scrolling"
+       label="Homepage finite scrolling"
        storage_var="FacebookInfinite"
        checked={finite}
        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide newsfeed"
+       label="Hide homepage feeds"
        storage_var="FacebookFeed"
        checked={feed}
        update={setFeed}
@@ -419,13 +348,13 @@ function LinkedInSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Finite newsfeed scrolling"
+       label="Homepage finite scrolling"
        storage_var="LinkedInInfinite"
        checked={finite}
        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide newsfeed"
+       label="Hide homepage feeds"
        storage_var="LinkedInFeed"
        checked={feed}
        update={setFeed}
@@ -508,13 +437,13 @@ function YouTubeSwitches() {
         update={setNotif}
       />
       <ToggleSwitch
-        label="Finite newsfeed scrolling"
+        label="Homepage finite scrolling"
         storage_var="YouTubeInfinite"
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
-       label="Hide newsfeed"
+       label="Hide homepage feeds"
        storage_var="YouTubeFeed"
        checked={feed}
        update={setFeed}
@@ -580,13 +509,13 @@ function TwitterSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-        label="Finite newsfeed scrolling"
+        label="Homepage finite scrolling"
         storage_var="TwitterInfinite"
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
-       label="Hide newsfeed"
+       label="Hide homepage feeds"
        storage_var="TwitterFeed"
        checked={feed}
        update={setFeed}
@@ -669,15 +598,10 @@ function ExpandableMenu({name, matchURL, Switches}) {
     setExpanded,
   } = useCollapse();
 
-  var isSetting = false;
-  if (matchURL === "setting"){
-    isSetting = true;
-  }
-
   useEffect(() => {
     const fetchURL = async () => {
       const url = await getTabURL();
-      if (matchURL === "setting"){
+      if (matchURL === ""){
         setExpanded(false);
       }
       else if (url.includes(matchURL)) {
@@ -694,14 +618,7 @@ function ExpandableMenu({name, matchURL, Switches}) {
           onClick: () => setExpanded((prevExpanded) => !prevExpanded),
         })}>
           { isExpanded ?
-            <p className="card-header-title">
-              <div hidden = {!isSetting}>
-                <img
-                  className="image is-16x16"
-                  src={setting}>
-                </img>
-              </div>
-              {name}
+            <p className="card-header-title">{name}
               <span className="icon">
                 <img src={upIcon}
                 style={{
@@ -711,14 +628,7 @@ function ExpandableMenu({name, matchURL, Switches}) {
               </span>
             </p>
             :
-            <p className="card-header-title">
-              <div hidden = {!isSetting}>
-                <img
-                  className="image is-16x16"
-                  src={setting}>
-                </img>
-              </div>
-              {name} 
+            <p className="card-header-title">{name} 
               <span className="icon">
                 <img src={downIcon}
                 style={{
@@ -740,29 +650,6 @@ function ExpandableMenu({name, matchURL, Switches}) {
 
 function IndexPopup() {
   const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);
-  const [intervention, setIntervention] = useChromeStorageLocal("enableIntervention", false);
-  const [uid] = useChromeStorageLocal("uid","Error");
-  const [sampled_esm] = useChromeStorageLocal("sampled_esm",null);
-  const [sampled_feature_change] = useChromeStorageLocal("sampled_feature_questioinnaire",null);
-  const [esm_counter_today] = useChromeStorageLocal("esm_counter_today",0);
-  const [esm_counter_total] = useChromeStorageLocal("esm_counter_total",0);
-  
-  var questionnaireText;
-  if(sampled_esm === null){
-    questionnaireText = "No Questionnaire";
-  } else{
-    questionnaireText = "Questionnaire";
-  }
-
-  var featureQuestionnaireText;
-  var featureButtonHeight;
-  if(sampled_feature_change === null){
-    featureQuestionnaireText = "No feature changes made";
-    featureButtonHeight = "40px";
-  } else{
-    featureQuestionnaireText = "Feature(s) changed! Tell us why!";
-    featureButtonHeight = "55px";
-  }
 
   return (
     <div
@@ -772,143 +659,57 @@ function IndexPopup() {
         padding: 16,
         width: "300px"
       }}>
-    <div id="hero" className="block">
-      <div className="columns is-mobile">
-        <div className="column has-text-right">
+    <div id="hero">
+      <div>
+        <div className="has-text-right">
           <div id="dropdown_setting" className="dropdown is-right">
             <div className="dropdown-trigger">
               <span>
-                <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} 
-                onClick={(e) => {
-                  var dropdown_setting = document.getElementById("dropdown_setting");
-                  var dropdown_setting_class = dropdown_setting.getAttribute('class');
-                  if (dropdown_setting_class == "dropdown is-right") {
-                    dropdown_setting.setAttribute('class', "dropdown is-right is-active");
-                  }
-                  else {
-                    dropdown_setting.setAttribute('class', "dropdown is-right");
-                  }
-                }}
-                />
+                {/* <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} /> */}
               </span>
             </div>
             <div className="dropdown-menu" id="dropdown-menu" role="menu">
               <div className="dropdown-content has-text-centered">
                 <div className="dropdown-item">
                   <p className="heading">ID</p> 
-                  <p id="userId">{uid}</p>
-                </div>
+                  <p id="userId">user id</p>
+                </div> 
                 <div className="dropdown-item">
-                  <button className="button is-small" id="test_notification"
-                  onClick={(e) => {
-                    const resp = sendToBackground({
-                    name: "test notification"
-                    })
-                  }} 
-                  >Test notification</button> 
-                </div>
-                <div className="dropdown-item">
-                  <button className="button is-small" id="test_questionnaire"
-                  onClick={(e) => {
-                    const resp = sendToContentScript({
-                    name: "test questionnaire"
-                    })
-                  }} 
-                  >Test questionnaire</button> 
-                </div>
-                <br/>
-                <div className="content is-small" hidden = {!intervention}>
-                  Forgot about what each feature does?{" "}
-                  <a
-                  onClick={(e) => {
-                    chrome.tabs.create({url: "https://docs.google.com/presentation/d/1Rnzz-iJ-d7cDc__P5x9M3aNJk5M5tPrnQelOa5ts5ZE/edit?usp=sharing"});
-                  }}
-                  >feature knowledge bank</a>
-                </div>
-                <div className="content is-small">
-                  For any questions, contact us at haopingl@cs.cmu.edu
-                </div>
-                <hr/>
-                <div className="content is-small">
-                  <p>Please follow the research team's instructions for the setting:</p>
-                  <StudyToggleSwitch
-                  storage_var = "enableIntervention"
-                  checked = {intervention}
-                  update  = {setIntervention}
-                  /> 
+                  <button className="button is-small" id="test_notification">Test notification</button> 
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div className="has-text-centered">
+          <h2 className="title is-6"> {extName}</h2>
+        </div>
       </div>
     </div>
-    <nav className="level is-mobile block">
-      <div className="level-item has-text-centered">
+    <nav className="level is-mobile">
+      {/* <div className="level-item has-text-centered">
         <div>
           <p className="heading">Today Answered</p>
-          <p id="numTodayAnswered">{esm_counter_today}</p>
+          <p id="numTodayAnswered">0</p>
         </div>
       </div>
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Total Answered</p>
-          <p id="numTotalAnswered">{esm_counter_total}</p>
+          <p id="numTotalAnswered">0</p>
         </div>
-      </div>
+      </div> */}
     </nav>
-    <nav className="level is-mobile">
+    {/* <nav className="level is-mobile">
       <div className="level-item has-text-centered">
-      <div className="buttons">
-        <button className="button is-primary is-small" id="questionnaire"
-        style={{width:"120px",height:"40px"}}
-        disabled = {sampled_esm===null}
-          onClick={(e) => {
-            const resp = sendToBackground({
-            name: "open questionnaire",
-          })
-          }} 
-        >
-        <span>
-        {questionnaireText} <br />
-          <img 
-              className="image is-16x16"
-              src={twitterIcon}>
-          </img> {" "}
-          <img 
-              className="image is-16x16"
-              src={facebookIcon}>
-          </img> {" "}
-          <img 
-              className="image is-16x16"
-              src={linkedInIcon}>
-          </img> {" "}
-          <img 
-              className="image is-16x16"
-              src={youTubeIcon}>
-          </img>
-        </span>
-        </button>
-        <div hidden = {!intervention} >
-        <button 
-        className="button is-info is-small" id="feature_questionnaire"
-        style={{width:"120px", height:featureButtonHeight, whiteSpace: "normal"}}
-        disabled = {sampled_feature_change===null}
-          onClick={(e) => {
-            const resp = sendToBackground({
-            name: "open feature questionnaire",
-          })
-          }} 
-        >{featureQuestionnaireText}</button>
-        </div>
-        </div>
+        <button className="button is-info is-small" id="questionnaire">Questionnaire</button>
       </div>
-    </nav>
+    </nav> */}
 
-      <div className="block" hidden = {!intervention}>  
+      <div className="block">  
         <ExpandableMenu
             name="Block autoplay setting"
-            matchURL="setting"
+            matchURL=""
             Switches={AutoPlaySwitch}
             />
       </div>
@@ -920,8 +721,8 @@ function IndexPopup() {
           update={setEnabled}
         />
       {
-        enabled && 
-        <div hidden = {!intervention}>
+        enabled &&
+        <div>
           <ExpandableMenu
            name="Twitter"
            matchURL="https://twitter.com"
