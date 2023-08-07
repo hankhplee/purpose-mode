@@ -37,6 +37,7 @@ const settingToHandler = {
 
     "YouTubeAutoplay":   onYouTubeAutoPlay,
     "YouTubeCompact":    onToggleYouTubeCompact,
+    "YouTubeComments":  onToggleYouTubeComments,
     // "YouTubeDeclutter":  onToggleYouTubeDeclutter,
     // "YouTubeRecomm":     onToggleYouTubeRecomm,
     "YouTubeInfinite":   onToggleYouTubeInfinite,
@@ -234,6 +235,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
 
         // "YouTubeAutoplay",
         "YouTubeCompact",
+        "YouTubeComments",
         // "YouTubeRecomm",
         // "YouTubeDeclutter",
         "YouTubeInfinite",
@@ -1125,9 +1127,25 @@ function onToggleYouTubeDeclutter(toggled: boolean) {
         // Hamburger menu.
         $('div#guide-content'),
     ]
-    if (isYouTubeVideo()) {
-        selectors.push($("ytd-comments#comments")); // Comments.
+    // if (isYouTubeVideo()) {
+    //     selectors.push($("ytd-comments#comments")); // Comments.
+    // }
+
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
     }
+}
+
+function onToggleYouTubeComments(toggled: boolean){
+    if (getCurrentPage() !== "YouTube" || !isYouTubeVideo()) {
+        return;
+    }
+    const selectors = [
+        // Comments.
+        $("ytd-comments#comments"),
+    ]
 
     if (toggled) {
         hideSelectors(selectors);
