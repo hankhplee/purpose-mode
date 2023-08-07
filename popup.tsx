@@ -347,13 +347,13 @@ function FacebookSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Homepage finite scrolling"
+       label="Finite newsfeed scrolling"
        storage_var="FacebookInfinite"
        checked={finite}
        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide homepage feeds"
+       label="Hide newsfeed"
        storage_var="FacebookFeed"
        checked={feed}
        update={setFeed}
@@ -419,13 +419,13 @@ function LinkedInSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Homepage finite scrolling"
+       label="Finite newsfeed scrolling"
        storage_var="LinkedInInfinite"
        checked={finite}
        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide homepage feeds"
+       label="Hide newsfeed"
        storage_var="LinkedInFeed"
        checked={feed}
        update={setFeed}
@@ -508,13 +508,13 @@ function YouTubeSwitches() {
         update={setNotif}
       />
       <ToggleSwitch
-        label="Homepage finite scrolling"
+        label="Finite newsfeed scrolling"
         storage_var="YouTubeInfinite"
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
-       label="Hide homepage feeds"
+       label="Hide newsfeed"
        storage_var="YouTubeFeed"
        checked={feed}
        update={setFeed}
@@ -580,13 +580,13 @@ function TwitterSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-        label="Homepage finite scrolling"
+        label="Finite newsfeed scrolling"
         storage_var="TwitterInfinite"
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
-       label="Hide homepage feeds"
+       label="Hide newsfeed"
        storage_var="TwitterFeed"
        checked={feed}
        update={setFeed}
