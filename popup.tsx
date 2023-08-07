@@ -122,6 +122,86 @@ function StudyToggleSwitch({storage_var, checked, update }) {
   );
 }
 
+function YouTubeCompactLayoutToggleSwitch({label, storage_var, checked, update, label_comm, storage_var_comm, checked_comm, update_comm}){
+  return(
+    <div>
+      <div className="columns is-mobile">
+        <div className="column is-two-thirds">
+          <span className="tag is-white">
+            {label}
+          </span>
+        </div>
+        <div className="column">
+          <div className="toggle-switch">
+            <input type="checkbox"
+                  className="toggle-checkbox"
+                  name={storage_var}
+                  id={storage_var}
+                  checked={checked}
+                  onChange={(e) => {
+                    update(e.target.checked);
+                    update_comm(e.target.checked);
+                    setBool(storage_var, e.target.checked);
+                    setBool(storage_var_comm, e.target.checked);
+                    const resp = sendToContentScript({
+                      name: "toggle",
+                      body: {"button": storage_var, "state": e.target.checked}
+                    })
+                    const resp_comm = sendToContentScript({
+                      name: "toggle",
+                      body: {"button": storage_var_comm, "state": e.target.checked}
+                    })
+                  }} />
+
+            <label className="label" htmlFor={storage_var}>
+              <span className="toggleswitch-inner" />
+              <span className="toggleswitch-switch" />
+            </label>
+          </div>
+        </div>
+      </div>
+      <div hidden = {!checked}>
+        <div className="columns is-mobile"
+          style={{marginTop:"-2.5rem"}}>
+          <div className="column is-two-thirds">
+            <span className="tag is-rounded is-light"
+            style={{fontSize:".65rem"}}>
+            > {label_comm}
+            </span>
+          </div>
+          <div className="column">
+            <div className="toggle-switch" 
+            >
+              <input type="checkbox"
+                    className="toggle-checkbox"
+                    name={storage_var_comm}
+                    id={storage_var_comm}
+                    checked={checked_comm}
+                    onChange={(e) => {
+                      update_comm(e.target.checked);
+                      setBool(storage_var_comm, e.target.checked);
+                      const resp = sendToContentScript({
+                        name: "toggle",
+                        body: {"button": storage_var_comm, "state": e.target.checked}
+                      })
+                    }} />
+
+              <label className="label" htmlFor={storage_var_comm}
+              style={{height: "16px"}}
+              >
+                <span className="toggleswitch-inner" />
+                <span className="toggleswitch-switch" 
+                style={{height:"10.5px", width:"10.5px"}}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function GlobalSwitch({ label, storage_var, checked, update }) {
   var switchColor;
   var switchText;
@@ -237,6 +317,8 @@ function FacebookSwitches() {
     useChromeStorageLocal("FacebookFeed", false);
   const [desaturate, setDesaturate] =
     useChromeStorageLocal("FacebookDesaturate", false);
+  // const [comments, setComments] =
+  //   useChromeStorageLocal("FacebookComments", false);
 
   return (
     <div className="content">
@@ -265,13 +347,13 @@ function FacebookSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Finite newsfeed scrolling"
+       label="Homepage finite scrolling"
        storage_var="FacebookInfinite"
        checked={finite}
        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide newsfeed"
+       label="Hide homepage feeds"
        storage_var="FacebookFeed"
        checked={feed}
        update={setFeed}
@@ -282,6 +364,12 @@ function FacebookSwitches() {
        checked={desaturate}
        update={setDesaturate}
       />
+      {/* <ToggleSwitch
+       label="Hide comments"
+       storage_var="FacebookComments"
+       checked={comments}
+       update={setComments}
+      /> */}
     </div>
   )
 }
@@ -301,6 +389,8 @@ function LinkedInSwitches() {
     useChromeStorageLocal("LinkedInFeed", false);
   const [desaturate, setDesaturate] =
     useChromeStorageLocal("LinkedInDesaturate", false);
+  // const [comments, setComments] =
+  //   useChromeStorageLocal("LinkedInComments", false);
 
   return (
     <div>
@@ -329,13 +419,13 @@ function LinkedInSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-       label="Finite newsfeed scrolling"
+       label="Homepage finite scrolling"
        storage_var="LinkedInInfinite"
        checked={finite}
        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide newsfeed"
+       label="Hide homepage feeds"
        storage_var="LinkedInFeed"
        checked={feed}
        update={setFeed}
@@ -346,6 +436,12 @@ function LinkedInSwitches() {
        checked={desaturate}
        update={setDesaturate}
       />
+      {/* <ToggleSwitch
+       label="Hide comments"
+       storage_var="LinkedInComments"
+       checked={comments}
+       update={setComments}
+      /> */}
     </div>
   )
 }
@@ -353,6 +449,8 @@ function LinkedInSwitches() {
 function YouTubeSwitches() {
   const [compact, setCompact] =
     useChromeStorageLocal("YouTubeCompact", false);
+  const [comments, setComments] =
+    useChromeStorageLocal("YouTubeComments", false);
   const [declutter, setDeclutter] =
     useChromeStorageLocal("YouTubeDeclutter", false)
   const [finite, setFinite] =
@@ -368,11 +466,28 @@ function YouTubeSwitches() {
 
   return (
     <div>
-      <ToggleSwitch
+      {/* <ToggleSwitch
        label="Compact layout"
        storage_var="YouTubeCompact"
        checked={compact}
        update={setCompact}
+      />
+      <SmallToggleSwitch
+       label="Remove video comments"
+       storage_var="YouTubeComments"
+       checked={comments}
+       update={setComments}
+      /> */}
+      <YouTubeCompactLayoutToggleSwitch
+        label="Compact layout"
+        storage_var="YouTubeCompact"
+        checked={compact}
+        update={setCompact}
+
+        label_comm="Remove video comments"
+        storage_var_comm="YouTubeComments"
+        checked_comm={comments}
+        update_comm={setComments}
       />
       {/* <ToggleSwitch
        label="Declutter"
@@ -393,13 +508,13 @@ function YouTubeSwitches() {
         update={setNotif}
       />
       <ToggleSwitch
-        label="Finite newsfeed scrolling"
+        label="Homepage finite scrolling"
         storage_var="YouTubeInfinite"
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
-       label="Hide newsfeed"
+       label="Hide homepage feeds"
        storage_var="YouTubeFeed"
        checked={feed}
        update={setFeed}
@@ -465,13 +580,13 @@ function TwitterSwitches() {
        update={setNotif}
       />
       <ToggleSwitch
-        label="Finite newsfeed scrolling"
+        label="Homepage finite scrolling"
         storage_var="TwitterInfinite"
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
-       label="Hide newsfeed"
+       label="Hide homepage feeds"
        storage_var="TwitterFeed"
        checked={feed}
        update={setFeed}

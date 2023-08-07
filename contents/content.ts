@@ -75,6 +75,7 @@ const settingToHandler = {
     "LinkedInNotif":     onToggleLinkedInNotif,
     "LinkedInFeed":      onToggleLinkedInFeed,
     "LinkedInDesaturate":onToggleLinkedInDesaturate,
+    // "LinkedInComments":  onToggleLinkedInComments,
 
     "FacebookCompact":   onToggleFacebookCompact,
     // "FacebookDeclutter": onToggleFacebookDeclutter,
@@ -83,9 +84,11 @@ const settingToHandler = {
     "FacebookNotif":     onToggleFacebookNotif,
     "FacebookFeed":      onToggleFacebookFeed,
     "FacebookDesaturate":onToggleFacebookDesaturate,
+    // "FacebookComments":  onToggleFacebookComments,
 
     "YouTubeAutoplay":   onYouTubeAutoPlay,
     "YouTubeCompact":    onToggleYouTubeCompact,
+    "YouTubeComments":  onToggleYouTubeComments,
     // "YouTubeDeclutter":  onToggleYouTubeDeclutter,
     // "YouTubeRecomm":     onToggleYouTubeRecomm,
     "YouTubeInfinite":   onToggleYouTubeInfinite,
@@ -290,6 +293,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
         // "LinkedInInfinite",
         "LinkedInNotif",
         "LinkedInFeed",
+        "LinkedInComments",
 
         "FacebookCompact",
         // "FacebookDeclutter",
@@ -297,9 +301,11 @@ var mutationObserver = new MutationObserver(function(mutations) {
         // "FacebookInfinite",
         "FacebookNotif",
         "FacebookFeed",
+        "FacebookComments",
 
         // "YouTubeAutoplay",
         "YouTubeCompact",
+        "YouTubeComments",
         // "YouTubeRecomm",
         // "YouTubeDeclutter",
         "YouTubeInfinite",
@@ -933,6 +939,23 @@ function onToggleFacebookFeed(toggled: boolean){
     }
 }
 
+function onToggleFacebookComments(toggled: boolean) {
+    if (getCurrentPage() !== "Facebook") {
+        return;
+    }
+
+    // Select the "like" button on the home feed and go up a few elements from
+    // there.  As far as I can tell, the "like" button is always supposed to be
+    // there.
+    const like = $('div[aria-label="Like"]');
+    const container = like.parent().parent().parent().parent().parent().parent();
+    if (toggled) {
+        container.hide();
+    } else {
+        container.show();
+    }
+}
+
 function onToggleFacebookRecomms(toggled: boolean) {
     if (getCurrentPage() !== "Facebook") {
         return;
@@ -1174,9 +1197,25 @@ function onToggleYouTubeDeclutter(toggled: boolean) {
         // Hamburger menu.
         $('div#guide-content'),
     ]
-    if (isYouTubeVideo()) {
-        selectors.push($("ytd-comments#comments")); // Comments.
+    // if (isYouTubeVideo()) {
+    //     selectors.push($("ytd-comments#comments")); // Comments.
+    // }
+
+    if (toggled) {
+        hideSelectors(selectors);
+    } else {
+        showSelectors(selectors);
     }
+}
+
+function onToggleYouTubeComments(toggled: boolean){
+    if (getCurrentPage() !== "YouTube" || !isYouTubeVideo()) {
+        return;
+    }
+    const selectors = [
+        // Comments.
+        $("ytd-comments#comments"),
+    ]
 
     if (toggled) {
         hideSelectors(selectors);
@@ -1224,6 +1263,20 @@ function onToggleLinkedInDesaturate(toggled: boolean) {
         e.css({"filter": "saturate(10%)"});
     } else {
         e.css({"filter": "saturate(100%)"});
+    }
+}
+
+function onToggleLinkedInComments(toggled: boolean) {
+    if (getCurrentPage() !== "LinkedIn") {
+        return;
+    }
+    // The box underneath a post that contains Like/Comment/Repost/Send and
+    // reactions to the post.
+    const e = $('div[class*="social-details-social-activity"]');
+    if (toggled) {
+        e.hide();
+    } else {
+        e.show();
     }
 }
 
