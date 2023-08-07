@@ -13,8 +13,10 @@
     "@plasmohq/messaging": "^0.4.0",
     "@plasmohq/storage": "^1.6.1",
     "@types/jquery": "^3.5.16",
+    "axios": "^1.4.0",
+    "browser-interaction-time": "^3.0.0",
     "jquery": "^3.7.0",
-    "plasmo": "0.77.5",
+    "plasmo": "0.81.0",
     "react": "18.2.0",
     "react-collapsed": "^4.0.2",
     "react-dom": "18.2.0",
@@ -32,6 +34,11 @@
   "manifest": {
     "host_permissions": [
       "https://*/*"
+    ],
+    "permissions": [
+      "notifications",
+      "activeTab",
+      "alarms"
     ]
   }
 }
