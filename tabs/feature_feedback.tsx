@@ -54,6 +54,9 @@ function ItemRecord(name,value){
     else if(name === "Infinite"){
         featureName = "Finite newsfeed scrolling"
     }
+    else if(name === "Comments"){
+        featureName = "Remove video comments"
+    }
     else if(name === "Notif"){
         featureName = "Hide notifications"
     }
@@ -61,7 +64,7 @@ function ItemRecord(name,value){
         featureName = "Hide newsfeed"
     }
     else if(name === "Desaturate"){
-        featureName = "FacebookDesaturate"
+        featureName = "Desaturate"
     }
     else if(name === "Autoplay"){
         featureName = "Block autoplay"

@@ -203,7 +203,7 @@ function createFeatureQuestionnaire(){
     "TwitterCompact","TwitterInfinite","TwitterNotif","TwitterFeed","TwitterDesaturate","TwitterAutoplay",
     "LinkedInCompact","LinkedInInfinite","LinkedInNotif","LinkedInFeed","LinkedInDesaturate","LinkedInAutoplay",
     "FacebookCompact","FacebookInfinite","FacebookNotif","FacebookFeed","FacebookDesaturate","FacebookAutoplay",
-    "YouTubeCompact","YouTubeInfinite","YouTubeNotif","YouTubeFeed","YouTubeDesaturate","YouTubeAutoplay",
+    "YouTubeCompact","YouTubeComments","YouTubeInfinite","YouTubeNotif","YouTubeFeed","YouTubeDesaturate","YouTubeAutoplay",
     ];
     chrome.storage.local.get(keys).then(function (status) {
         var sampled_site = status.sampling_feature_site;
@@ -235,6 +235,7 @@ function createFeatureQuestionnaire(){
         }
         else if(sampled_site === "YouTube"){
             feature_after["Compact"]     = status.YouTubeCompact;
+            feature_after["Comments"]    = status.YouTubeComments;
             feature_after["Infinite"]    = status.YouTubeInfinite;
             feature_after["Notif"]       = status.YouTubeNotif;
             feature_after["Feed"]        = status.YouTubeFeed; 
@@ -434,7 +435,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         "TwitterCompact","TwitterInfinite","TwitterNotif","TwitterFeed","TwitterDesaturate","TwitterAutoplay",
         "LinkedInCompact","LinkedInInfinite","LinkedInNotif","LinkedInFeed","LinkedInDesaturate","LinkedInAutoplay",
         "FacebookCompact","FacebookInfinite","FacebookNotif","FacebookFeed","FacebookDesaturate","FacebookAutoplay",
-        "YouTubeCompact","YouTubeInfinite","YouTubeNotif","YouTubeFeed","YouTubeDesaturate","YouTubeAutoplay",
+        "YouTubeCompact","YouTubeComments","YouTubeInfinite","YouTubeNotif","YouTubeFeed","YouTubeDesaturate","YouTubeAutoplay",
         ];
         chrome.storage.local.get(keys).then(function (lock) {
             var current_time = new Date().getTime()/1000;
@@ -480,6 +481,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 else if(msg.body["changed_feature"].includes("YouTube")){
                     sample_site = "YouTube";
                     feature_before["Compact"]     = lock.YouTubeCompact;
+                    feature_before["Comments"]    = lock.YouTubeComments;
                     feature_before["Infinite"]    = lock.YouTubeInfinite;
                     feature_before["Notif"]       = lock.YouTubeNotif;
                     feature_before["Feed"]        = lock.YouTubeFeed; 
