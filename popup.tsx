@@ -147,6 +147,7 @@ function YouTubeCompactLayoutToggleSwitch({label, storage_var, checked, update, 
                       name: "toggle",
                       body: {"button": storage_var, "state": e.target.checked}
                     })
+                    startFeatureSampling(storage_var,checked);
                     const resp_comm = sendToContentScript({
                       name: "toggle",
                       body: {"button": storage_var_comm, "state": e.target.checked}
@@ -184,6 +185,7 @@ function YouTubeCompactLayoutToggleSwitch({label, storage_var, checked, update, 
                         name: "toggle",
                         body: {"button": storage_var_comm, "state": e.target.checked}
                       })
+                      startFeatureSampling(storage_var_comm,checked_comm);
                     }} />
 
               <label className="label" htmlFor={storage_var_comm}
