@@ -20,6 +20,7 @@
 #tisd-show-more p {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
     font-weight: 800;
+    font-size: 14px;
 }
 
 #tisd-show-more button:hover {

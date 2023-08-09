@@ -489,7 +489,7 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
         const button = $(`
             <div id="tisd-show-more">
                 <button type="button">Show more 
-                    <p style ="margin-top: 5px; font-size: 14px;">(already clicked ${SeeMoreClick_today} times today)</p>
+                    <p style ="margin-top: 5px;">(already clicked ${SeeMoreClick_today} times today)</p>
                 </button>
             </div>
         `);
