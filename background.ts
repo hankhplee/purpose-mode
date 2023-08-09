@@ -97,9 +97,13 @@ function init() {
 
         // feature use
         "TwitterSeeMoreClick",
+        "TwitterSeeMoreClick_today",
         "FacebookSeeMoreClick",
+        "FacebookSeeMoreClick_today",
         "YouTubeSeeMoreClick",
-        "LinkedInSeeMoreClick"
+        "YouTubeSeeMoreClick_today",
+        "LinkedInSeeMoreClick",
+        "LinkedInSeeMoreClick_today"
     ]
 
     chrome.storage.local.get([...toggle_keys,...temp_storage_keys,...counter_keys], (result) => {
@@ -318,10 +322,14 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             }
         }
 
-        //check if daily ESM counter needs to be upated
+        //check if daily see more lick and ESM counter needs to be upated
         if(result.last_active_date !== current_date.getDate()){
-            console.log("reset ESM daily counter...");
+            console.log("reset see more lick & ESM daily counter...");
             chrome.storage.local.set({"esm_counter_today": 0});
+            chrome.storage.local.set({"TwitterSeeMoreClick_today": 0});
+            chrome.storage.local.set({"FacebookSeeMoreClick_today": 0});
+            chrome.storage.local.set({"YouTubeSeeMoreClick_today": 0});
+            chrome.storage.local.set({"LinkedInSeeMoreClick_today": 0});
             chrome.storage.local.set({"last_active_date": current_date.getDate()});
         }
 

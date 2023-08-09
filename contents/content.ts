@@ -242,34 +242,62 @@ const updateFacebookShowMore = (container) => {
 }
 
 function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
-    feedHeight += showMoreIncrement;
-    container.css("max-height", `${feedHeight}px`);
-    if (currentPage == "Facebook"
-        && parseInt(container.css('height')) < feedHeight) {
-        const button = $("#tisd-show-more");
-        feedHeight = parseInt(container.css('height'));
-        container.css("max-height", `${feedHeight}px`);
-        button.css("top", `${feedHeight+containerTop-100}px`);
-    }
-    if (currentPage == "Twitter") {
-        container.css("min-height", `${feedHeight}px`);
-    }
-    button.css("top", `${feedHeight+containerTop-100}px`);
-    // update show more button click time
-    var keys=["TwitterSeeMoreClick","FacebookSeeMoreClick","LinkedInSeeMoreClick","YouTubeSeeMoreClick"];
+    
+    var keys=["TwitterSeeMoreClick",
+    "TwitterSeeMoreClick_today",
+    "FacebookSeeMoreClick",
+    "FacebookSeeMoreClick_today",
+    "YouTubeSeeMoreClick",
+    "YouTubeSeeMoreClick_today",
+    "LinkedInSeeMoreClick",
+    "LinkedInSeeMoreClick_today"];
 
     chrome.storage.local.get(keys).then(function (counter) {
+        feedHeight += showMoreIncrement;
+        container.css("max-height", `${feedHeight}px`);
+        if (currentPage == "Facebook"
+            && parseInt(container.css('height')) < feedHeight) {
+            const button = $("#tisd-show-more");
+            feedHeight = parseInt(container.css('height'));
+            container.css("max-height", `${feedHeight}px`);
+            button.css("top", `${feedHeight+containerTop-100}px`);
+        }
+        if (currentPage == "Twitter") {
+            container.css("min-height", `${feedHeight}px`);
+        }
+        button.css("top", `${feedHeight+containerTop-100}px`);
+
+        let SeeMoreClick_today;
+        if (currentPage === "Twitter"){
+            SeeMoreClick_today = counter.TwitterSeeMoreClick_today;
+        } 
+        else if(currentPage === "Facebook"){
+            SeeMoreClick_today = counter.FacebookSeeMoreClick_today;
+        }
+        else if(currentPage === "YouTube"){
+            SeeMoreClick_today = counter.YouTubeSeeMoreClick_today;
+        }
+        else if(currentPage === "LinkedIn"){
+            SeeMoreClick_today = counter.LinkedInSeeMoreClick_today;
+        }
+        button.find("p").html(`(already clicked ${SeeMoreClick_today+1} today)`);
+
+        // update show more button click time
         if (currentPage == "Twitter") {
             chrome.storage.local.set({"TwitterSeeMoreClick": counter.TwitterSeeMoreClick+1});
+            chrome.storage.local.set({"TwitterSeeMoreClick_today": counter.TwitterSeeMoreClick_today+1});
         }
         else if(currentPage == "Facebook"){
             chrome.storage.local.set({"FacebookSeeMoreClick": counter.FacebookSeeMoreClick+1});
+            chrome.storage.local.set({"FacebookSeeMoreClick_today": counter.FacebookSeeMoreClick_today+1});
         }
         else if(currentPage == "LinkedIn"){
             chrome.storage.local.set({"LinkedInSeeMoreClick": counter.LinkedInSeeMoreClick+1});
+            chrome.storage.local.set({"LinkedInSeeMoreClick_today": counter.LinkedInSeeMoreClick_today+1});
         }
         else if(currentPage == "YouTube"){
             chrome.storage.local.set({"YouTubeSeeMoreClick": counter.YouTubeSeeMoreClick+1});
+            chrome.storage.local.set({"YouTubeSeeMoreClick_today": counter.YouTubeSeeMoreClick_today+1});
         }
     });
 }; 
@@ -412,52 +440,74 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
     if (!isHomePage()) {
         return;
     }
+    var keys=[
+    "TwitterSeeMoreClick_today",
+    "FacebookSeeMoreClick_today",
+    "YouTubeSeeMoreClick_today",
+    "LinkedInSeeMoreClick_today"];
 
-    if (currentPage === "Twitter") {
-        container.css("min-height", `${feedHeight}px`);
-    }
-    container.css("max-height", `${feedHeight}px`);
-    if (currentPage === "Facebook"
-        && parseInt(container.css('height')) < feedHeight) {
-        updateFacebookShowMore(container);
-    }
-    containerTop = 0;
-    if (container){
-        var position = container.position();
-        if (position){containerTop = position.top;}
-    }
+    chrome.storage.local.get(keys).then(function (counter) {
+        if (currentPage === "Twitter") {
+            container.css("min-height", `${feedHeight}px`);
+        }
+        container.css("max-height", `${feedHeight}px`);
+        if (currentPage === "Facebook"
+            && parseInt(container.css('height')) < feedHeight) {
+            updateFacebookShowMore(container);
+        }
+        containerTop = 0;
+        if (container){
+            var position = container.position();
+            if (position){containerTop = position.top;}
+        }
 
-    if (isAlreadyManipulated(container)) {
-        return;
-    }
+        if (isAlreadyManipulated(container)) {
+            return;
+        }
 
-    container.css({
-        "max-height": `${feedHeight}px`,
-        "overflow":   "hidden",
+        container.css({
+            "max-height": `${feedHeight}px`,
+            "overflow":   "hidden",
+        });
+        if (currentPage === "Twitter") {
+            container.css("min-height", `${feedHeight}px`);
+        }
+        let SeeMoreClick_today;
+        if (currentPage === "Twitter"){
+            SeeMoreClick_today = counter.TwitterSeeMoreClick_today;
+        } 
+        else if(currentPage === "Facebook"){
+            SeeMoreClick_today = counter.FacebookSeeMoreClick_today;
+        }
+        else if(currentPage === "YouTube"){
+            SeeMoreClick_today = counter.YouTubeSeeMoreClick_today;
+        }
+        else if(currentPage === "LinkedIn"){
+            SeeMoreClick_today = counter.LinkedInSeeMoreClick_today;
+        }
+
+        const button = $(`
+            <div id="tisd-show-more">
+                <button type="button">Show more 
+                    <p style ="margin-top: 5px; font-size: 14px;">(already clicked ${SeeMoreClick_today} today)</p>
+                </button>
+            </div>
+        `);
+        button.css({
+            width: container.width(),
+            top: `${feedHeight+containerTop-100}px`
+        });
+        container.prepend(button);
+
+        if (checkBackgroundColorDark()){
+            button.children("button").css({"color": "rgb(255, 255, 255)", "background-color": "rgba(0 , 0, 0, 0.7)"});
+        }
+        else{
+            button.children("button").css({"color": "rgb(0, 0, 0)", "background-color": "rgba(255 , 255, 255, 0.7)"});
+        }
+
+        button.click(() => showMore(container, button));
     });
-    if (currentPage === "Twitter") {
-        container.css("min-height", `${feedHeight}px`);
-    }
-
-    const button = $(`
-        <div id="tisd-show-more">
-            <button type="button">Show more</button>
-        </div>
-    `);
-    button.css({
-        width: container.width(),
-        top: `${feedHeight+containerTop-100}px`
-    });
-    container.prepend(button);
-
-    if (checkBackgroundColorDark()){
-        button.children("button").css({"color": "rgb(255, 255, 255)", "background-color": "rgba(0 , 0, 0, 0.7)"});
-    }
-    else{
-        button.children("button").css({"color": "rgb(0, 0, 0)", "background-color": "rgba(255 , 255, 255, 0.7)"});
-    }
-
-    button.click(() => showMore(container, button));
 }
 
 // Starts listening for changes in the root HTML element of the page.
