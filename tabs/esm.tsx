@@ -460,6 +460,8 @@ function ESMPage() {
                                         var esm_record = {};
                                         esm_record["esm_responses"]              = answers;
                                         esm_record["esm_site"]                   = esm.esm_site;
+                                        esm_record["esm_is_homepage"]            = esm.esm_is_homepage;
+                                        esm_record["esm_is_youtube_watch"]       = esm.esm_is_youtube_watch;
                                         esm_record["esm_time"]                   = esm.esm_time;
                                         esm_record["esm_time_unix_second"]       = esm.esm_time_unix_second;
                                         esm_record["distractions"]               = esm.distractions;

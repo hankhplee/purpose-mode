@@ -1809,6 +1809,8 @@ function create_esm(){
         esm['distractions'] = distractionDetection(features);
         esm['features'] = features;
         esm['adjusted_distractions'] = adjustedDistractionDetection(esm['distractions'],features);
+        esm['esm_is_homepage'] = isHomePage();
+        esm['esm_is_youtube_watch'] = isYouTubeVideo();
         const resp = sendToBackground({
             name: "cache ESM",
             esm: esm,
