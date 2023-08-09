@@ -280,7 +280,7 @@ function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
         else if(currentPage === "LinkedIn"){
             SeeMoreClick_today = counter.LinkedInSeeMoreClick_today;
         }
-        button.find("p").html(`(already clicked ${SeeMoreClick_today+1} today)`);
+        button.find("p").html(`(already clicked ${SeeMoreClick_today+1} times today)`);
 
         // update show more button click time
         if (currentPage == "Twitter") {
@@ -489,7 +489,7 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
         const button = $(`
             <div id="tisd-show-more">
                 <button type="button">Show more 
-                    <p style ="margin-top: 5px; font-size: 14px;">(already clicked ${SeeMoreClick_today} today)</p>
+                    <p style ="margin-top: 5px; font-size: 14px;">(already clicked ${SeeMoreClick_today} times today)</p>
                 </button>
             </div>
         `);
