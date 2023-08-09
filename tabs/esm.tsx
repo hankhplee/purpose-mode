@@ -174,7 +174,7 @@ function ESMPage() {
                     <div className="box">
                         <div className="field">
                             <label className="label">
-                                3. Reflecting on your current browsing experience on {esmSite}, how will you describe the distractions you feel?
+                                3. Reflecting on your current browsing experience on {esmSite}: Do you find this page distracting for the purposes of you browsing {esmSite} at the moment?
                                 <span style={{color:"red"}}>*</span>
                             </label>
                             <div className="control">
@@ -186,7 +186,7 @@ function ESMPage() {
                                         }
                                     }}
                                     />
-                                    {" "}I am distracted.<br/>
+                                    {" "}Yes.<br/>
                                 </label>
                                 <label className="radio">
                                     <input type="radio" value="No" name="q_distraction"
@@ -195,7 +195,7 @@ function ESMPage() {
                                             document.getElementById("q_distraction_detail").innerHTML = "4. Please explain what things about " + esmSite + " lead you to feel not distracted: <span style='color:red'>*</span>";
                                         }
                                     }}/>
-                                    {" "}I am <i>NOT</i> distracted.<br/>
+                                    {" "}No.<br/>
                                 </label>
                             </div>
                         </div>
