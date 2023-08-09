@@ -79,37 +79,40 @@ function StudyToggleSwitch({storage_var, checked, update }) {
                 id={storage_var}
                 checked={checked}
                 onChange={(e) => {
-                  var status_change = e.target.checked;
-                  update(e.target.checked);
-                  setBool(storage_var, e.target.checked);
-                  chrome.storage.local.set({"esm_counter_today": 0});
-                  
-                  // ping server
-                  chrome.storage.local.get("uid").then(function (uid) {
-                    var ping = {};
-                    var date = new Date(Date.now());
-                    var current_time = date.toString().replace(/ \(.*\)/ig, '');
-                    var unix_time = new Date().getTime();
-                    var status;
-                    if(status_change){
-                      status = "interventions enabled";
-                    }
-                    else{
-                      status = "interventions disabled";
-                    }
-                    ping["timestamp"] = current_time;
-                    ping["unix_time"] = unix_time
-                    ping["status"] = status;
-                    axios.post('https://purpose-mode-backend.nymity.ch/submit', {
-                        uid: uid.uid,
-                        type:"study_status",
-                        data: ping
-                      })
-                      .catch(function (error) {
-                        console.log(error);
-                        alert("ping failed: "+ error);
-                      });
+                  var con = confirm("Are you sure you want to change the study setting? Please confirm this action with the research team.");
+                  if (con) {
+                    var status_change = e.target.checked;
+                    update(e.target.checked);
+                    setBool(storage_var, e.target.checked);
+                    chrome.storage.local.set({"esm_counter_today": 0});
+                    
+                    // ping server
+                    chrome.storage.local.get("uid").then(function (uid) {
+                      var ping = {};
+                      var date = new Date(Date.now());
+                      var current_time = date.toString().replace(/ \(.*\)/ig, '');
+                      var unix_time = new Date().getTime();
+                      var status;
+                      if(status_change){
+                        status = "interventions enabled";
+                      }
+                      else{
+                        status = "interventions disabled";
+                      }
+                      ping["timestamp"] = current_time;
+                      ping["unix_time"] = unix_time
+                      ping["status"] = status;
+                      axios.post('https://purpose-mode-backend.nymity.ch/submit', {
+                          uid: uid.uid,
+                          type:"study_status",
+                          data: ping
+                        })
+                        .catch(function (error) {
+                          console.log(error);
+                          alert("ping failed: "+ error);
+                        });
                     });
+                  }
                 }} />
 
           <label className="label" htmlFor={storage_var}>
