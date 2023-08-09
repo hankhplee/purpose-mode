@@ -812,7 +812,7 @@ function IndexPopup() {
                   }} 
                   >Test notification</button> 
                 </div>
-                <div className="dropdown-item">
+                {/* <div className="dropdown-item">
                   <button className="button is-small" id="test_questionnaire"
                   onClick={(e) => {
                     const resp = sendToContentScript({
@@ -820,7 +820,7 @@ function IndexPopup() {
                     })
                   }} 
                   >Test questionnaire</button> 
-                </div>
+                </div> */}
                 <br/>
                 <div className="content is-small" hidden = {!intervention}>
                   Forgot about what each feature does?{" "}
