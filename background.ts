@@ -16,15 +16,6 @@ chrome.runtime.onInstalled.addListener(init);
 function init() {
     console.log("Initializing " + extName + " background script.");
 
-    // Create an alarm that fires every periodInMinutes minutes.
-    // Our event handler sends a ping to the backend every time the event fires.
-    chrome.alarms.create(extName + " ping", {
-        delayInMinutes: 0,
-        periodInMinutes: 1,
-    }, () => {
-        console.log("Created repeating alarm for backend pings.");
-    });
-
     // initialize local storage
     // init value false
     const toggle_keys = [
@@ -291,6 +282,15 @@ function createFeatureQuestionnaire(){
         }
     });
 }
+
+// Create an alarm that fires every periodInMinutes minutes.
+// Our event handler sends a ping to the backend every time the event fires.
+chrome.alarms.create(extName + " ping", {
+    delayInMinutes: 0,
+    periodInMinutes: 1,
+}, () => {
+    console.log("Created repeating alarm for backend pings.");
+});
 
 // This callback sends a ping to our backend containing all the variables that
 // are set in the extension's local storage. For the purposes of the ping
