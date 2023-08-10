@@ -207,65 +207,68 @@ function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
     button.css("top", `${feedHeight+containerTop-100}px`);
 };
 
+function populateMutationKeys(site: string): Array<string> {
+    switch (site) {
+        case "Facebook":
+            return [
+                "FacebookCompact",
+                "FacebookNotif",
+                "FacebookFeed",
+                "FacebookComments",
+            ];
+        case "LinkedIn":
+            return [
+                "LinkedInCompact",
+                "LinkedInNotif",
+                "LinkedInFeed",
+                "LinkedInComments",
+            ];
+        case "Twitter":
+            return [
+                "TwitterNotif",
+                "TwitterFeed",
+            ];
+        case "YouTube":
+            return [
+                "YouTubeCompact",
+                "YouTubeComments",
+                "YouTubeInfinite",
+                "YouTubeNotif",
+                "YouTubeFeed",
+            ];
+        default:
+            return [];
+    }
+}
+// Once, at content script initialization time, populate the list of features
+// that our mutation observer should run for each mutation.
+const mutationKeys = populateMutationKeys(getCurrentPage());
 
 var mutationObserver = new MutationObserver(function(mutations) {
-    // let keys = [
-    //     "TwitterReadOnly",
-    // ];
-    let keys = [
-        // "TwitterCompact",
-        // "TwitterClutter",
-        // "TwitterRecomm",
-        // "TwitterInfinite",
-        "TwitterNotif",
-        "TwitterFeed",
-
-        "LinkedInCompact",
-        // "LinkedInDeclutter",
-        // "LinkedInRecomms",
-        // "LinkedInInfinite",
-        "LinkedInNotif",
-        "LinkedInFeed",
-        "LinkedInComments",
-
-        "FacebookCompact",
-        // "FacebookDeclutter",
-        // "FacebookRecomms",
-        // "FacebookInfinite",
-        "FacebookNotif",
-        "FacebookFeed",
-        "FacebookComments",
-
-        // "YouTubeAutoplay",
-        "YouTubeCompact",
-        "YouTubeComments",
-        // "YouTubeRecomm",
-        // "YouTubeDeclutter",
-        "YouTubeInfinite",
-        "YouTubeNotif",
-        "YouTubeFeed",
-    ]
-
     // For each page mutation, invoke relevant toggle functions if enabled.
     mutations.forEach(function(mutation) {
-        if (!isEnabled) {
+        if (!isEnabled || mutationKeys.length === 0) {
             return;
         }
-        for (const key of keys) {
-            chrome.storage.local.get(key, (result) => {
-                if (result[key] === true) {
-                    if(key === "FacebookCompact"){
-                        onToggleFacebookCompactDynamic(true);
-                    }
-                    else if(key === "LinkedInCompact"){
-                        onToggleLinkedInCompactDynamic(true);
-                    } 
-                    else {
-                        settingToHandler[key](result[key], mutation.target);
+        // Check what toggles are enabled right now.  This is not ideal because
+        // the code is reading the storage excessively but it will do for now.
+        chrome.storage.local.get(mutationKeys, (result) => {
+            for (const toggle in result) {
+                if (result[toggle] === false) {
+                    continue
+                }
+                if (toggle === "FacebookCompact") {
+                    onToggleFacebookCompactDynamic(true);
+                } else if (toggle === "LinkedInCompact") {
+                    onToggleLinkedInCompactDynamic(true);
+                } else {
+                    const f = settingToHandler[toggle];
+                    if (f !== undefined) {
+                        f(result[toggle], mutation.target);
                     }
                 }
-            });
-        }
+            }
+        });
     });
 
     // For autoplay page, invoke autoplay setting
