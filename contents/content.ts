@@ -307,6 +307,7 @@ function populateMutationKeys(site: string): Array<string> {
         case "Facebook":
             return [
                 "FacebookCompact",
+                "FacebookInfinite",
                 "FacebookNotif",
                 "FacebookFeed",
                 "FacebookComments",
