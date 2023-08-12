@@ -831,6 +831,15 @@ function IndexPopup() {
                   >feature knowledge bank</a>
                 </div>
                 <div className="content is-small">
+                  Extension does not work properly? Follow the{" "}
+                  <a
+                  onClick={(e) => {
+                    chrome.tabs.create({url: "https://docs.google.com/document/d/1cSxZ0V1C6PCBN_9skQdWckvX-83qL8Q8yAdSIGepmqs/edit?usp=sharing"});
+                  }}
+                  >instructions</a>
+                  {" "}to reset the extension.
+                </div>
+                <div className="content is-small">
                   For any questions, contact us at haopingl@cs.cmu.edu
                 </div>
                 <hr/>
