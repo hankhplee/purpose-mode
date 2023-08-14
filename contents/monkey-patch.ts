@@ -1,7 +1,7 @@
 import type { PlasmoCSConfig } from "plasmo"
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://twitter.com/*"],
+    matches: ["https://twitter.com/*","https://x.com/*"],
     world: "MAIN",
 }
 

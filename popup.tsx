@@ -695,6 +695,9 @@ function ExpandableMenu({name, matchURL, Switches}) {
       else if (url.includes(matchURL)) {
         setExpanded(true);
       }
+      else if (matchURL === "https://twitter.com" && url.includes("https://x.com")){
+        setExpanded(true);
+      }
     }
     fetchURL();
   }, []);
