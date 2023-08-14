@@ -25,6 +25,13 @@ function startFeatureSampling(storage_var,current_status){
   });
 }
 
+function startFeatureSamplingYouTubeComplactLayout(storage_var,current_status,comment_current_status){
+  const resp = sendToBackground({
+    name: "feature change",
+    body: {"changed_feature": storage_var, "initial_value": current_status, "initial_value_comment":comment_current_status}
+  });
+}
+
 function setBool(key: string, value: boolean) {
     console.log("Setting '" + key + "' to '" + value + "'.");
     chrome.storage.local.set({key: JSON.stringify(value)});
@@ -150,7 +157,7 @@ function YouTubeCompactLayoutToggleSwitch({label, storage_var, checked, update, 
                       name: "toggle",
                       body: {"button": storage_var, "state": e.target.checked}
                     })
-                    startFeatureSampling(storage_var,checked);
+                    startFeatureSamplingYouTubeComplactLayout(storage_var,checked,checked_comm);
                     const resp_comm = sendToContentScript({
                       name: "toggle",
                       body: {"button": storage_var_comm, "state": e.target.checked}

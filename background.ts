@@ -502,6 +502,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                         feature_before[key] = msg.body["initial_value"];
                     }
                 }
+                // if changed feature is YouTubeCompact, set the init value of YouTubeComments as well
+                if(msg.body["changed_feature"] === "YouTubeCompact"){
+                    feature_before["Comments"] = msg.body["initial_value_comment"];
+                }
                 console.log("before change setting:", feature_before);
                 chrome.storage.local.set({"sampling_feature_site": sample_site});
                 chrome.storage.local.set({"feature_before": feature_before});
