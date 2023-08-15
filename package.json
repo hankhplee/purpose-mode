@@ -33,12 +33,13 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "*://*/*","<all_urls>"
     ],
     "permissions": [
       "notifications",
       "activeTab",
-      "alarms"
+      "alarms",
+      "tabs"
     ]
   }
 }
