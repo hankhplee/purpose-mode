@@ -1470,8 +1470,8 @@ function onToggleLinkedInAutoplay(toggled: boolean){
         alertMessage = "Autoplay on LinkedIn has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.";
     }
     
-    const autoPlayToggle = $('div[data-control-name="toggle_button"]');
-    const currentToggleText = $('span.artdeco-toggle__text').text();
+    const autoPlayToggle = $('div:has(>input[data-control-name="toggle_button"])');
+    const currentToggleText = $('div:has(>input[data-control-name="toggle_button"])').find('span').text();
     if(currentToggleText.includes("Off")){
         currentToggle = true;
     } else if(currentToggleText.includes("On")){
