@@ -3,8 +3,8 @@ import { useCollapse } from "react-collapsed";
 import { sendToContentScript } from "@plasmohq/messaging"
 import { sendToBackground } from "@plasmohq/messaging"
 import { useChromeStorageLocal } from "use-chrome-storage";
-import "./ToggleSwitch.css";
-import "./mystyles.css";
+import "./css/ToggleSwitch.css";
+import "./css/mystyles.css";
 import yesIcon from "data-base64:~assets/yes.png";
 import noIcon from "data-base64:~assets/no.png";
 import setting from "data-base64:~assets/settings.png";
