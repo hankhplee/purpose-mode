@@ -125,13 +125,12 @@ function getContainer() {
             resolve(y);
         }
         else if (currentPage == constants.Twitter) {
-            const x = $('section[aria-labelledby]');
+            const x = $('div[aria-label*=Timeline]').first();
             if (x.length === 0 || x.find("article").length === 0) {
                 setTimeout(() => { resolve(getContainer()); }, 100);
                 return;
             }
-            const y = x.children("div[aria-label]").first().children().first();
-            resolve(y);
+            resolve(x);
         } else if (currentPage == constants.Facebook) {
             const y = $('div[role="main"]');
             if (y.length === 0) {
@@ -213,6 +212,7 @@ function populateMutationKeys(site: string): Array<string> {
             return [
                 "TwitterNotif",
                 "TwitterFeed",
+                "TwitterInfinite",
             ];
         case constants.YouTube:
             return [
@@ -331,8 +331,10 @@ function resetInfScrolling(container: JQuery<HTMLElement>) {
 }
 
 function stopInfScrolling(container: JQuery<HTMLElement>) {
-    if (!isHomePage()) {
-        return;
+    if (!window.location.href.includes("twitter")) {
+        if (!isHomePage()) {
+            return;
+        }
     }
 
     if (currentPage === constants.Twitter) {
