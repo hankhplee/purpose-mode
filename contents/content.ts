@@ -445,10 +445,8 @@ function resetInfScrolling(container: JQuery<HTMLElement>) {
 }
 
 function stopInfScrolling(container: JQuery<HTMLElement>) {
-    if (!window.location.href.includes("twitter")) {
-        if (!isHomePage()) {
-            return;
-        }
+    if (!isHomePage()) {
+        return;
     }
     var keys=[
     "TwitterSeeMoreClick_today",
