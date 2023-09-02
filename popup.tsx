@@ -14,8 +14,8 @@ import downIcon from "data-base64:~assets/down.png";
 const extName = "Purpose Mode";
 
 function setBool(key: string, value: boolean) {
-    console.log("Setting '" + key + "' to '" + value + "'.");
-    chrome.storage.local.set({key: JSON.stringify(value)});
+  console.log("Setting '" + key + "' to '" + value + "'.");
+  chrome.storage.local.set({ key: JSON.stringify(value) });
 }
 
 function ToggleSwitch({ label, storage_var, checked, update }) {
@@ -29,18 +29,18 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
       <div className="column">
         <div className="toggle-switch">
           <input type="checkbox"
-                className="toggle-checkbox"
-                name={storage_var}
-                id={storage_var}
-                checked={checked}
-                onChange={(e) => {
-                  update(e.target.checked);
-                  setBool(storage_var, e.target.checked);
-                  const resp = sendToContentScript({
-                    name: "toggle",
-                    body: {"button": storage_var, "state": e.target.checked}
-                  })
-                }} />
+            className="toggle-checkbox"
+            name={storage_var}
+            id={storage_var}
+            checked={checked}
+            onChange={(e) => {
+              update(e.target.checked);
+              setBool(storage_var, e.target.checked);
+              const resp = sendToContentScript({
+                name: "toggle",
+                body: { "button": storage_var, "state": e.target.checked }
+              })
+            }} />
 
           <label className="label" htmlFor={storage_var}>
             <span className="toggleswitch-inner" />
@@ -52,8 +52,8 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
   );
 }
 
-function YouTubeCompactLayoutToggleSwitch({label, storage_var, checked, update, label_comm, storage_var_comm, checked_comm, update_comm}){
-  return(
+function YouTubeCompactLayoutToggleSwitch({ label, storage_var, checked, update, label_comm, storage_var_comm, checked_comm, update_comm }) {
+  return (
     <div>
       <div className="columns is-mobile">
         <div className="column is-two-thirds">
@@ -64,24 +64,24 @@ function YouTubeCompactLayoutToggleSwitch({label, storage_var, checked, update, 
         <div className="column">
           <div className="toggle-switch">
             <input type="checkbox"
-                  className="toggle-checkbox"
-                  name={storage_var}
-                  id={storage_var}
-                  checked={checked}
-                  onChange={(e) => {
-                    update(e.target.checked);
-                    update_comm(e.target.checked);
-                    setBool(storage_var, e.target.checked);
-                    setBool(storage_var_comm, e.target.checked);
-                    const resp = sendToContentScript({
-                      name: "toggle",
-                      body: {"button": storage_var, "state": e.target.checked}
-                    })
-                    const resp_comm = sendToContentScript({
-                      name: "toggle",
-                      body: {"button": storage_var_comm, "state": e.target.checked}
-                    })
-                  }} />
+              className="toggle-checkbox"
+              name={storage_var}
+              id={storage_var}
+              checked={checked}
+              onChange={(e) => {
+                update(e.target.checked);
+                update_comm(e.target.checked);
+                setBool(storage_var, e.target.checked);
+                setBool(storage_var_comm, e.target.checked);
+                const resp = sendToContentScript({
+                  name: "toggle",
+                  body: { "button": storage_var, "state": e.target.checked }
+                })
+                const resp_comm = sendToContentScript({
+                  name: "toggle",
+                  body: { "button": storage_var_comm, "state": e.target.checked }
+                })
+              }} />
 
             <label className="label" htmlFor={storage_var}>
               <span className="toggleswitch-inner" />
@@ -90,38 +90,38 @@ function YouTubeCompactLayoutToggleSwitch({label, storage_var, checked, update, 
           </div>
         </div>
       </div>
-      <div hidden = {!checked}>
+      <div hidden={!checked}>
         <div className="columns is-mobile"
-          style={{marginTop:"-2.5rem"}}>
+          style={{ marginTop: "-2.5rem" }}>
           <div className="column is-two-thirds">
             <span className="tag is-rounded is-light"
-            style={{fontSize:".65rem"}}>
+              style={{ fontSize: ".65rem" }}>
             > {label_comm}
             </span>
           </div>
           <div className="column">
-            <div className="toggle-switch" 
+            <div className="toggle-switch"
             >
               <input type="checkbox"
-                    className="toggle-checkbox"
-                    name={storage_var_comm}
-                    id={storage_var_comm}
-                    checked={checked_comm}
-                    onChange={(e) => {
-                      update_comm(e.target.checked);
-                      setBool(storage_var_comm, e.target.checked);
-                      const resp = sendToContentScript({
-                        name: "toggle",
-                        body: {"button": storage_var_comm, "state": e.target.checked}
-                      })
-                    }} />
+                className="toggle-checkbox"
+                name={storage_var_comm}
+                id={storage_var_comm}
+                checked={checked_comm}
+                onChange={(e) => {
+                  update_comm(e.target.checked);
+                  setBool(storage_var_comm, e.target.checked);
+                  const resp = sendToContentScript({
+                    name: "toggle",
+                    body: { "button": storage_var_comm, "state": e.target.checked }
+                  })
+                }} />
 
               <label className="label" htmlFor={storage_var_comm}
-              style={{height: "16px"}}
+                style={{ height: "16px" }}
               >
                 <span className="toggleswitch-inner" />
-                <span className="toggleswitch-switch" 
-                style={{height:"10.5px", width:"10.5px"}}
+                <span className="toggleswitch-switch"
+                  style={{ height: "10.5px", width: "10.5px" }}
                 />
               </label>
             </div>
@@ -135,20 +135,20 @@ function YouTubeCompactLayoutToggleSwitch({label, storage_var, checked, update, 
 function GlobalSwitch({ label, storage_var, checked, update }) {
   var switchColor;
   var switchText;
-  if(checked){
+  if (checked) {
     switchColor = "is-primary";
     switchText = "On";
   }
-  else{
+  else {
     switchColor = "is-danger";
     switchText = "Off";
   }
-  
+
   return (
-  <div className={"box hero "+switchColor}>
-    <div className="columns is-mobile"
-    style={{height: "55px"}}
-    >
+    <div className={"box hero " + switchColor}>
+      <div className="columns is-mobile"
+        style={{ height: "55px" }}
+      >
         <div className="column is-two-thirds">
           <span className={"tag is-medium " + switchColor}>
             {label}
@@ -162,18 +162,18 @@ function GlobalSwitch({ label, storage_var, checked, update }) {
         <div className="column">
           <div className="toggle-switch">
             <input type="checkbox"
-                  className="toggle-checkbox"
-                  name={storage_var}
-                  id={storage_var}
-                  checked={checked}
-                  onChange={(e) => {
-                    update(e.target.checked);
-                    setBool(storage_var, e.target.checked);
-                    const resp = sendToContentScript({
-                      name: "toggle",
-                      body: {"button": storage_var, "state": e.target.checked}
-                    })
-                  }} />
+              className="toggle-checkbox"
+              name={storage_var}
+              id={storage_var}
+              checked={checked}
+              onChange={(e) => {
+                update(e.target.checked);
+                setBool(storage_var, e.target.checked);
+                const resp = sendToContentScript({
+                  name: "toggle",
+                  body: { "button": storage_var, "state": e.target.checked }
+                })
+              }} />
 
             <label className="label" htmlFor={storage_var}>
               <span className="toggleswitch-inner" />
@@ -181,7 +181,7 @@ function GlobalSwitch({ label, storage_var, checked, update }) {
             </label>
           </div>
           <p className="is-size-7	has-text-centered"
-            style={{width: "37px"}}>
+            style={{ width: "37px" }}>
             {switchText}
           </p>
         </div>
@@ -191,15 +191,15 @@ function GlobalSwitch({ label, storage_var, checked, update }) {
 
 }
 
-function ButtonSwitch({label, storage_var, current_status}){
+function ButtonSwitch({ label, storage_var, current_status }) {
   let currentStatus;
   let buttonText = "";
   let buttonClass = "button is-small is-outlined is-fullwidth ";
-  if(current_status == true){
+  if (current_status == true) {
     currentStatus = yesIcon;
     buttonText = "Go Unblock";
     buttonClass = buttonClass + "is-danger";
-  }else if(current_status == false){
+  } else if (current_status == false) {
     currentStatus = noIcon;
     buttonText = "Go Block";
     buttonClass = buttonClass + "is-success";
@@ -209,22 +209,22 @@ function ButtonSwitch({label, storage_var, current_status}){
     <div className="columns is-mobile">
       <div id={label}
         className="column is-three-fifths">
-          <span className="icon-text">
-            <span className="tag is-white">{label}:</span>
-            <span className="icon">
+        <span className="icon-text">
+          <span className="tag is-white">{label}:</span>
+          <span className="icon">
             <img className="image is-16x16 fas fa-home" src={currentStatus}></img>
-            </span>
           </span>
+        </span>
       </div>
       <div className="column">
         <button id={storage_var}
-                className= {buttonClass}
-                onClick={(e) => {
-                  const resp = sendToBackground({
-                  name: "autoplay",
-                  body: {"site": storage_var, "state": !current_status}
-                })
-                }} 
+          className={buttonClass}
+          onClick={(e) => {
+            const resp = sendToBackground({
+              name: "autoplay",
+              body: { "site": storage_var, "state": !current_status }
+            })
+          }}
         >{buttonText}</button>
       </div>
     </div>
@@ -252,10 +252,10 @@ function FacebookSwitches() {
   return (
     <div className="content">
       <ToggleSwitch
-       label="Compact layout"
-       storage_var="FacebookCompact"
-       checked={compact}
-       update={setCompact}
+        label="Compact layout"
+        storage_var="FacebookCompact"
+        checked={compact}
+        update={setCompact}
       />
       {/* <ToggleSwitch
        label="Declutter"
@@ -270,28 +270,28 @@ function FacebookSwitches() {
        update={setRecomms}
       /> */}
       <ToggleSwitch
-       label="Hide notifications"
-       storage_var="FacebookNotif"
-       checked={notif}
-       update={setNotif}
+        label="Hide notifications"
+        storage_var="FacebookNotif"
+        checked={notif}
+        update={setNotif}
       />
       <ToggleSwitch
-       label="Homepage finite scrolling"
-       storage_var="FacebookInfinite"
-       checked={finite}
-       update={setFinite}
+        label="Homepage finite scrolling"
+        storage_var="FacebookInfinite"
+        checked={finite}
+        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide homepage feeds"
-       storage_var="FacebookFeed"
-       checked={feed}
-       update={setFeed}
+        label="Hide homepage feeds"
+        storage_var="FacebookFeed"
+        checked={feed}
+        update={setFeed}
       />
       <ToggleSwitch
-       label="Desaturate"
-       storage_var="FacebookDesaturate"
-       checked={desaturate}
-       update={setDesaturate}
+        label="Desaturate"
+        storage_var="FacebookDesaturate"
+        checked={desaturate}
+        update={setDesaturate}
       />
       {/* <ToggleSwitch
        label="Hide comments"
@@ -342,28 +342,28 @@ function LinkedInSwitches() {
        update={setRecomms}
       /> */}
       <ToggleSwitch
-       label="Hide notifications"
-       storage_var="LinkedInNotif"
-       checked={notif}
-       update={setNotif}
+        label="Hide notifications"
+        storage_var="LinkedInNotif"
+        checked={notif}
+        update={setNotif}
       />
       <ToggleSwitch
-       label="Homepage finite scrolling"
-       storage_var="LinkedInInfinite"
-       checked={finite}
-       update={setFinite}
+        label="Homepage finite scrolling"
+        storage_var="LinkedInInfinite"
+        checked={finite}
+        update={setFinite}
       />
       <ToggleSwitch
-       label="Hide homepage feeds"
-       storage_var="LinkedInFeed"
-       checked={feed}
-       update={setFeed}
+        label="Hide homepage feeds"
+        storage_var="LinkedInFeed"
+        checked={feed}
+        update={setFeed}
       />
       <ToggleSwitch
-       label="Desaturate"
-       storage_var="LinkedInDesaturate"
-       checked={desaturate}
-       update={setDesaturate}
+        label="Desaturate"
+        storage_var="LinkedInDesaturate"
+        checked={desaturate}
+        update={setDesaturate}
       />
       {/* <ToggleSwitch
        label="Hide comments"
@@ -443,16 +443,16 @@ function YouTubeSwitches() {
         update={setFinite}
       />
       <ToggleSwitch
-       label="Hide homepage feeds"
-       storage_var="YouTubeFeed"
-       checked={feed}
-       update={setFeed}
+        label="Hide homepage feeds"
+        storage_var="YouTubeFeed"
+        checked={feed}
+        update={setFeed}
       />
       <ToggleSwitch
-       label="Desaturate"
-       storage_var="YouTubeDesaturate"
-       checked={desaturate}
-       update={setDesaturate}
+        label="Desaturate"
+        storage_var="YouTubeDesaturate"
+        checked={desaturate}
+        update={setDesaturate}
       />
     </div>
   )
@@ -485,10 +485,10 @@ function TwitterSwitches() {
         update={setReadOnly}
       /> */}
       <ToggleSwitch
-       label="Compact layout"
-       storage_var="TwitterCompact"
-       checked={compact}
-       update={setCompact}
+        label="Compact layout"
+        storage_var="TwitterCompact"
+        checked={compact}
+        update={setCompact}
       />
       {/* <ToggleSwitch
         label="Declutter"
@@ -503,10 +503,10 @@ function TwitterSwitches() {
        update={setRecomm}
       /> */}
       <ToggleSwitch
-       label="Hide notifications"
-       storage_var="TwitterNotif"
-       checked={notif}
-       update={setNotif}
+        label="Hide notifications"
+        storage_var="TwitterNotif"
+        checked={notif}
+        update={setNotif}
       />
       <ToggleSwitch
         label="Homepage finite scrolling"
@@ -515,61 +515,61 @@ function TwitterSwitches() {
         update={setFinite}
       />
       <ToggleSwitch
-       label="Hide homepage feeds"
-       storage_var="TwitterFeed"
-       checked={feed}
-       update={setFeed}
+        label="Hide homepage feeds"
+        storage_var="TwitterFeed"
+        checked={feed}
+        update={setFeed}
       />
       <ToggleSwitch
-       label="Desaturate"
-       storage_var="TwitterDesaturate"
-       checked={desaturate}
-       update={setDesaturate}
+        label="Desaturate"
+        storage_var="TwitterDesaturate"
+        checked={desaturate}
+        update={setDesaturate}
       />
     </div>
   )
 }
 
-function AutoPlaySwitch(){
-  const [twitterAutoplay] = 
+function AutoPlaySwitch() {
+  const [twitterAutoplay] =
     useChromeStorageLocal("TwitterAutoplay", false);
-  const [setTwitterAutoplay] = 
+  const [setTwitterAutoplay] =
     useChromeStorageLocal("SetTwitterAutoplay", false);
-  const [linkedInAutoplay] = 
+  const [linkedInAutoplay] =
     useChromeStorageLocal("LinkedInAutoplay", false);
-  const [setLinkedInAutoplay] = 
+  const [setLinkedInAutoplay] =
     useChromeStorageLocal("SetLinkedInAutoplay", false);
-  const [facebookAutoplay] = 
+  const [facebookAutoplay] =
     useChromeStorageLocal("FacebookAutoplay", false);
-  const [setFacebookAutoplay] = 
+  const [setFacebookAutoplay] =
     useChromeStorageLocal("SetFacebookAutoplay", false);
-  const [youTubeAutoplay,setYouTubeAutoplay] = 
+  const [youTubeAutoplay, setYouTubeAutoplay] =
     useChromeStorageLocal("YouTubeAutoplay", false);
 
   return (
     <div>
 
       <ButtonSwitch
-      label="Twitter"
-      storage_var="TwitterAutoplay"
-      current_status={twitterAutoplay}
+        label="Twitter"
+        storage_var="TwitterAutoplay"
+        current_status={twitterAutoplay}
       />
       <ButtonSwitch
-      label="LinkedIn"
-      storage_var="LinkedInAutoplay"
-      current_status={linkedInAutoplay}
+        label="LinkedIn"
+        storage_var="LinkedInAutoplay"
+        current_status={linkedInAutoplay}
       />
       <ButtonSwitch
-      label="Facebook"
-      storage_var="FacebookAutoplay"
-      current_status={facebookAutoplay}
+        label="Facebook"
+        storage_var="FacebookAutoplay"
+        current_status={facebookAutoplay}
       />
       <ToggleSwitch
-      label="YouTube"
-      storage_var="YouTubeAutoplay"
-      checked={youTubeAutoplay}
-      update={setYouTubeAutoplay}
-    />
+        label="YouTube"
+        storage_var="YouTubeAutoplay"
+        checked={youTubeAutoplay}
+        update={setYouTubeAutoplay}
+      />
     </div>
   )
 
@@ -577,20 +577,20 @@ function AutoPlaySwitch(){
 
 function getTabURL() {
   return new Promise<string>((resolve, reject) => {
-      try {
-          chrome.tabs.query({
-              active: true,
-              lastFocusedWindow: true,
-          }, function (tabs) {
-              resolve(tabs[0].url);
-          })
-      } catch (e) {
-          reject("fail");
-      }
+    try {
+      chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+      }, function (tabs) {
+        resolve(tabs[0].url);
+      })
+    } catch (e) {
+      reject("fail");
+    }
   })
 }
 
-function ExpandableMenu({name, matchURL, Switches}) {
+function ExpandableMenu({ name, matchURL, Switches }) {
   const {
     getCollapseProps,
     getToggleProps,
@@ -601,7 +601,7 @@ function ExpandableMenu({name, matchURL, Switches}) {
   useEffect(() => {
     const fetchURL = async () => {
       const url = await getTabURL();
-      if (matchURL === ""){
+      if (matchURL === "") {
         setExpanded(false);
       }
       else if (url.includes(matchURL)) {
@@ -617,24 +617,24 @@ function ExpandableMenu({name, matchURL, Switches}) {
         <div className="header card-header" {...getToggleProps({
           onClick: () => setExpanded((prevExpanded) => !prevExpanded),
         })}>
-          { isExpanded ?
+          {isExpanded ?
             <p className="card-header-title">{name}
               <span className="icon">
                 <img src={upIcon}
-                style={{
-                  width: "10px",
-                  height: "10px"
-                }}></img>
+                  style={{
+                    width: "10px",
+                    height: "10px"
+                  }}></img>
               </span>
             </p>
             :
-            <p className="card-header-title">{name} 
+            <p className="card-header-title">{name}
               <span className="icon">
                 <img src={downIcon}
-                style={{
-                  width: "10px",
-                  height: "10px"
-                }}></img>
+                  style={{
+                    width: "10px",
+                    height: "10px"
+                  }}></img>
               </span>
             </p>
           }
@@ -659,35 +659,35 @@ function IndexPopup() {
         padding: 16,
         width: "300px"
       }}>
-    <div id="hero">
-      <div>
-        <div className="has-text-right">
-          <div id="dropdown_setting" className="dropdown is-right">
-            <div className="dropdown-trigger">
-              <span>
-                {/* <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} /> */}
-              </span>
-            </div>
-            <div className="dropdown-menu" id="dropdown-menu" role="menu">
-              <div className="dropdown-content has-text-centered">
-                <div className="dropdown-item">
-                  <p className="heading">ID</p> 
-                  <p id="userId">user id</p>
-                </div> 
-                <div className="dropdown-item">
-                  <button className="button is-small" id="test_notification">Test notification</button> 
+      <div id="hero">
+        <div>
+          <div className="has-text-right">
+            <div id="dropdown_setting" className="dropdown is-right">
+              <div className="dropdown-trigger">
+                <span>
+                  {/* <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} /> */}
+                </span>
+              </div>
+              <div className="dropdown-menu" id="dropdown-menu" role="menu">
+                <div className="dropdown-content has-text-centered">
+                  <div className="dropdown-item">
+                    <p className="heading">ID</p>
+                    <p id="userId">user id</p>
+                  </div>
+                  <div className="dropdown-item">
+                    <button className="button is-small" id="test_notification">Test notification</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="has-text-centered">
-          <h2 className="title is-6"> {extName}</h2>
+          <div className="has-text-centered">
+            <h2 className="title is-6"> {extName}</h2>
+          </div>
         </div>
       </div>
-    </div>
-    <nav className="level is-mobile">
-      {/* <div className="level-item has-text-centered">
+      <nav className="level is-mobile">
+        {/* <div className="level-item has-text-centered">
         <div>
           <p className="heading">Today Answered</p>
           <p id="numTodayAnswered">0</p>
@@ -699,57 +699,57 @@ function IndexPopup() {
           <p id="numTotalAnswered">0</p>
         </div>
       </div> */}
-    </nav>
-    {/* <nav className="level is-mobile">
+      </nav>
+      {/* <nav className="level is-mobile">
       <div className="level-item has-text-centered">
         <button className="button is-info is-small" id="questionnaire">Questionnaire</button>
       </div>
     </nav> */}
 
-      <div className="block">  
+      <div className="block">
         <ExpandableMenu
-            name="Block autoplay setting"
-            matchURL=""
-            Switches={AutoPlaySwitch}
-            />
+          name="Block autoplay setting"
+          matchURL=""
+          Switches={AutoPlaySwitch}
+        />
       </div>
 
       <GlobalSwitch
-          label="Purpose Mode"
-          storage_var="Enable"
-          checked={enabled}
-          update={setEnabled}
-        />
+        label="Purpose Mode"
+        storage_var="Enable"
+        checked={enabled}
+        update={setEnabled}
+      />
       {
         enabled &&
         <div>
           <ExpandableMenu
-           name="Twitter"
-           matchURL="https://twitter.com"
-           Switches={TwitterSwitches}
+            name="Twitter"
+            matchURL="https://twitter.com"
+            Switches={TwitterSwitches}
           />
 
           <ExpandableMenu
-           name="YouTube"
-           matchURL="https://www.youtube.com"
-           Switches={YouTubeSwitches}
-          />
-          
-          <ExpandableMenu
-           name="Facebook"
-           matchURL="https://www.facebook.com"
-           Switches={FacebookSwitches}
+            name="YouTube"
+            matchURL="https://www.youtube.com"
+            Switches={YouTubeSwitches}
           />
 
           <ExpandableMenu
-           name="LinkedIn"
-           matchURL="https://www.linkedin.com"
-           Switches={LinkedInSwitches}
+            name="Facebook"
+            matchURL="https://www.facebook.com"
+            Switches={FacebookSwitches}
+          />
+
+          <ExpandableMenu
+            name="LinkedIn"
+            matchURL="https://www.linkedin.com"
+            Switches={LinkedInSwitches}
           />
 
         </div>
       }
-  </div>
+    </div>
   )
 }
 
