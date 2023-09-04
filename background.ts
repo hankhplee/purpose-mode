@@ -1,13 +1,15 @@
-const extName = "Purpose Mode";
+import * as constants from "./constants";
 
 // Initialize storage variables at installation time.
 chrome.runtime.onInstalled.addListener(init);
 
 function init() {
-    console.log("Initializing " + extName + " background script.");
+    console.log("Initializing " + constants.ExtName + " background script.");
 
     // initialize local storage
-    const keys = ["TwitterAutoplay",
+    const keys = [
+        constants.Enable,
+        "TwitterAutoplay",
         "SetTwitterAutoplay",
         "LinkedInAutoplay",
         "SetLinkedInAutoplay",
@@ -29,17 +31,17 @@ function init() {
 
 function settingAutoPlay(site: string, toggled: boolean) {
     console.log("Set autopaly on", site, "to", toggled);
-    if (site.includes("Twitter")) {
+    if (site.includes(constants.Twitter)) {
         chrome.storage.local.set({ "SetTwitterAutoplay": toggled })
-            .then(chrome.tabs.create({ url: "https://twitter.com/settings/autoplay" }));
+            .then(() => chrome.tabs.create({ url: "https://twitter.com/settings/autoplay" }));
     }
-    else if (site.includes("LinkedIn")) {
+    else if (site.includes(constants.LinkedIn)) {
         chrome.storage.local.set({ "SetLinkedInAutoplay": toggled })
-            .then(chrome.tabs.create({ url: "https://www.linkedin.com/mypreferences/d/settings/autoplay-videos" }));
+            .then(() => chrome.tabs.create({ url: "https://www.linkedin.com/mypreferences/d/settings/autoplay-videos" }));
     }
-    else if (site.includes("Facebook")) {
+    else if (site.includes(constants.Facebook)) {
         chrome.storage.local.set({ "SetFacebookAutoplay": toggled })
-            .then(chrome.tabs.create({ url: "https://www.facebook.com/settings?tab=videos" }));
+            .then(() => chrome.tabs.create({ url: "https://www.facebook.com/settings?tab=videos" }));
     }
 }
 

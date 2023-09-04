@@ -1,50 +1,36 @@
 import $ from "jquery";
 import "../css/finite_scroll_style.css";
+import * as constants from "../constants";
+
 import twitterIcon from "data-base64:~assets/twitter.ico";
 
-const extName = "Purpose Mode";
-const settingToHandler = {
-    "Enable": onToggleEnable,
+var settingToHandler = {};
+settingToHandler[constants.Enable] = onToggleEnable;
 
-    "Desaturate": onToggleDesaturate,
+settingToHandler[constants.TwitterCompact] = onToggleTwitterCompact;
+settingToHandler[constants.TwitterInfinite] = onToggleTwitterInfinite;
+settingToHandler[constants.TwitterNotif] = onToggleTwitterNotif;
+settingToHandler[constants.TwitterFeed] = onToggleTwitterFeed;
+settingToHandler[constants.TwitterDesaturate] = onToggleTwitterDesaturate;
 
-    "TwitterCompact": onToggleTwitterCompact,
-    // "TwitterReadOnly":   onToggleTwitterReadOnly,
-    // "TwitterClutter":    onToggleTwitterClutter,
-    // "TwitterRecomm":     onToggleTwitterRecomm,
-    "TwitterInfinite": onToggleTwitterInfinite,
-    "TwitterNotif": onToggleTwitterNotif,
-    "TwitterFeed": onToggleTwitterFeed,
-    "TwitterDesaturate": onToggleTwitterDesaturate,
+settingToHandler[constants.LinkedInCompact] = onToggleLinkedInCompact;
+settingToHandler[constants.LinkedInInfinite] = onToggleLinkedInInfinite;
+settingToHandler[constants.LinkedInNotif] = onToggleLinkedInNotif;
+settingToHandler[constants.LinkedInFeed] = onToggleLinkedInFeed;
+settingToHandler[constants.LinkedInDesaturate] = onToggleLinkedInDesaturate;
 
-    "LinkedInCompact": onToggleLinkedInCompact,
-    // "LinkedInDeclutter": onToggleLinkedInDeclutter,
-    // "LinkedInRecomms":   onToggleLinkedInRecomms,
-    "LinkedInInfinite": onToggleLinkedInInfinite,
-    "LinkedInNotif": onToggleLinkedInNotif,
-    "LinkedInFeed": onToggleLinkedInFeed,
-    "LinkedInDesaturate": onToggleLinkedInDesaturate,
-    // "LinkedInComments":  onToggleLinkedInComments,
+settingToHandler[constants.FacebookCompact] = onToggleFacebookCompact;
+settingToHandler[constants.FacebookInfinite] = onToggleFacebookInfinite;
+settingToHandler[constants.FacebookNotif] = onToggleFacebookNotif;
+settingToHandler[constants.FacebookFeed] = onToggleFacebookFeed;
+settingToHandler[constants.FacebookDesaturate] = onToggleFacebookDesaturate;
 
-    "FacebookCompact": onToggleFacebookCompact,
-    // "FacebookDeclutter": onToggleFacebookDeclutter,
-    // "FacebookRecomms":   onToggleFacebookRecomms,
-    "FacebookInfinite": onToggleFacebookInfinite,
-    "FacebookNotif": onToggleFacebookNotif,
-    "FacebookFeed": onToggleFacebookFeed,
-    "FacebookDesaturate": onToggleFacebookDesaturate,
-    // "FacebookComments":  onToggleFacebookComments,
+settingToHandler[constants.YouTubeCompact] = onToggleYouTubeCompact;
+settingToHandler[constants.YouTubeInfinite] = onToggleYouTubeInfinite;
+settingToHandler[constants.YouTubeNotif] = onToggleYouTubeNotif;
+settingToHandler[constants.YouTubeFeed] = onToggleYouTubeFeed;
+settingToHandler[constants.YouTubeDesaturate] = onToggleYouTubeDesaturate;
 
-    "YouTubeAutoplay": onYouTubeAutoPlay,
-    "YouTubeCompact": onToggleYouTubeCompact,
-    "YouTubeComments": onToggleYouTubeComments,
-    // "YouTubeDeclutter":  onToggleYouTubeDeclutter,
-    // "YouTubeRecomm":     onToggleYouTubeRecomm,
-    "YouTubeInfinite": onToggleYouTubeInfinite,
-    "YouTubeNotif": onToggleYouTubeNotif,
-    "YouTubeFeed": onToggleYouTubeFeed,
-    "YouTubeDesaturate": onToggleYouTubeDesaturate,
-}
 
 let isEnabled = false;
 let feedHeight = 2500;
@@ -67,16 +53,16 @@ function getCurrentPage(): string {
     const currentWindowURL = window.location.href;
     if (currentWindowURL.includes("https://twitter.com") ||
         currentWindowURL.includes("https://x.com")) {
-        return "Twitter";
+        return constants.Twitter;
     }
     else if (currentWindowURL.includes("facebook.com")) {
-        return "Facebook";
+        return constants.Facebook;
     }
     else if (currentWindowURL.includes("youtube.com")) {
-        return "YouTube";
+        return constants.YouTube;
     }
     else if (currentWindowURL.includes("linkedin.com")) {
-        return "LinkedIn";
+        return constants.LinkedIn;
     } else {
         return "NA";
     }
@@ -138,7 +124,7 @@ function getContainer() {
             const y = document;
             resolve(y);
         }
-        else if (currentPage == "Twitter") {
+        else if (currentPage == constants.Twitter) {
             const x = $('section[aria-labelledby]');
             if (x.length === 0 || x.find("article").length === 0) {
                 setTimeout(() => { resolve(getContainer()); }, 100);
@@ -146,21 +132,21 @@ function getContainer() {
             }
             const y = x.children("div[aria-label]").first().children().first();
             resolve(y);
-        } else if (currentPage == "Facebook") {
+        } else if (currentPage == constants.Facebook) {
             const y = $('div[role="main"]');
             if (y.length === 0) {
                 setTimeout(() => { resolve(getContainer()); }, 100);
                 return;
             }
             resolve(y);
-        } else if (currentPage == "YouTube") {
+        } else if (currentPage == constants.YouTube) {
             const y = $("#content");
             if (y.length === 0) {
                 setTimeout(() => { resolve(getContainer()); }, 100);
                 return;
             }
             resolve(y);
-        } else if (currentPage == "LinkedIn") {
+        } else if (currentPage == constants.LinkedIn) {
             if (isHomePage()) {
                 // const y = $('main[aria-label]');
                 const y = $('div.application-outlet');
@@ -194,14 +180,14 @@ const updateFacebookShowMore = (container) => {
 function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
     feedHeight += showMoreIncrement;
     container.css("max-height", `${feedHeight}px`);
-    if (currentPage == "Facebook"
+    if (currentPage == constants.Facebook
         && parseInt(container.css('height')) < feedHeight) {
         const button = $("#tisd-show-more");
         feedHeight = parseInt(container.css('height'));
         container.css("max-height", `${feedHeight}px`);
         button.css("top", `${feedHeight + containerTop - 100}px`);
     }
-    if (currentPage == "Twitter") {
+    if (currentPage == constants.Twitter) {
         container.css("min-height", `${feedHeight}px`);
     }
     button.css("top", `${feedHeight + containerTop - 100}px`);
@@ -209,26 +195,26 @@ function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
 
 function populateMutationKeys(site: string): Array<string> {
     switch (site) {
-        case "Facebook":
+        case constants.Facebook:
             return [
                 "FacebookCompact",
                 "FacebookNotif",
                 "FacebookFeed",
                 "FacebookComments",
             ];
-        case "LinkedIn":
+        case constants.LinkedIn:
             return [
                 "LinkedInCompact",
                 "LinkedInNotif",
                 "LinkedInFeed",
                 "LinkedInComments",
             ];
-        case "Twitter":
+        case constants.Twitter:
             return [
                 "TwitterNotif",
                 "TwitterFeed",
             ];
-        case "YouTube":
+        case constants.YouTube:
             return [
                 "YouTubeCompact",
                 "YouTubeComments",
@@ -272,7 +258,7 @@ var mutationObserver = new MutationObserver(function (mutations) {
     });
 
     // For autoplay page, invoke autoplay setting
-    if (isAutoPlaySettingPage() && currentPage != "Facebook") {
+    if (isAutoPlaySettingPage() && currentPage != constants.Facebook) {
         setAutoPlay();
     }
 });
@@ -289,7 +275,7 @@ function toggleInfScrolling(toggled: boolean) {
 }
 
 const checkBackgroundColorDark = () => {
-    if (currentPage == "Twitter") {
+    if (currentPage == constants.Twitter) {
         const bgColor = $("body").css("background-color");
         if (bgColor === "rgb(21, 32, 43)" || bgColor === "rgb(0, 0, 0)") {
             return true;
@@ -298,7 +284,7 @@ const checkBackgroundColorDark = () => {
             return false;
         }
     }
-    else if (currentPage == "Facebook") {
+    else if (currentPage == constants.Facebook) {
         const bgColor = $("body").css("background-color");
         if (bgColor === "rgb(24, 25, 26)") {
             return true;
@@ -307,7 +293,7 @@ const checkBackgroundColorDark = () => {
             return false;
         }
     }
-    else if (currentPage == "YouTube") {
+    else if (currentPage == constants.YouTube) {
         const bgColor = $("ytd-app").css("background");
         if (bgColor.includes("rgb(15, 15, 15)")) {
             return true;
@@ -316,7 +302,7 @@ const checkBackgroundColorDark = () => {
             return false;
         }
     }
-    else if (currentPage == "LinkedIn") {
+    else if (currentPage == constants.LinkedIn) {
         const bgColor = $("body").css("background-color");
         if (bgColor.includes("rgb(0, 0, 0)")) {
             return true;
@@ -349,11 +335,11 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
         return;
     }
 
-    if (currentPage === "Twitter") {
+    if (currentPage === constants.Twitter) {
         container.css("min-height", `${feedHeight}px`);
     }
     container.css("max-height", `${feedHeight}px`);
-    if (currentPage === "Facebook"
+    if (currentPage === constants.Facebook
         && parseInt(container.css('height')) < feedHeight) {
         updateFacebookShowMore(container);
     }
@@ -371,7 +357,7 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
         "max-height": `${feedHeight}px`,
         "overflow": "hidden",
     });
-    if (currentPage === "Twitter") {
+    if (currentPage === constants.Twitter) {
         container.css("min-height", `${feedHeight}px`);
     }
 
@@ -411,12 +397,12 @@ var changes = mutationObserver.takeRecords();
 function onToggleEnable(toggled: boolean) {
     isEnabled = toggled;
     chrome.storage.local.get(null, (result) => {
-        console.log(extName + " configuration: ");
+        console.log(constants.ExtName + " configuration: ");
         console.log(result);
     });
 
     if (!toggled) {
-        console.log("Disabling " + extName + ".");
+        console.log("Disabling " + constants.ExtName + ".");
         // Disable all settings.
         for (const key in settingToHandler) {
             if (key === "Enable") {
@@ -425,7 +411,7 @@ function onToggleEnable(toggled: boolean) {
             settingToHandler[key](false);
         }
     } else {
-        console.log("Enabling " + extName + ".");
+        console.log("Enabling " + constants.ExtName + ".");
         // Run whatever settings were previously enabled.
         for (const key in settingToHandler) {
             if (key === "Enable") {
@@ -445,7 +431,7 @@ function onToggleEnable(toggled: boolean) {
 }
 
 function onToggleLinkedInCompactDynamic(toggled: boolean) {
-    if (getCurrentPage() != "LinkedIn") {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
     if (toggled) {
@@ -461,7 +447,7 @@ function onToggleLinkedInCompactDynamic(toggled: boolean) {
 }
 
 function onToggleLinkedInCompact(toggled: boolean) {
-    if (getCurrentPage() != "LinkedIn") {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
     onToggleLinkedInDeclutter(toggled);
@@ -469,7 +455,7 @@ function onToggleLinkedInCompact(toggled: boolean) {
 }
 
 function onToggleLinkedInDeclutter(toggled: boolean) {
-    if (getCurrentPage() != "LinkedIn") {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
 
@@ -500,7 +486,7 @@ function onToggleLinkedInDeclutter(toggled: boolean) {
 }
 
 function onToggleLinkedInNotif(toggled: boolean) {
-    if (getCurrentPage() != "LinkedIn") {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
 
@@ -516,8 +502,8 @@ function onToggleLinkedInNotif(toggled: boolean) {
             $(this).hide();
         });
         // reset window title
-        if (document.title !== "LinkedIn") {
-            document.title = "LinkedIn";
+        if (document.title !== constants.LinkedIn) {
+            document.title = constants.LinkedIn;
         }
     } else {
         for (const e of elements) { e.show() }
@@ -529,7 +515,7 @@ function onToggleLinkedInNotif(toggled: boolean) {
 }
 
 function onToggleLinkedInRecomms(toggled: boolean) {
-    if (getCurrentPage() != "LinkedIn") {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
 
@@ -586,7 +572,7 @@ function onToggleLinkedInFeed(toggled: boolean) {
 }
 
 function onToggleTwitterReadOnly(toggled: boolean, node: Node) {
-    if (getCurrentPage() != "Twitter") {
+    if (getCurrentPage() != constants.Twitter) {
         return;
     }
     let selectors = [
@@ -606,7 +592,7 @@ function onToggleTwitterReadOnly(toggled: boolean, node: Node) {
 }
 
 function onToggleTwitterCompact(toggled: boolean) {
-    if (getCurrentPage() != "Twitter") {
+    if (getCurrentPage() != constants.Twitter) {
         return;
     }
 
@@ -620,14 +606,14 @@ function onToggleTwitterCompact(toggled: boolean) {
 }
 
 function onToggleTwitterInfinite(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
     toggleInfScrolling(toggled);
 }
 
 function onToggleTwitterNotif(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
     const selectors = [
@@ -644,9 +630,9 @@ function onToggleTwitterNotif(toggled: boolean) {
         $('div[aria-label*="unread"]').each(function () {
             $(this).hide();
         });
-        if (document.title !== "Twitter") {
+        if (document.title !== constants.Twitter) {
             // reset window title
-            document.title = "Twitter";
+            document.title = constants.Twitter;
             // reset window icon
             var icon = document.querySelector("link[rel~='icon']");
             icon.setAttribute('href', twitterIcon);
@@ -687,7 +673,7 @@ function onToggleTwitterFeed(toggled: boolean) {
 }
 
 function onToggleTwitterRecomm(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
 
@@ -705,7 +691,7 @@ function onToggleTwitterRecomm(toggled: boolean) {
 }
 
 function onToggleTwitterClutter(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
 
@@ -727,14 +713,14 @@ function onToggleTwitterClutter(toggled: boolean) {
 }
 
 function onToggleFacebookInfinite(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     toggleInfScrolling(toggled);
 }
 
 function onToggleFacebookCompactDynamic(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     const selectors = [
@@ -792,7 +778,7 @@ function onToggleFacebookCompactDynamic(toggled: boolean) {
 }
 
 function onToggleFacebookCompact(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     onToggleFacebookRecomms(toggled);
@@ -800,7 +786,7 @@ function onToggleFacebookCompact(toggled: boolean) {
 }
 
 function onToggleFacebookDeclutter(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     const currentWindowURL = window.location.href;
@@ -877,7 +863,7 @@ function onToggleFacebookFeed(toggled: boolean) {
 }
 
 function onToggleFacebookComments(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
 
@@ -894,7 +880,7 @@ function onToggleFacebookComments(toggled: boolean) {
 }
 
 function onToggleFacebookRecomms(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
 
@@ -931,7 +917,7 @@ function onToggleFacebookRecomms(toggled: boolean) {
 }
 
 function onToggleFacebookNotif(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
 
@@ -951,9 +937,9 @@ function onToggleFacebookNotif(toggled: boolean) {
         $('div[aria-label*="Open chat"]').find('div[aria-label*="unread"]').each(function () {
             $(this).hide();
         });
-        if (document.title !== "Facebook") {
+        if (document.title !== constants.Facebook) {
             // reset window title
-            document.title = "Facebook";
+            document.title = constants.Facebook;
         }
     } else {
         for (const s of selectors) {
@@ -967,7 +953,7 @@ function onToggleFacebookNotif(toggled: boolean) {
 }
 
 function onToggleYouTubeInfinite(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
     if (toggled && isHomePage()) {
@@ -979,7 +965,7 @@ function onToggleYouTubeInfinite(toggled: boolean) {
 }
 
 function onToggleYouTubeFeed(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
     const selectors = [
@@ -1000,7 +986,7 @@ function onToggleYouTubeFeed(toggled: boolean) {
 }
 
 function onToggleYouTubeCompact(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
 
@@ -1009,7 +995,7 @@ function onToggleYouTubeCompact(toggled: boolean) {
 }
 
 function onToggleYouTubeRecomm(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
 
@@ -1101,7 +1087,7 @@ function onToggleYouTubeRecomm(toggled: boolean) {
 }
 
 function onToggleYouTubeNotif(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
 
@@ -1113,9 +1099,9 @@ function onToggleYouTubeNotif(toggled: boolean) {
     ]
     if (toggled) {
         hideSelectors(selectors);
-        if (document.title !== "YouTube") {
+        if (document.title !== constants.YouTube) {
             // reset window title
-            document.title = "YouTube";
+            document.title = constants.YouTube;
         }
     } else {
         // Only show the first selector. Showing the second selector results
@@ -1127,7 +1113,7 @@ function onToggleYouTubeNotif(toggled: boolean) {
 }
 
 function onToggleYouTubeDeclutter(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
     const selectors = [
@@ -1146,7 +1132,7 @@ function onToggleYouTubeDeclutter(toggled: boolean) {
 }
 
 function onToggleYouTubeComments(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube" || !isYouTubeVideo()) {
+    if (getCurrentPage() !== constants.YouTube || !isYouTubeVideo()) {
         return;
     }
     const selectors = [
@@ -1162,7 +1148,7 @@ function onToggleYouTubeComments(toggled: boolean) {
 }
 
 function onToggleDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter" && getCurrentPage() !== "Facebook" && getCurrentPage() !== "YouTube" && getCurrentPage() !== "LinkedIn") {
+    if (getCurrentPage() !== constants.Twitter && getCurrentPage() !== constants.Facebook && getCurrentPage() !== constants.YouTube && getCurrentPage() !== constants.LinkedIn) {
         return;
     }
     let e = $("html");
@@ -1180,7 +1166,7 @@ function onToggleDesaturate(toggled: boolean) {
 }
 
 function onToggleFacebookDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     let e = $("html");
@@ -1192,7 +1178,7 @@ function onToggleFacebookDesaturate(toggled: boolean) {
 }
 
 function onToggleLinkedInDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "LinkedIn") {
+    if (getCurrentPage() !== constants.LinkedIn) {
         return;
     }
     let e = $("html");
@@ -1204,7 +1190,7 @@ function onToggleLinkedInDesaturate(toggled: boolean) {
 }
 
 function onToggleLinkedInComments(toggled: boolean) {
-    if (getCurrentPage() !== "LinkedIn") {
+    if (getCurrentPage() !== constants.LinkedIn) {
         return;
     }
     // The box underneath a post that contains Like/Comment/Repost/Send and
@@ -1218,7 +1204,7 @@ function onToggleLinkedInComments(toggled: boolean) {
 }
 
 function onToggleTwitterDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
     let e = $("html");
@@ -1230,7 +1216,7 @@ function onToggleTwitterDesaturate(toggled: boolean) {
 }
 
 function onToggleYouTubeDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
     let e = $("html");
@@ -1243,7 +1229,7 @@ function onToggleYouTubeDesaturate(toggled: boolean) {
 
 
 function onToggleTwitterAutoplay(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
     let autoPlayToggle;
@@ -1276,7 +1262,7 @@ function onToggleTwitterAutoplay(toggled: boolean) {
 }
 
 function onToggleFacebookAutoplay(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     chrome.storage.local.set({ "FacebookAutoplay": toggled });
@@ -1336,7 +1322,7 @@ function onToggleFacebookAutoplay(toggled: boolean) {
 }
 
 function onToggleLinkedInAutoplay(toggled: boolean) {
-    if (getCurrentPage() !== "LinkedIn") {
+    if (getCurrentPage() !== constants.LinkedIn) {
         return;
     }
     let currentToggle;
@@ -1370,21 +1356,21 @@ function onToggleLinkedInAutoplay(toggled: boolean) {
 
 
 function setAutoPlay() {
-    if (getCurrentPage() == "Twitter") {
+    if (getCurrentPage() == constants.Twitter) {
         const key = "SetTwitterAutoplay";
         chrome.storage.local.get(key, (result) => {
             console.log("Set Twitter autoplay:", result.SetTwitterAutoplay);
             onToggleTwitterAutoplay(result.SetTwitterAutoplay);
         });
     }
-    else if (getCurrentPage() == "LinkedIn") {
+    else if (getCurrentPage() == constants.LinkedIn) {
         const key = "SetLinkedInAutoplay";
         chrome.storage.local.get(key, (result) => {
             console.log("Set LinkedIn autoplay:", result.SetLinkedInAutoplay);
             onToggleLinkedInAutoplay(result.SetLinkedInAutoplay);
         });
     }
-    else if (getCurrentPage() == "Facebook") {
+    else if (getCurrentPage() == constants.Facebook) {
         const key = "SetFacebookAutoplay";
         chrome.storage.local.get(key, (result) => {
             console.log("Set Facebook autoplay:", result.SetFacebookAutoplay);
@@ -1403,7 +1389,7 @@ function triggerYouTubeAutoplayBlocker() {
         });
     }
 }
-if (currentPage === "YouTube") {
+if (currentPage === constants.YouTube) {
     document.addEventListener('yt-navigate-start', triggerYouTubeAutoplayBlocker);
     // Choose a different event depending on when you want to apply the change
     // document.addEventListener('yt-navigate-finish', process);

@@ -3,6 +3,7 @@ import { useCollapse } from "react-collapsed";
 import { sendToContentScript } from "@plasmohq/messaging"
 import { sendToBackground } from "@plasmohq/messaging"
 import { useChromeStorageLocal } from "use-chrome-storage";
+import * as constants from "./constants";
 import "./css/ToggleSwitch.css";
 import "./css/mystyles.css";
 import yesIcon from "data-base64:~assets/yes.png";
@@ -10,8 +11,6 @@ import noIcon from "data-base64:~assets/no.png";
 import setting from "data-base64:~assets/settings.png";
 import upIcon from "data-base64:~assets/up.png";
 import downIcon from "data-base64:~assets/down.png";
-
-const extName = "Purpose Mode";
 
 function setBool(key: string, value: boolean) {
   console.log("Setting '" + key + "' to '" + value + "'.");
@@ -233,19 +232,15 @@ function ButtonSwitch({ label, storage_var, current_status }) {
 
 function FacebookSwitches() {
   const [compact, setCompact] =
-    useChromeStorageLocal("FacebookCompact", false);
+    useChromeStorageLocal(constants.FacebookCompact, false);
   const [finite, setFinite] =
-    useChromeStorageLocal("FacebookInfinite", false);
-  const [declutter, setDeclutter] =
-    useChromeStorageLocal("FacebookDeclutter", false);
-  const [recomms, setRecomms] =
-    useChromeStorageLocal("FacebookRecomms", false);
+    useChromeStorageLocal(constants.FacebookInfinite, false);
   const [notif, setNotif] =
-    useChromeStorageLocal("FacebookNotif", false);
+    useChromeStorageLocal(constants.FacebookNotif, false);
   const [feed, setFeed] =
-    useChromeStorageLocal("FacebookFeed", false);
+    useChromeStorageLocal(constants.FacebookFeed, false);
   const [desaturate, setDesaturate] =
-    useChromeStorageLocal("FacebookDesaturate", false);
+    useChromeStorageLocal(constants.FacebookDesaturate, false);
   // const [comments, setComments] =
   //   useChromeStorageLocal("FacebookComments", false);
 
@@ -253,7 +248,7 @@ function FacebookSwitches() {
     <div className="content">
       <ToggleSwitch
         label="Compact layout"
-        storage_var="FacebookCompact"
+        storage_var={constants.FacebookCompact}
         checked={compact}
         update={setCompact}
       />
@@ -271,25 +266,25 @@ function FacebookSwitches() {
       /> */}
       <ToggleSwitch
         label="Hide notifications"
-        storage_var="FacebookNotif"
+        storage_var={constants.FacebookNotif}
         checked={notif}
         update={setNotif}
       />
       <ToggleSwitch
         label="Homepage finite scrolling"
-        storage_var="FacebookInfinite"
+        storage_var={constants.FacebookInfinite}
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
         label="Hide homepage feeds"
-        storage_var="FacebookFeed"
+        storage_var={constants.FacebookFeed}
         checked={feed}
         update={setFeed}
       />
       <ToggleSwitch
         label="Desaturate"
-        storage_var="FacebookDesaturate"
+        storage_var={constants.FacebookDesaturate}
         checked={desaturate}
         update={setDesaturate}
       />
@@ -305,19 +300,15 @@ function FacebookSwitches() {
 
 function LinkedInSwitches() {
   const [compact, setCompact] =
-    useChromeStorageLocal("LinkedInCompact", false);
-  const [declutter, setDeclutter] =
-    useChromeStorageLocal("LinkedInDeclutter", false);
-  const [recomms, setRecomms] =
-    useChromeStorageLocal("LinkedInRecomms", false);
+    useChromeStorageLocal(constants.LinkedInCompact, false);
   const [notif, setNotif] =
-    useChromeStorageLocal("LinkedInNotif", false);
+    useChromeStorageLocal(constants.LinkedInNotif, false);
   const [finite, setFinite] =
-    useChromeStorageLocal("LinkedInInfinite", false);
+    useChromeStorageLocal(constants.LinkedInInfinite, false);
   const [feed, setFeed] =
-    useChromeStorageLocal("LinkedInFeed", false);
+    useChromeStorageLocal(constants.LinkedInFeed, false);
   const [desaturate, setDesaturate] =
-    useChromeStorageLocal("LinkedInDesaturate", false);
+    useChromeStorageLocal(constants.LinkedInDesaturate, false);
   // const [comments, setComments] =
   //   useChromeStorageLocal("LinkedInComments", false);
 
@@ -325,7 +316,7 @@ function LinkedInSwitches() {
     <div>
       <ToggleSwitch
         label="Compact Layout"
-        storage_var="LinkedInCompact"
+        storage_var={constants.LinkedInCompact}
         checked={compact}
         update={setCompact}
       />
@@ -343,25 +334,25 @@ function LinkedInSwitches() {
       /> */}
       <ToggleSwitch
         label="Hide notifications"
-        storage_var="LinkedInNotif"
+        storage_var={constants.LinkedInNotif}
         checked={notif}
         update={setNotif}
       />
       <ToggleSwitch
         label="Homepage finite scrolling"
-        storage_var="LinkedInInfinite"
+        storage_var={constants.LinkedInInfinite}
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
         label="Hide homepage feeds"
-        storage_var="LinkedInFeed"
+        storage_var={constants.LinkedInFeed}
         checked={feed}
         update={setFeed}
       />
       <ToggleSwitch
         label="Desaturate"
-        storage_var="LinkedInDesaturate"
+        storage_var={constants.LinkedInDesaturate}
         checked={desaturate}
         update={setDesaturate}
       />
@@ -377,21 +368,17 @@ function LinkedInSwitches() {
 
 function YouTubeSwitches() {
   const [compact, setCompact] =
-    useChromeStorageLocal("YouTubeCompact", false);
+    useChromeStorageLocal(constants.YouTubeCompact, false);
   const [comments, setComments] =
-    useChromeStorageLocal("YouTubeComments", false);
-  const [declutter, setDeclutter] =
-    useChromeStorageLocal("YouTubeDeclutter", false)
+    useChromeStorageLocal(constants.YouTubeComments, false);
   const [finite, setFinite] =
-    useChromeStorageLocal("YouTubeInfinite", false)
-  const [recomm, setRecomm] =
-    useChromeStorageLocal("YouTubeRecomm", false)
+    useChromeStorageLocal(constants.YouTubeInfinite, false)
   const [notif, setNotif] =
-    useChromeStorageLocal("YouTubeNotif", false);
+    useChromeStorageLocal(constants.YouTubeNotif, false);
   const [feed, setFeed] =
-    useChromeStorageLocal("YouTubeFeed", false);
+    useChromeStorageLocal(constants.YouTubeFeed, false);
   const [desaturate, setDesaturate] =
-    useChromeStorageLocal("YouTubeDesaturate", false);
+    useChromeStorageLocal(constants.YouTubeDesaturate, false);
 
   return (
     <div>
@@ -409,12 +396,12 @@ function YouTubeSwitches() {
       /> */}
       <YouTubeCompactLayoutToggleSwitch
         label="Compact layout"
-        storage_var="YouTubeCompact"
+        storage_var={constants.YouTubeCompact}
         checked={compact}
         update={setCompact}
 
         label_comm="Remove video comments"
-        storage_var_comm="YouTubeComments"
+        storage_var_comm={constants.YouTubeComments}
         checked_comm={comments}
         update_comm={setComments}
       />
@@ -432,25 +419,25 @@ function YouTubeSwitches() {
       /> */}
       <ToggleSwitch
         label="Hide notifications"
-        storage_var="YouTubeNotif"
+        storage_var={constants.YouTubeNotif}
         checked={notif}
         update={setNotif}
       />
       <ToggleSwitch
         label="Homepage finite scrolling"
-        storage_var="YouTubeInfinite"
+        storage_var={constants.YouTubeInfinite}
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
         label="Hide homepage feeds"
-        storage_var="YouTubeFeed"
+        storage_var={constants.YouTubeFeed}
         checked={feed}
         update={setFeed}
       />
       <ToggleSwitch
         label="Desaturate"
-        storage_var="YouTubeDesaturate"
+        storage_var={constants.YouTubeDesaturate}
         checked={desaturate}
         update={setDesaturate}
       />
@@ -462,19 +449,19 @@ function TwitterSwitches() {
   // const [readOnly, setReadOnly] =
   //   useChromeStorageLocal("TwitterReadOnly", false);
   const [compact, setCompact] =
-    useChromeStorageLocal("TwitterCompact", false);
+    useChromeStorageLocal(constants.TwitterCompact, false);
   const [finite, setFinite] =
-    useChromeStorageLocal("TwitterInfinite", false);
+    useChromeStorageLocal(constants.TwitterInfinite, false);
   const [notif, setNotif] =
-    useChromeStorageLocal("TwitterNotif", false);
+    useChromeStorageLocal(constants.TwitterNotif, false);
   const [clutter, setClutter] =
-    useChromeStorageLocal("TwitterClutter", false);
+    useChromeStorageLocal(constants.TwitterClutter, false);
   const [recomm, setRecomm] =
-    useChromeStorageLocal("TwitterRecomm", false);
+    useChromeStorageLocal(constants.TwitterRecomm, false);
   const [feed, setFeed] =
-    useChromeStorageLocal("TwitterFeed", false);
+    useChromeStorageLocal(constants.TwitterFeed, false);
   const [desaturate, setDesaturate] =
-    useChromeStorageLocal("TwitterDesaturate", false);
+    useChromeStorageLocal(constants.TwitterDesaturate, false);
 
   return (
     <div>
@@ -486,7 +473,7 @@ function TwitterSwitches() {
       /> */}
       <ToggleSwitch
         label="Compact layout"
-        storage_var="TwitterCompact"
+        storage_var={constants.TwitterCompact}
         checked={compact}
         update={setCompact}
       />
@@ -504,25 +491,25 @@ function TwitterSwitches() {
       /> */}
       <ToggleSwitch
         label="Hide notifications"
-        storage_var="TwitterNotif"
+        storage_var={constants.TwitterNotif}
         checked={notif}
         update={setNotif}
       />
       <ToggleSwitch
         label="Homepage finite scrolling"
-        storage_var="TwitterInfinite"
+        storage_var={constants.TwitterInfinite}
         checked={finite}
         update={setFinite}
       />
       <ToggleSwitch
         label="Hide homepage feeds"
-        storage_var="TwitterFeed"
+        storage_var={constants.TwitterFeed}
         checked={feed}
         update={setFeed}
       />
       <ToggleSwitch
         label="Desaturate"
-        storage_var="TwitterDesaturate"
+        storage_var={constants.TwitterDesaturate}
         checked={desaturate}
         update={setDesaturate}
       />
@@ -532,41 +519,41 @@ function TwitterSwitches() {
 
 function AutoPlaySwitch() {
   const [twitterAutoplay] =
-    useChromeStorageLocal("TwitterAutoplay", false);
+    useChromeStorageLocal(constants.TwitterAutoplay, false);
   const [setTwitterAutoplay] =
-    useChromeStorageLocal("SetTwitterAutoplay", false);
+    useChromeStorageLocal(constants.SetTwitterAutoplay, false);
   const [linkedInAutoplay] =
-    useChromeStorageLocal("LinkedInAutoplay", false);
+    useChromeStorageLocal(constants.LinkedInAutoplay, false);
   const [setLinkedInAutoplay] =
-    useChromeStorageLocal("SetLinkedInAutoplay", false);
+    useChromeStorageLocal(constants.SetLinkedInAutoplay, false);
   const [facebookAutoplay] =
-    useChromeStorageLocal("FacebookAutoplay", false);
+    useChromeStorageLocal(constants.FacebookAutoplay, false);
   const [setFacebookAutoplay] =
-    useChromeStorageLocal("SetFacebookAutoplay", false);
+    useChromeStorageLocal(constants.SetFacebookAutoplay, false);
   const [youTubeAutoplay, setYouTubeAutoplay] =
-    useChromeStorageLocal("YouTubeAutoplay", false);
+    useChromeStorageLocal(constants.YouTubeAutoplay, false);
 
   return (
     <div>
 
       <ButtonSwitch
-        label="Twitter"
-        storage_var="TwitterAutoplay"
+        label={constants.Twitter}
+        storage_var={constants.TwitterAutoplay}
         current_status={twitterAutoplay}
       />
       <ButtonSwitch
-        label="LinkedIn"
-        storage_var="LinkedInAutoplay"
+        label={constants.LinkedIn}
+        storage_var={constants.LinkedInAutoplay}
         current_status={linkedInAutoplay}
       />
       <ButtonSwitch
-        label="Facebook"
-        storage_var="FacebookAutoplay"
+        label={constants.Facebook}
+        storage_var={constants.FacebookAutoplay}
         current_status={facebookAutoplay}
       />
       <ToggleSwitch
-        label="YouTube"
-        storage_var="YouTubeAutoplay"
+        label={constants.YouTube}
+        storage_var={constants.YouTubeAutoplay}
         checked={youTubeAutoplay}
         update={setYouTubeAutoplay}
       />
@@ -649,7 +636,7 @@ function ExpandableMenu({ name, matchURL, Switches }) {
 }
 
 function IndexPopup() {
-  const [enabled, setEnabled] = useChromeStorageLocal("Enable", false);
+  const [enabled, setEnabled] = useChromeStorageLocal(constants.Enable, false);
 
   return (
     <div
@@ -682,7 +669,7 @@ function IndexPopup() {
             </div>
           </div>
           <div className="has-text-centered">
-            <h2 className="title is-6"> {extName}</h2>
+            <h2 className="title is-6"> {constants.ExtName}</h2>
           </div>
         </div>
       </div>
@@ -715,8 +702,8 @@ function IndexPopup() {
       </div>
 
       <GlobalSwitch
-        label="Purpose Mode"
-        storage_var="Enable"
+        label={constants.ExtName}
+        storage_var={constants.Enable}
         checked={enabled}
         update={setEnabled}
       />
@@ -724,25 +711,25 @@ function IndexPopup() {
         enabled &&
         <div>
           <ExpandableMenu
-            name="Twitter"
+            name={constants.Twitter}
             matchURL="https://twitter.com"
             Switches={TwitterSwitches}
           />
 
           <ExpandableMenu
-            name="YouTube"
+            name={constants.YouTube}
             matchURL="https://www.youtube.com"
             Switches={YouTubeSwitches}
           />
 
           <ExpandableMenu
-            name="Facebook"
+            name={constants.Facebook}
             matchURL="https://www.facebook.com"
             Switches={FacebookSwitches}
           />
 
           <ExpandableMenu
-            name="LinkedIn"
+            name={constants.LinkedIn}
             matchURL="https://www.linkedin.com"
             Switches={LinkedInSwitches}
           />
