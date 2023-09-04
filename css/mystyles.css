@@ -3019,8 +3019,7 @@ a.tag:hover {
   position: relative; }
 
 .card-content {
-  background-color: transparent;
-  padding: 1.5rem; }
+  background-color: transparent; }
 
 .card-footer {
   background-color: transparent;
