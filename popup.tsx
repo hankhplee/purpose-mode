@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { useCollapse } from "react-collapsed";
 import { sendToContentScript } from "@plasmohq/messaging"
 import { sendToBackground } from "@plasmohq/messaging"
@@ -8,7 +8,6 @@ import "./css/ToggleSwitch.css";
 import "./css/mystyles.css";
 import yesIcon from "data-base64:~assets/yes.png";
 import noIcon from "data-base64:~assets/no.png";
-import setting from "data-base64:~assets/settings.png";
 import upIcon from "data-base64:~assets/up.png";
 import downIcon from "data-base64:~assets/down.png";
 
@@ -35,7 +34,7 @@ function ToggleSwitch({ label, storage_var, checked, update }) {
             onChange={(e) => {
               update(e.target.checked);
               setBool(storage_var, e.target.checked);
-              const resp = sendToContentScript({
+              sendToContentScript({
                 name: "toggle",
                 body: { "button": storage_var, "state": e.target.checked }
               })
@@ -72,11 +71,11 @@ function YouTubeCompactLayoutToggleSwitch({ label, storage_var, checked, update,
                 update_comm(e.target.checked);
                 setBool(storage_var, e.target.checked);
                 setBool(storage_var_comm, e.target.checked);
-                const resp = sendToContentScript({
+                sendToContentScript({
                   name: "toggle",
                   body: { "button": storage_var, "state": e.target.checked }
                 })
-                const resp_comm = sendToContentScript({
+                sendToContentScript({
                   name: "toggle",
                   body: { "button": storage_var_comm, "state": e.target.checked }
                 })
@@ -153,11 +152,6 @@ function GlobalSwitch({ label, storage_var, checked, update }) {
             {label}
           </span>
         </div>
-        {/* <div className="column">
-          <span className={"tag is-light " + switchColor}>
-            {switchText}
-          </span>
-        </div> */}
         <div className="column">
           <div className="toggle-switch">
             <input type="checkbox"
@@ -168,7 +162,7 @@ function GlobalSwitch({ label, storage_var, checked, update }) {
               onChange={(e) => {
                 update(e.target.checked);
                 setBool(storage_var, e.target.checked);
-                const resp = sendToContentScript({
+                sendToContentScript({
                   name: "toggle",
                   body: { "button": storage_var, "state": e.target.checked }
                 })
@@ -218,10 +212,13 @@ function ButtonSwitch({ label, storage_var, current_status }) {
       <div className="column">
         <button id={storage_var}
           className={buttonClass}
-          onClick={(e) => {
-            const resp = sendToBackground({
+          onClick={() => {
+            sendToBackground({
               name: "autoplay",
-              body: { "site": storage_var, "state": !current_status }
+              body: {
+                "site": storage_var,
+                "state": !current_status
+              }
             })
           }}
         >{buttonText}</button>
@@ -241,8 +238,6 @@ function FacebookSwitches() {
     useChromeStorageLocal(constants.FacebookFeed, false);
   const [desaturate, setDesaturate] =
     useChromeStorageLocal(constants.FacebookDesaturate, false);
-  // const [comments, setComments] =
-  //   useChromeStorageLocal("FacebookComments", false);
 
   return (
     <div className="content">
@@ -252,18 +247,6 @@ function FacebookSwitches() {
         checked={compact}
         update={setCompact}
       />
-      {/* <ToggleSwitch
-       label="Declutter"
-       storage_var="FacebookDeclutter"
-       checked={declutter}
-       update={setDeclutter}
-      />
-      <ToggleSwitch
-       label="Hide newsfeed recommendations"
-       storage_var="FacebookRecomms"
-       checked={recomms}
-       update={setRecomms}
-      /> */}
       <ToggleSwitch
         label="Hide notifications"
         storage_var={constants.FacebookNotif}
@@ -288,12 +271,6 @@ function FacebookSwitches() {
         checked={desaturate}
         update={setDesaturate}
       />
-      {/* <ToggleSwitch
-       label="Hide comments"
-       storage_var="FacebookComments"
-       checked={comments}
-       update={setComments}
-      /> */}
     </div>
   )
 }
@@ -309,8 +286,6 @@ function LinkedInSwitches() {
     useChromeStorageLocal(constants.LinkedInFeed, false);
   const [desaturate, setDesaturate] =
     useChromeStorageLocal(constants.LinkedInDesaturate, false);
-  // const [comments, setComments] =
-  //   useChromeStorageLocal("LinkedInComments", false);
 
   return (
     <div>
@@ -320,18 +295,6 @@ function LinkedInSwitches() {
         checked={compact}
         update={setCompact}
       />
-      {/* <ToggleSwitch
-        label="Declutter"
-        storage_var="LinkedInDeclutter"
-        checked={declutter}
-        update={setDeclutter}
-      />
-      <ToggleSwitch
-       label="Hide sidebar recommendations"
-       storage_var="LinkedInRecomms"
-       checked={recomms}
-       update={setRecomms}
-      /> */}
       <ToggleSwitch
         label="Hide notifications"
         storage_var={constants.LinkedInNotif}
@@ -356,12 +319,6 @@ function LinkedInSwitches() {
         checked={desaturate}
         update={setDesaturate}
       />
-      {/* <ToggleSwitch
-       label="Hide comments"
-       storage_var="LinkedInComments"
-       checked={comments}
-       update={setComments}
-      /> */}
     </div>
   )
 }
@@ -382,18 +339,6 @@ function YouTubeSwitches() {
 
   return (
     <div>
-      {/* <ToggleSwitch
-       label="Compact layout"
-       storage_var="YouTubeCompact"
-       checked={compact}
-       update={setCompact}
-      />
-      <SmallToggleSwitch
-       label="Remove video comments"
-       storage_var="YouTubeComments"
-       checked={comments}
-       update={setComments}
-      /> */}
       <YouTubeCompactLayoutToggleSwitch
         label="Compact layout"
         storage_var={constants.YouTubeCompact}
@@ -405,18 +350,6 @@ function YouTubeSwitches() {
         checked_comm={comments}
         update_comm={setComments}
       />
-      {/* <ToggleSwitch
-       label="Declutter"
-       storage_var="YouTubeDeclutter"
-       checked={declutter}
-       update={setDeclutter}
-      />
-      <ToggleSwitch
-       label="Hide video recommendations"
-       storage_var="YouTubeRecomm"
-       checked={recomm}
-       update={setRecomm}
-      /> */}
       <ToggleSwitch
         label="Hide notifications"
         storage_var={constants.YouTubeNotif}
@@ -446,8 +379,6 @@ function YouTubeSwitches() {
 }
 
 function TwitterSwitches() {
-  // const [readOnly, setReadOnly] =
-  //   useChromeStorageLocal("TwitterReadOnly", false);
   const [compact, setCompact] =
     useChromeStorageLocal(constants.TwitterCompact, false);
   const [finite, setFinite] =
@@ -465,30 +396,12 @@ function TwitterSwitches() {
 
   return (
     <div>
-      {/* <ToggleSwitch
-        label="Read only"
-        storage_var="TwitterReadOnly"
-        checked={readOnly}
-        update={setReadOnly}
-      /> */}
       <ToggleSwitch
         label="Compact layout"
         storage_var={constants.TwitterCompact}
         checked={compact}
         update={setCompact}
       />
-      {/* <ToggleSwitch
-        label="Declutter"
-        storage_var="TwitterClutter"
-        checked={clutter}
-        update={setClutter}
-      />
-      <ToggleSwitch
-       label="Hide sidebar recommendations"
-       storage_var="TwitterRecomm"
-       checked={recomm}
-       update={setRecomm}
-      /> */}
       <ToggleSwitch
         label="Hide notifications"
         storage_var={constants.TwitterNotif}
@@ -520,16 +433,10 @@ function TwitterSwitches() {
 function AutoPlaySwitch() {
   const [twitterAutoplay] =
     useChromeStorageLocal(constants.TwitterAutoplay, false);
-  const [setTwitterAutoplay] =
-    useChromeStorageLocal(constants.SetTwitterAutoplay, false);
   const [linkedInAutoplay] =
     useChromeStorageLocal(constants.LinkedInAutoplay, false);
-  const [setLinkedInAutoplay] =
-    useChromeStorageLocal(constants.SetLinkedInAutoplay, false);
   const [facebookAutoplay] =
     useChromeStorageLocal(constants.FacebookAutoplay, false);
-  const [setFacebookAutoplay] =
-    useChromeStorageLocal(constants.SetFacebookAutoplay, false);
   const [youTubeAutoplay, setYouTubeAutoplay] =
     useChromeStorageLocal(constants.YouTubeAutoplay, false);
 
@@ -591,7 +498,7 @@ function ExpandableMenu({ name, matchURL, Switches }) {
       if (matchURL === "") {
         setExpanded(false);
       }
-      else if (url.includes(matchURL)) {
+      else if (url !== undefined && url.includes(matchURL)) {
         setExpanded(true);
       }
     }
@@ -641,8 +548,6 @@ function IndexPopup() {
   return (
     <div
       style={{
-        // display: "flex",
-        // flexDirection: "column",
         padding: 16,
         width: "300px"
       }}>
@@ -650,11 +555,6 @@ function IndexPopup() {
         <div>
           <div className="has-text-right">
             <div id="dropdown_setting" className="dropdown is-right">
-              <div className="dropdown-trigger">
-                <span>
-                  {/* <img id="setting_trigger" style={{cursor:"pointer"}} src={setting} /> */}
-                </span>
-              </div>
               <div className="dropdown-menu" id="dropdown-menu" role="menu">
                 <div className="dropdown-content has-text-centered">
                   <div className="dropdown-item">
@@ -673,25 +573,6 @@ function IndexPopup() {
           </div>
         </div>
       </div>
-      <nav className="level is-mobile">
-        {/* <div className="level-item has-text-centered">
-        <div>
-          <p className="heading">Today Answered</p>
-          <p id="numTodayAnswered">0</p>
-        </div>
-      </div>
-      <div className="level-item has-text-centered">
-        <div>
-          <p className="heading">Total Answered</p>
-          <p id="numTotalAnswered">0</p>
-        </div>
-      </div> */}
-      </nav>
-      {/* <nav className="level is-mobile">
-      <div className="level-item has-text-centered">
-        <button className="button is-info is-small" id="questionnaire">Questionnaire</button>
-      </div>
-    </nav> */}
 
       <div className="block">
         <ExpandableMenu
