@@ -95,7 +95,7 @@ function YouTubeCompactLayoutToggleSwitch({ label, storage_var, checked, update,
           <div className="column is-two-thirds">
             <span className="tag is-rounded is-light"
               style={{ fontSize: ".65rem" }}>
-            > {label_comm}
+              {label_comm}
             </span>
           </div>
           <div className="column">
