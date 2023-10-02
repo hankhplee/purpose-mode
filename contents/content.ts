@@ -1,5 +1,5 @@
 import $ from "jquery";
-import "../finite_scroll_style.css";
+import "../css/finite_scroll_style.css";
 import twitterIcon from "data-base64:~assets/twitter.ico";
 
 const extName = "Purpose Mode";
