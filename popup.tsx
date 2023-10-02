@@ -568,9 +568,6 @@ function IndexPopup() {
               </div>
             </div>
           </div>
-          <div className="has-text-centered">
-            <h2 className="title is-6"> {constants.ExtName}</h2>
-          </div>
         </div>
       </div>
 
