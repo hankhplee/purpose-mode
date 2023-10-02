@@ -1,8 +1,8 @@
 import type { PlasmoCSConfig } from "plasmo"
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://twitter.com/*"],
-    world: "MAIN",
+  matches: ["https://twitter.com/*"],
+  world: "MAIN",
 }
 
 console.log(__filename + " running.");
@@ -26,8 +26,8 @@ function maybePatchWinSize() {
   if (spoof) {
     width = Math.min(document.documentElement.offsetWidth || 800, 800)
     if (window.innerWidth === width &&
-        document.documentElement.clientWidth === width) {
-        return;
+      document.documentElement.clientWidth === width) {
+      return;
     }
   } else {
     width = document.documentElement.offsetWidth

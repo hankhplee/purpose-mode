@@ -1,50 +1,36 @@
 import $ from "jquery";
 import "../css/finite_scroll_style.css";
+import * as constants from "../constants";
+
 import twitterIcon from "data-base64:~assets/twitter.ico";
 
-const extName = "Purpose Mode";
-const settingToHandler = {
-    "Enable":            onToggleEnable,
+var settingToHandler = {};
+settingToHandler[constants.Enable] = onToggleEnable;
 
-    "Desaturate":        onToggleDesaturate,
+settingToHandler[constants.TwitterCompact] = onToggleTwitterCompact;
+settingToHandler[constants.TwitterInfinite] = onToggleTwitterInfinite;
+settingToHandler[constants.TwitterNotif] = onToggleTwitterNotif;
+settingToHandler[constants.TwitterFeed] = onToggleTwitterFeed;
+settingToHandler[constants.TwitterDesaturate] = onToggleTwitterDesaturate;
 
-    "TwitterCompact":    onToggleTwitterCompact,
-    // "TwitterReadOnly":   onToggleTwitterReadOnly,
-    // "TwitterClutter":    onToggleTwitterClutter,
-    // "TwitterRecomm":     onToggleTwitterRecomm,
-    "TwitterInfinite":   onToggleTwitterInfinite,
-    "TwitterNotif":      onToggleTwitterNotif,
-    "TwitterFeed":       onToggleTwitterFeed,
-    "TwitterDesaturate": onToggleTwitterDesaturate,
+settingToHandler[constants.LinkedInCompact] = onToggleLinkedInCompact;
+settingToHandler[constants.LinkedInInfinite] = onToggleLinkedInInfinite;
+settingToHandler[constants.LinkedInNotif] = onToggleLinkedInNotif;
+settingToHandler[constants.LinkedInFeed] = onToggleLinkedInFeed;
+settingToHandler[constants.LinkedInDesaturate] = onToggleLinkedInDesaturate;
 
-    "LinkedInCompact":   onToggleLinkedInCompact,
-    // "LinkedInDeclutter": onToggleLinkedInDeclutter,
-    // "LinkedInRecomms":   onToggleLinkedInRecomms,
-    "LinkedInInfinite":  onToggleLinkedInInfinite,
-    "LinkedInNotif":     onToggleLinkedInNotif,
-    "LinkedInFeed":      onToggleLinkedInFeed,
-    "LinkedInDesaturate":onToggleLinkedInDesaturate,
-    // "LinkedInComments":  onToggleLinkedInComments,
+settingToHandler[constants.FacebookCompact] = onToggleFacebookCompact;
+settingToHandler[constants.FacebookInfinite] = onToggleFacebookInfinite;
+settingToHandler[constants.FacebookNotif] = onToggleFacebookNotif;
+settingToHandler[constants.FacebookFeed] = onToggleFacebookFeed;
+settingToHandler[constants.FacebookDesaturate] = onToggleFacebookDesaturate;
 
-    "FacebookCompact":   onToggleFacebookCompact,
-    // "FacebookDeclutter": onToggleFacebookDeclutter,
-    // "FacebookRecomms":   onToggleFacebookRecomms,
-    "FacebookInfinite":  onToggleFacebookInfinite,
-    "FacebookNotif":     onToggleFacebookNotif,
-    "FacebookFeed":      onToggleFacebookFeed,
-    "FacebookDesaturate":onToggleFacebookDesaturate,
-    // "FacebookComments":  onToggleFacebookComments,
+settingToHandler[constants.YouTubeCompact] = onToggleYouTubeCompact;
+settingToHandler[constants.YouTubeInfinite] = onToggleYouTubeInfinite;
+settingToHandler[constants.YouTubeNotif] = onToggleYouTubeNotif;
+settingToHandler[constants.YouTubeFeed] = onToggleYouTubeFeed;
+settingToHandler[constants.YouTubeDesaturate] = onToggleYouTubeDesaturate;
 
-    "YouTubeAutoplay":   onYouTubeAutoPlay,
-    "YouTubeCompact":    onToggleYouTubeCompact,
-    "YouTubeComments":  onToggleYouTubeComments,
-    // "YouTubeDeclutter":  onToggleYouTubeDeclutter,
-    // "YouTubeRecomm":     onToggleYouTubeRecomm,
-    "YouTubeInfinite":   onToggleYouTubeInfinite,
-    "YouTubeNotif":      onToggleYouTubeNotif,
-    "YouTubeFeed":       onToggleYouTubeFeed,
-    "YouTubeDesaturate": onToggleYouTubeDesaturate,
-}
 
 let isEnabled = false;
 let feedHeight = 2500;
@@ -66,17 +52,17 @@ function showSelectors(selectors: Array<JQuery>) {
 function getCurrentPage(): string {
     const currentWindowURL = window.location.href;
     if (currentWindowURL.includes("https://twitter.com") ||
-        currentWindowURL.includes("https://x.com")){
-        return "Twitter";
+        currentWindowURL.includes("https://x.com")) {
+        return constants.Twitter;
     }
-    else if (currentWindowURL.includes("facebook.com")){
-        return "Facebook";
+    else if (currentWindowURL.includes("facebook.com")) {
+        return constants.Facebook;
     }
-    else if (currentWindowURL.includes("youtube.com")){
-        return "YouTube";
+    else if (currentWindowURL.includes("youtube.com")) {
+        return constants.YouTube;
     }
-    else if (currentWindowURL.includes("linkedin.com")){
-        return "LinkedIn";
+    else if (currentWindowURL.includes("linkedin.com")) {
+        return constants.LinkedIn;
     } else {
         return "NA";
     }
@@ -88,40 +74,40 @@ function isHomePage(): boolean {
         currentWindowURL.includes("https://x.com/home") ||
         currentWindowURL === "https://www.facebook.com/" ||
         currentWindowURL === "https://www.youtube.com/" || currentWindowURL === "https://www.youtube.com/?bp=wgUCEAE%3D" ||
-        currentWindowURL === "https://www.linkedin.com/feed/"){
+        currentWindowURL === "https://www.linkedin.com/feed/") {
         return true;
     } else {
         return false;
     }
 }
 
-function isYouTubeVideo(): boolean{
+function isYouTubeVideo(): boolean {
     const currentWindowURL = window.location.href;
-    if (currentWindowURL.includes("https://www.youtube.com/watch?")){
+    if (currentWindowURL.includes("https://www.youtube.com/watch?")) {
         return true;
     }
-    else{
+    else {
         return false;
     }
 }
 
-function isYouTubeSearch(): boolean{
+function isYouTubeSearch(): boolean {
     const currentWindowURL = window.location.href;
-    if (currentWindowURL.includes("results?search_query")){
+    if (currentWindowURL.includes("results?search_query")) {
         return true;
     }
-    else{
+    else {
         return false;
     }
 }
 
-function isAutoPlaySettingPage() : boolean {
+function isAutoPlaySettingPage(): boolean {
     const currentWindowURL = window.location.href;
     if (currentWindowURL.includes("https://x.com/settings/autoplay") ||
-        currentWindowURL.includes("https://twitter.com/settings/autoplay") || 
-        currentWindowURL.includes("https://www.linkedin.com/mypreferences/d/settings/autoplay-videos") || 
+        currentWindowURL.includes("https://twitter.com/settings/autoplay") ||
+        currentWindowURL.includes("https://www.linkedin.com/mypreferences/d/settings/autoplay-videos") ||
         currentWindowURL.includes("https://www.facebook.com/settings?tab=videos")
-        ){
+    ) {
         return true;
     } else {
         return false;
@@ -133,12 +119,12 @@ function getContainer() {
     return new Promise((resolve) => {
         const currentWindowURL = window.location.href;
         // Twitter autoplay setting page
-        if(currentWindowURL.includes("https://twitter.com/settings/autoplay") ||
-           currentWindowURL.includes("https://x.com/settings/autoplay")){
+        if (currentWindowURL.includes("https://twitter.com/settings/autoplay") ||
+            currentWindowURL.includes("https://x.com/settings/autoplay")) {
             const y = document;
             resolve(y);
         }
-        else if (currentPage == "Twitter") {
+        else if (currentPage == constants.Twitter) {
             const x = $('section[aria-labelledby]');
             if (x.length === 0 || x.find("article").length === 0) {
                 setTimeout(() => { resolve(getContainer()); }, 100);
@@ -146,21 +132,21 @@ function getContainer() {
             }
             const y = x.children("div[aria-label]").first().children().first();
             resolve(y);
-        } else if (currentPage == "Facebook") {
+        } else if (currentPage == constants.Facebook) {
             const y = $('div[role="main"]');
             if (y.length === 0) {
                 setTimeout(() => { resolve(getContainer()); }, 100);
                 return;
             }
             resolve(y);
-        } else if (currentPage == "YouTube") {
+        } else if (currentPage == constants.YouTube) {
             const y = $("#content");
             if (y.length === 0) {
                 setTimeout(() => { resolve(getContainer()); }, 100);
                 return;
             }
             resolve(y);
-        } else if (currentPage == "LinkedIn") {
+        } else if (currentPage == constants.LinkedIn) {
             if (isHomePage()) {
                 // const y = $('main[aria-label]');
                 const y = $('div.application-outlet');
@@ -188,47 +174,47 @@ const updateFacebookShowMore = (container) => {
     const button = $("#tisd-show-more");
     feedHeight = parseInt(container.css('height'));
     container.css("max-height", `${feedHeight}px`);
-    button.css("top", `${feedHeight+containerTop-100}px`);
+    button.css("top", `${feedHeight + containerTop - 100}px`);
 }
 
 function showMore(container: JQuery<HTMLElement>, button: JQuery<HTMLElement>) {
     feedHeight += showMoreIncrement;
     container.css("max-height", `${feedHeight}px`);
-    if (currentPage == "Facebook"
+    if (currentPage == constants.Facebook
         && parseInt(container.css('height')) < feedHeight) {
         const button = $("#tisd-show-more");
         feedHeight = parseInt(container.css('height'));
         container.css("max-height", `${feedHeight}px`);
-        button.css("top", `${feedHeight+containerTop-100}px`);
+        button.css("top", `${feedHeight + containerTop - 100}px`);
     }
-    if (currentPage == "Twitter") {
+    if (currentPage == constants.Twitter) {
         container.css("min-height", `${feedHeight}px`);
     }
-    button.css("top", `${feedHeight+containerTop-100}px`);
+    button.css("top", `${feedHeight + containerTop - 100}px`);
 };
 
 function populateMutationKeys(site: string): Array<string> {
     switch (site) {
-        case "Facebook":
+        case constants.Facebook:
             return [
                 "FacebookCompact",
                 "FacebookNotif",
                 "FacebookFeed",
                 "FacebookComments",
             ];
-        case "LinkedIn":
+        case constants.LinkedIn:
             return [
                 "LinkedInCompact",
                 "LinkedInNotif",
                 "LinkedInFeed",
                 "LinkedInComments",
             ];
-        case "Twitter":
+        case constants.Twitter:
             return [
                 "TwitterNotif",
                 "TwitterFeed",
             ];
-        case "YouTube":
+        case constants.YouTube:
             return [
                 "YouTubeCompact",
                 "YouTubeComments",
@@ -244,9 +230,9 @@ function populateMutationKeys(site: string): Array<string> {
 // that our mutation observer should run for each mutation.
 const mutationKeys = populateMutationKeys(getCurrentPage());
 
-var mutationObserver = new MutationObserver(function(mutations) {
+var mutationObserver = new MutationObserver(function (mutations) {
     // For each page mutation, invoke relevant toggle functions if enabled.
-    mutations.forEach(function(mutation) {
+    mutations.forEach(function (mutation) {
         if (!isEnabled || mutationKeys.length === 0) {
             return;
         }
@@ -272,7 +258,7 @@ var mutationObserver = new MutationObserver(function(mutations) {
     });
 
     // For autoplay page, invoke autoplay setting
-    if(isAutoPlaySettingPage() && currentPage!="Facebook"){
+    if (isAutoPlaySettingPage() && currentPage != constants.Facebook) {
         setAutoPlay();
     }
 });
@@ -289,43 +275,43 @@ function toggleInfScrolling(toggled: boolean) {
 }
 
 const checkBackgroundColorDark = () => {
-    if(currentPage == "Twitter"){
+    if (currentPage == constants.Twitter) {
         const bgColor = $("body").css("background-color");
         if (bgColor === "rgb(21, 32, 43)" || bgColor === "rgb(0, 0, 0)") {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-    else if(currentPage == "Facebook"){
+    else if (currentPage == constants.Facebook) {
         const bgColor = $("body").css("background-color");
         if (bgColor === "rgb(24, 25, 26)") {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-    else if (currentPage == "YouTube"){
+    else if (currentPage == constants.YouTube) {
         const bgColor = $("ytd-app").css("background");
         if (bgColor.includes("rgb(15, 15, 15)")) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-    else if (currentPage == "LinkedIn"){
+    else if (currentPage == constants.LinkedIn) {
         const bgColor = $("body").css("background-color");
-        if (bgColor.includes("rgb(0, 0, 0)")){
+        if (bgColor.includes("rgb(0, 0, 0)")) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-    else{
+    else {
         console.error("Unknown page to enable purpose mode!");
     }
 }
@@ -338,7 +324,7 @@ function resetInfScrolling(container: JQuery<HTMLElement>) {
     });
 
     const button = $("#tisd-show-more");
-    if(button){
+    if (button) {
         button.remove();
     }
     feedHeight = 2500;
@@ -349,18 +335,18 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
         return;
     }
 
-    if (currentPage === "Twitter") {
+    if (currentPage === constants.Twitter) {
         container.css("min-height", `${feedHeight}px`);
     }
     container.css("max-height", `${feedHeight}px`);
-    if (currentPage === "Facebook"
+    if (currentPage === constants.Facebook
         && parseInt(container.css('height')) < feedHeight) {
         updateFacebookShowMore(container);
     }
     containerTop = 0;
-    if (container){
+    if (container) {
         var position = container.position();
-        if (position){containerTop = position.top;}
+        if (position) { containerTop = position.top; }
     }
 
     if (isAlreadyManipulated(container)) {
@@ -369,9 +355,9 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
 
     container.css({
         "max-height": `${feedHeight}px`,
-        "overflow":   "hidden",
+        "overflow": "hidden",
     });
-    if (currentPage === "Twitter") {
+    if (currentPage === constants.Twitter) {
         container.css("min-height", `${feedHeight}px`);
     }
 
@@ -382,15 +368,15 @@ function stopInfScrolling(container: JQuery<HTMLElement>) {
     `);
     button.css({
         width: container.width(),
-        top: `${feedHeight+containerTop-100}px`
+        top: `${feedHeight + containerTop - 100}px`
     });
     container.prepend(button);
 
-    if (checkBackgroundColorDark()){
-        button.children("button").css({"color": "rgb(255, 255, 255)", "background-color": "rgba(0 , 0, 0, 0.7)"});
+    if (checkBackgroundColorDark()) {
+        button.children("button").css({ "color": "rgb(255, 255, 255)", "background-color": "rgba(0 , 0, 0, 0.7)" });
     }
-    else{
-        button.children("button").css({"color": "rgb(0, 0, 0)", "background-color": "rgba(255 , 255, 255, 0.7)"});
+    else {
+        button.children("button").css({ "color": "rgb(0, 0, 0)", "background-color": "rgba(255 , 255, 255, 0.7)" });
     }
 
     button.click(() => showMore(container, button));
@@ -411,12 +397,12 @@ var changes = mutationObserver.takeRecords();
 function onToggleEnable(toggled: boolean) {
     isEnabled = toggled;
     chrome.storage.local.get(null, (result) => {
-        console.log(extName + " configuration: ");
+        console.log(constants.ExtName + " configuration: ");
         console.log(result);
     });
 
     if (!toggled) {
-        console.log("Disabling " + extName + ".");
+        console.log("Disabling " + constants.ExtName + ".");
         // Disable all settings.
         for (const key in settingToHandler) {
             if (key === "Enable") {
@@ -425,7 +411,7 @@ function onToggleEnable(toggled: boolean) {
             settingToHandler[key](false);
         }
     } else {
-        console.log("Enabling " + extName + ".");
+        console.log("Enabling " + constants.ExtName + ".");
         // Run whatever settings were previously enabled.
         for (const key in settingToHandler) {
             if (key === "Enable") {
@@ -444,12 +430,12 @@ function onToggleEnable(toggled: boolean) {
     }
 }
 
-function onToggleLinkedInCompactDynamic(toggled: boolean){
-    if (getCurrentPage() != "LinkedIn") {
+function onToggleLinkedInCompactDynamic(toggled: boolean) {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
     if (toggled) {
-        if($('div.scaffold-layout__sidebar').css('display') !== 'none'){
+        if ($('div.scaffold-layout__sidebar').css('display') !== 'none') {
             onToggleLinkedInCompact(toggled);
         }
         let elements = [
@@ -460,8 +446,8 @@ function onToggleLinkedInCompactDynamic(toggled: boolean){
     }
 }
 
-function onToggleLinkedInCompact(toggled: boolean){
-    if (getCurrentPage() != "LinkedIn") {
+function onToggleLinkedInCompact(toggled: boolean) {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
     onToggleLinkedInDeclutter(toggled);
@@ -469,7 +455,7 @@ function onToggleLinkedInCompact(toggled: boolean){
 }
 
 function onToggleLinkedInDeclutter(toggled: boolean) {
-    if (getCurrentPage() != "LinkedIn") {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
 
@@ -485,10 +471,10 @@ function onToggleLinkedInDeclutter(toggled: boolean) {
         // Footer
         $('footer[aria-label="LinkedIn Footer Content"]'),
     ];
-    if(isHomePage()){
+    if (isHomePage()) {
         elements.push($('aside[aria-label="LinkedIn News"]'));
     }
-    else{
+    else {
         elements.push($('footer.global-footer'));
     }
 
@@ -500,7 +486,7 @@ function onToggleLinkedInDeclutter(toggled: boolean) {
 }
 
 function onToggleLinkedInNotif(toggled: boolean) {
-    if (getCurrentPage() != "LinkedIn") {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
 
@@ -512,24 +498,24 @@ function onToggleLinkedInNotif(toggled: boolean) {
     if (toggled) {
         for (const e of elements) { e.hide() }
         // "Red dot" notification icon.
-        $('span.notification-badge--show').each(function() {
-            $( this ).hide();
+        $('span.notification-badge--show').each(function () {
+            $(this).hide();
         });
         // reset window title
-        if(document.title !== "LinkedIn"){
-            document.title = "LinkedIn";
+        if (document.title !== constants.LinkedIn) {
+            document.title = constants.LinkedIn;
         }
     } else {
         for (const e of elements) { e.show() }
         // "Red dot" notification icon.
-        $('span.notification-badge--show').each(function() {
-            $( this ).show();
+        $('span.notification-badge--show').each(function () {
+            $(this).show();
         });
     }
 }
 
 function onToggleLinkedInRecomms(toggled: boolean) {
-    if (getCurrentPage() != "LinkedIn") {
+    if (getCurrentPage() != constants.LinkedIn) {
         return;
     }
 
@@ -537,14 +523,14 @@ function onToggleLinkedInRecomms(toggled: boolean) {
         // LinkedIn news.
         $('section:has(>div>div#feed-news-module)'),
     ];
-    if(!isHomePage()){
+    if (!isHomePage()) {
         // Profile recommendations.
-        $('aside.scaffold-layout__aside').children('section').each(function(){
-            elements.push($( this ));
+        $('aside.scaffold-layout__aside').children('section').each(function () {
+            elements.push($(this));
         });
-        $('aside.scaffold-layout__aside').children('div').each(function(){
-            if(!this.className.includes("profile-info-section")){
-                elements.push($( this ));
+        $('aside.scaffold-layout__aside').children('div').each(function () {
+            if (!this.className.includes("profile-info-section")) {
+                elements.push($(this));
             }
         });
         // Profile advertisements
@@ -565,7 +551,7 @@ function onToggleLinkedInInfinite(toggled: boolean) {
     toggleInfScrolling(toggled);
 }
 
-function onToggleLinkedInFeed(toggled: boolean){
+function onToggleLinkedInFeed(toggled: boolean) {
     const currentWindow = window.top.location.href;
     if (!currentWindow.includes("https://www.linkedin.com/feed/")) {
         return;
@@ -586,7 +572,7 @@ function onToggleLinkedInFeed(toggled: boolean){
 }
 
 function onToggleTwitterReadOnly(toggled: boolean, node: Node) {
-    if (getCurrentPage() != "Twitter") {
+    if (getCurrentPage() != constants.Twitter) {
         return;
     }
     let selectors = [
@@ -606,7 +592,7 @@ function onToggleTwitterReadOnly(toggled: boolean, node: Node) {
 }
 
 function onToggleTwitterCompact(toggled: boolean) {
-    if (getCurrentPage() != "Twitter") {
+    if (getCurrentPage() != constants.Twitter) {
         return;
     }
 
@@ -614,20 +600,20 @@ function onToggleTwitterCompact(toggled: boolean) {
     // world.  Upon receiving this message, the script is going to
     // monkey-patch the window and document API.
     window.postMessage({
-        type:  "FROM_CONTENT_SCRIPT",
+        type: "FROM_CONTENT_SCRIPT",
         toggle: toggled
     }, "*");
 }
 
 function onToggleTwitterInfinite(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
     toggleInfScrolling(toggled);
 }
 
 function onToggleTwitterNotif(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
     const selectors = [
@@ -641,21 +627,21 @@ function onToggleTwitterNotif(toggled: boolean) {
     if (toggled) {
         hideSelectors(selectors);
         // Notifications.
-        $('div[aria-label*="unread"]').each(function(){
-            $( this ).hide();
+        $('div[aria-label*="unread"]').each(function () {
+            $(this).hide();
         });
-        if(document.title !== "Twitter"){
+        if (document.title !== constants.Twitter) {
             // reset window title
-            document.title = "Twitter";
+            document.title = constants.Twitter;
             // reset window icon
             var icon = document.querySelector("link[rel~='icon']");
-            icon.setAttribute('href',twitterIcon);
+            icon.setAttribute('href', twitterIcon);
         }
     } else {
         showSelectors(selectors);
         // Notifications.
-        $('div[aria-label*="unread"]').each(function(){
-            $( this ).show();
+        $('div[aria-label*="unread"]').each(function () {
+            $(this).show();
         });
     }
 }
@@ -673,21 +659,21 @@ function onToggleTwitterFeed(toggled: boolean) {
         feeds.css({
             "visibility": "hidden"
         });
-        selectors.each(function(){
-            $( this ).hide();
+        selectors.each(function () {
+            $(this).hide();
         });
     } else {
         feeds.css({
             "visibility": "visible"
         });
-        selectors.each(function(){
-            $( this ).show();
+        selectors.each(function () {
+            $(this).show();
         });
     }
 }
 
 function onToggleTwitterRecomm(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
 
@@ -705,7 +691,7 @@ function onToggleTwitterRecomm(toggled: boolean) {
 }
 
 function onToggleTwitterClutter(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
 
@@ -727,14 +713,14 @@ function onToggleTwitterClutter(toggled: boolean) {
 }
 
 function onToggleFacebookInfinite(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     toggleInfScrolling(toggled);
 }
 
-function onToggleFacebookCompactDynamic(toggled: boolean){
-    if (getCurrentPage() !== "Facebook") {
+function onToggleFacebookCompactDynamic(toggled: boolean) {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     const selectors = [
@@ -756,12 +742,12 @@ function onToggleFacebookCompactDynamic(toggled: boolean){
 
     if (toggled) {
         // check if need to run FacebookCompactDynamic
-        if($('div[aria-label="Stories"]').parent().parent().css('display') !== 'none'){
+        if ($('div[aria-label="Stories"]').parent().parent().css('display') !== 'none') {
             onToggleFacebookCompact(toggled);
             console.log("Run FacebookCompact");
             return;
         }
-        else{
+        else {
             console.log("Run FacebookCompactDynamic");
         }
 
@@ -769,30 +755,30 @@ function onToggleFacebookCompactDynamic(toggled: boolean){
             s.each(() => { s.hide() });
         }
         // Messenger boxes.
-        $('div[aria-label*="Open chat"').each(function(){
-            $( this ).hide();
+        $('div[aria-label*="Open chat"').each(function () {
+            $(this).hide();
         });
         // "Reels" and short video recommendations. (optimal solution; comment out due to performance issue)
-        $('div[aria-label="Reels"]').each(function(){
-            $( this ).parent().parent().parent().parent().hide();
+        $('div[aria-label="Reels"]').each(function () {
+            $(this).parent().parent().parent().parent().hide();
         });
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
         }
         // Messenger boxes.
-        $('div[aria-label*="Open chat"').each(function(){
-            $( this ).show();
+        $('div[aria-label*="Open chat"').each(function () {
+            $(this).show();
         });
         // // "Reels" and short video recommendations.
-        $('div[aria-label="Reels"]').each(function(){
-            $( this ).parent().parent().parent().parent().show();
+        $('div[aria-label="Reels"]').each(function () {
+            $(this).parent().parent().parent().parent().show();
         });
     }
 }
 
 function onToggleFacebookCompact(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     onToggleFacebookRecomms(toggled);
@@ -800,7 +786,7 @@ function onToggleFacebookCompact(toggled: boolean) {
 }
 
 function onToggleFacebookDeclutter(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     const currentWindowURL = window.location.href;
@@ -829,7 +815,7 @@ function onToggleFacebookDeclutter(toggled: boolean) {
         // New message box.
         $('div[aria-label="New message"'),
     ];
-    if(!currentWindowURL.includes("/photo/")){
+    if (!currentWindowURL.includes("/photo/")) {
         // Right column.
         selectors.push($('div[role="complementary"]'));
     }
@@ -838,21 +824,21 @@ function onToggleFacebookDeclutter(toggled: boolean) {
             s.each(() => { s.hide() });
         }
         // Messenger boxes.
-        $('div[aria-label*="Open chat"').each(function(){
-            $( this ).hide();
+        $('div[aria-label*="Open chat"').each(function () {
+            $(this).hide();
         });
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
         }
         // Messenger boxes.
-        $('div[aria-label*="Open chat"').each(function(){
-            $( this ).show();
+        $('div[aria-label*="Open chat"').each(function () {
+            $(this).show();
         });
     }
 }
 
-function onToggleFacebookFeed(toggled: boolean){
+function onToggleFacebookFeed(toggled: boolean) {
     const currentWindow = window.top.location.href;
     if (currentWindow !== "https://www.facebook.com/") {
         return;
@@ -877,7 +863,7 @@ function onToggleFacebookFeed(toggled: boolean){
 }
 
 function onToggleFacebookComments(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
 
@@ -894,7 +880,7 @@ function onToggleFacebookComments(toggled: boolean) {
 }
 
 function onToggleFacebookRecomms(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
 
@@ -916,22 +902,22 @@ function onToggleFacebookRecomms(toggled: boolean) {
             s.each(() => { s.hide() });
         }
         // "Reels" and short video recommendations.
-        $('div[aria-label="Reels"]').each(function(){
-            $( this ).parent().parent().parent().parent().hide();
+        $('div[aria-label="Reels"]').each(function () {
+            $(this).parent().parent().parent().parent().hide();
         });
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
         }
         // "Reels" and short video recommendations.
-        $('div[aria-label="Reels"]').each(function(){
-            $( this ).parent().parent().parent().parent().show();
+        $('div[aria-label="Reels"]').each(function () {
+            $(this).parent().parent().parent().parent().show();
         });
     }
 }
 
 function onToggleFacebookNotif(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
 
@@ -948,38 +934,38 @@ function onToggleFacebookNotif(toggled: boolean) {
             s.each(() => { s.hide() });
         }
         // DM bubble
-        $('div[aria-label*="Open chat"]').find('div[aria-label*="unread"]').each(function() {
-            $( this ).hide();
+        $('div[aria-label*="Open chat"]').find('div[aria-label*="unread"]').each(function () {
+            $(this).hide();
         });
-        if(document.title !== "Facebook"){
+        if (document.title !== constants.Facebook) {
             // reset window title
-            document.title = "Facebook";
+            document.title = constants.Facebook;
         }
     } else {
         for (const s of selectors) {
             s.each(() => { s.show() });
         }
         // DM bubble
-        $('div[aria-label*="Open chat"]').find('div[aria-label*="unread"]').each(function() {
-            $( this ).show();
+        $('div[aria-label*="Open chat"]').find('div[aria-label*="unread"]').each(function () {
+            $(this).show();
         });
     }
 }
 
 function onToggleYouTubeInfinite(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
-    if(toggled && isHomePage()){
+    if (toggled && isHomePage()) {
         toggleInfScrolling(true);
     }
-    else{
+    else {
         toggleInfScrolling(false);
     }
 }
 
-function onToggleYouTubeFeed(toggled: boolean){
-    if (getCurrentPage() !== "YouTube"){
+function onToggleYouTubeFeed(toggled: boolean) {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
     const selectors = [
@@ -999,17 +985,17 @@ function onToggleYouTubeFeed(toggled: boolean){
     }
 }
 
-function onToggleYouTubeCompact(toggled: boolean){
-    if (getCurrentPage() !== "YouTube") {
+function onToggleYouTubeCompact(toggled: boolean) {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
-    
+
     onToggleYouTubeRecomm(toggled);
     onToggleYouTubeDeclutter(toggled);
 }
 
 function onToggleYouTubeRecomm(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
 
@@ -1030,78 +1016,78 @@ function onToggleYouTubeRecomm(toggled: boolean) {
             $('ytd-banner-promo-renderer'),
             $('ytd-statement-banner-renderer'),
         ]);
-    // Recommendations on the "watch" page.
+        // Recommendations on the "watch" page.
     } else if (watchPage) {
         selectors = selectors.concat([
             // Video recommendations.
             $('div#secondary-inner'),
         ]);
-    } else if (searchPage){
+    } else if (searchPage) {
         selectors = selectors.concat([
             // Recommendation tags on top of the page.
             $('div#scroll-container'),
             // "Next" button of the recommendation tags.
             $('button[aria-label="Next"]'),
         ]);
-    } 
+    }
 
     if (toggled) {
         hideSelectors(selectors);
-        if(homePage){
+        if (homePage) {
             // all section drawers on landing page
-            $('ytd-rich-section-renderer').each(function(){
-                $( this ).hide();
+            $('ytd-rich-section-renderer').each(function () {
+                $(this).hide();
             });
         }
-        else if(searchPage){
+        else if (searchPage) {
             // all shorts on search
-            $('ytd-reel-shelf-renderer').each(function(){
-                $( this ).hide();
+            $('ytd-reel-shelf-renderer').each(function () {
+                $(this).hide();
             });
             // add ads on serach
-            $('ytd-in-feed-ad-layout-renderer').each(function(){
-                $( this ).hide();
+            $('ytd-in-feed-ad-layout-renderer').each(function () {
+                $(this).hide();
             });
             // all shelf recommendations
-            $('ytd-shelf-renderer').each(function(){
-                $( this ).hide();
+            $('ytd-shelf-renderer').each(function () {
+                $(this).hide();
             });
             // card list recommendations
-            $('ytd-horizontal-card-list-renderer').each(function(){
-                $( this ).hide();
+            $('ytd-horizontal-card-list-renderer').each(function () {
+                $(this).hide();
             });
         }
     } else {
         showSelectors(selectors);
-        if(homePage){
+        if (homePage) {
             // all section drawers on landing page
-            $('ytd-rich-section-renderer').each(function(){
-                $( this ).show();
+            $('ytd-rich-section-renderer').each(function () {
+                $(this).show();
             });
         }
-        else if(searchPage){
+        else if (searchPage) {
             // all shorts on search
-            $('ytd-reel-shelf-renderer').each(function(){
-                $( this ).show();
+            $('ytd-reel-shelf-renderer').each(function () {
+                $(this).show();
             });
             // add ads on serach
-            $('ytd-in-feed-ad-layout-renderer').each(function(){
-                $( this ).show();
+            $('ytd-in-feed-ad-layout-renderer').each(function () {
+                $(this).show();
             });
             // all shelf recommendations
-            $('ytd-shelf-renderer').each(function(){
-                $( this ).show();
+            $('ytd-shelf-renderer').each(function () {
+                $(this).show();
             });
             // card list recommendations
-            $('ytd-horizontal-card-list-renderer').each(function(){
-                $( this ).show();
+            $('ytd-horizontal-card-list-renderer').each(function () {
+                $(this).show();
             });
         }
     }
 }
 
 function onToggleYouTubeNotif(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
 
@@ -1113,9 +1099,9 @@ function onToggleYouTubeNotif(toggled: boolean) {
     ]
     if (toggled) {
         hideSelectors(selectors);
-        if(document.title !== "YouTube"){
+        if (document.title !== constants.YouTube) {
             // reset window title
-            document.title = "YouTube";
+            document.title = constants.YouTube;
         }
     } else {
         // Only show the first selector. Showing the second selector results
@@ -1127,7 +1113,7 @@ function onToggleYouTubeNotif(toggled: boolean) {
 }
 
 function onToggleYouTubeDeclutter(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
     const selectors = [
@@ -1145,8 +1131,8 @@ function onToggleYouTubeDeclutter(toggled: boolean) {
     }
 }
 
-function onToggleYouTubeComments(toggled: boolean){
-    if (getCurrentPage() !== "YouTube" || !isYouTubeVideo()) {
+function onToggleYouTubeComments(toggled: boolean) {
+    if (getCurrentPage() !== constants.YouTube || !isYouTubeVideo()) {
         return;
     }
     const selectors = [
@@ -1162,7 +1148,7 @@ function onToggleYouTubeComments(toggled: boolean){
 }
 
 function onToggleDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter" && getCurrentPage() !== "Facebook" && getCurrentPage() !== "YouTube" && getCurrentPage() !== "LinkedIn") {
+    if (getCurrentPage() !== constants.Twitter && getCurrentPage() !== constants.Facebook && getCurrentPage() !== constants.YouTube && getCurrentPage() !== constants.LinkedIn) {
         return;
     }
     let e = $("html");
@@ -1172,39 +1158,39 @@ function onToggleDesaturate(toggled: boolean) {
         console.log("Existing CSS:");
         console.log(e.css("filter"));
         // e.css({"cssText": "filter: saturate(10%)"});
-        e.css({"filter": "saturate(10%)"});
+        e.css({ "filter": "saturate(10%)" });
     } else {
         // e.css({"cssText": "filter: saturate(100%)"});
-        e.css({"filter": "saturate(100%)"});
+        e.css({ "filter": "saturate(100%)" });
     }
 }
 
 function onToggleFacebookDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "Facebook") {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
     let e = $("html");
     if (toggled) {
-        e.css({"filter": "saturate(10%)"});
+        e.css({ "filter": "saturate(10%)" });
     } else {
-        e.css({"filter": "saturate(100%)"});
+        e.css({ "filter": "saturate(100%)" });
     }
 }
 
 function onToggleLinkedInDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "LinkedIn") {
+    if (getCurrentPage() !== constants.LinkedIn) {
         return;
     }
     let e = $("html");
     if (toggled) {
-        e.css({"filter": "saturate(10%)"});
+        e.css({ "filter": "saturate(10%)" });
     } else {
-        e.css({"filter": "saturate(100%)"});
+        e.css({ "filter": "saturate(100%)" });
     }
 }
 
 function onToggleLinkedInComments(toggled: boolean) {
-    if (getCurrentPage() !== "LinkedIn") {
+    if (getCurrentPage() !== constants.LinkedIn) {
         return;
     }
     // The box underneath a post that contains Like/Comment/Repost/Send and
@@ -1218,113 +1204,113 @@ function onToggleLinkedInComments(toggled: boolean) {
 }
 
 function onToggleTwitterDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "Twitter") {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
     let e = $("html");
     if (toggled) {
-        e.css({"filter": "saturate(10%)"});
+        e.css({ "filter": "saturate(10%)" });
     } else {
-        e.css({"filter": "saturate(100%)"});
+        e.css({ "filter": "saturate(100%)" });
     }
 }
 
 function onToggleYouTubeDesaturate(toggled: boolean) {
-    if (getCurrentPage() !== "YouTube") {
+    if (getCurrentPage() !== constants.YouTube) {
         return;
     }
     let e = $("html");
     if (toggled) {
-        e.css({"filter": "saturate(10%)"});
+        e.css({ "filter": "saturate(10%)" });
     } else {
-        e.css({"filter": "saturate(100%)"});
+        e.css({ "filter": "saturate(100%)" });
     }
 }
 
 
-function onToggleTwitterAutoplay(toggled: boolean){
-    if (getCurrentPage() !== "Twitter") {
+function onToggleTwitterAutoplay(toggled: boolean) {
+    if (getCurrentPage() !== constants.Twitter) {
         return;
     }
     let autoPlayToggle;
     let alertMessage;
-    if(toggled === true){
+    if (toggled === true) {
         // autoPlayToggle = $('input:radio[name="video_autoplay"]:nth(1)');
         autoPlayToggle = $('input[aria-posinset="2"]');
         alertMessage = "Autoplay on Twitter has been turned OFF.\nTo turn it back on, please go to the Purpose Mode setting.";
-    }else{
+    } else {
         autoPlayToggle = $('input[aria-posinset="1"]');
         alertMessage = "Autoplay on Twitter has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.";
     }
     // let toggleFlag = autoPlayToggle.is(':checked');
-    if(autoPlayToggle.is(':checked') === false){
+    if (autoPlayToggle.is(':checked') === false) {
         console.log("suppose to click button");
-        autoPlayToggle.parent().on('click', function (){
+        autoPlayToggle.parent().on('click', function () {
             // if(toggleFlag === false){
             //     toggleFlag = true;
             //     chrome.storage.local.set({"TwitterAutoplay": toggled});
             //     alert(alertMessage);
             // }
             // });
-            chrome.storage.local.set({"TwitterAutoplay": toggled});
+            chrome.storage.local.set({ "TwitterAutoplay": toggled });
             alert(alertMessage);
-            });
+        });
         autoPlayToggle.parent().click();
     }
-    chrome.storage.local.set({"TwitterAutoplay": toggled});
-    
+    chrome.storage.local.set({ "TwitterAutoplay": toggled });
+
 }
 
-function onToggleFacebookAutoplay(toggled: boolean){
-    if (getCurrentPage() !== "Facebook") {
+function onToggleFacebookAutoplay(toggled: boolean) {
+    if (getCurrentPage() !== constants.Facebook) {
         return;
     }
-    chrome.storage.local.set({"FacebookAutoplay": toggled});
+    chrome.storage.local.set({ "FacebookAutoplay": toggled });
     let currentToggle;
     let alertMessage;
-    
-    if(toggled === true){
+
+    if (toggled === true) {
         alertMessage = 'Autoplay on Facebook has been turned OFF.\nTo turn it back on, please go to the Purpose Mode setting.\n\n[NOTICE]: To avoid mulfunction, please confirm if "Auto-Play Videos" is set to "Off". If not, please manually do so.';
-    } else{
+    } else {
         alertMessage = 'Autoplay on Facebook has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.\n\n[NOTICE]: To avoid mulfunction, please confirm if "Auto-Play Videos" is set to "Default". If not, please manually do so.';
     }
     let currentToggleTarget;
     setTimeout(() => {
         currentToggleTarget = $('iframe').contents().find('span[id="autoplay_setting"]');
-        if(currentToggleTarget.length === 0){
+        if (currentToggleTarget.length === 0) {
             currentToggleTarget = $('span[id="autoplay_setting"]');
         }
         // let currentToggleText = document.querySelector('span[id="autoplay_setting"]').innerHTML;
         console.log("currentToggleText: ", currentToggleTarget.text());
-        if(currentToggleTarget.text().includes("Off")){
+        if (currentToggleTarget.text().includes("Off")) {
             currentToggle = true;
-        } else if(currentToggleTarget.text().includes("On") || currentToggleTarget.text().includes("Default")){
+        } else if (currentToggleTarget.text().includes("On") || currentToggleTarget.text().includes("Default")) {
             currentToggle = false;
         } else {
             return;
         }
 
-        if(currentToggle !== toggled){
+        if (currentToggle !== toggled) {
             // $('iframe').contents().find('span[id="autoplay_setting"]').click();
             // $('iframe').contents().find('span[id="autoplay_setting"]').click();
             currentToggleTarget.click();
-            
+
             console.log("currentToggleTarget", currentToggleTarget);
             setTimeout(() => {
                 console.log("Delayed for 1 second for the page to refresh.");
                 let autoPlayToggle;
-                if(toggled === true){
+                if (toggled === true) {
                     autoPlayToggle = $('iframe').contents().find('a:has(>span>span:contains("Off"))').parent();// turn off autoplay
-                    if(autoPlayToggle.length === 0){
+                    if (autoPlayToggle.length === 0) {
                         autoPlayToggle = $('a:has(>span>span:contains("Off"))').parent();
                     }
                 } else {
                     autoPlayToggle = autoPlayToggle = $('iframe').contents().find('a:has(>span>span:contains("Default"))').parent(); // turn on autoplay
-                    if(autoPlayToggle.length === 0){
+                    if (autoPlayToggle.length === 0) {
                         autoPlayToggle = $('a:has(>span>span:contains("Default"))').parent();
                     }
                 }
-                console.log("autoPlayToggle",autoPlayToggle);
+                console.log("autoPlayToggle", autoPlayToggle);
                 autoPlayToggle.click();
                 alert(alertMessage);
             }, 1000);
@@ -1335,59 +1321,59 @@ function onToggleFacebookAutoplay(toggled: boolean){
     // }
 }
 
-function onToggleLinkedInAutoplay(toggled: boolean){
-    if (getCurrentPage() !== "LinkedIn") {
+function onToggleLinkedInAutoplay(toggled: boolean) {
+    if (getCurrentPage() !== constants.LinkedIn) {
         return;
     }
     let currentToggle;
     let alertMessage;
-    
-    if(toggled === true){
+
+    if (toggled === true) {
         alertMessage = "Autoplay on LinkedIn has been turned OFF.\nTo turn it back on, please go to the Purpose Mode setting.";
-    } else{
+    } else {
         alertMessage = "Autoplay on LinkedIn has been turned ON.\nTo turn it off, please go to the Purpose Mode setting.";
     }
-    
+
     const autoPlayToggle = $('div[data-control-name="toggle_button"]');
     const currentToggleText = $('span.artdeco-toggle__text').text();
-    if(currentToggleText.includes("Off")){
+    if (currentToggleText.includes("Off")) {
         currentToggle = true;
-    } else if(currentToggleText.includes("On")){
+    } else if (currentToggleText.includes("On")) {
         currentToggle = false;
-    } else{
+    } else {
         return;
     }
-    
-    if(currentToggle !== toggled){
+
+    if (currentToggle !== toggled) {
         autoPlayToggle.click();
         alert(alertMessage);
     }
     // }else{
     //     alert(alertMessage);
     // }
-    chrome.storage.local.set({"LinkedInAutoplay": toggled});
+    chrome.storage.local.set({ "LinkedInAutoplay": toggled });
 }
 
 
-function setAutoPlay(){
-    if (getCurrentPage() == "Twitter") {
+function setAutoPlay() {
+    if (getCurrentPage() == constants.Twitter) {
         const key = "SetTwitterAutoplay";
         chrome.storage.local.get(key, (result) => {
-            console.log("Set Twitter autoplay:",result.SetTwitterAutoplay);
+            console.log("Set Twitter autoplay:", result.SetTwitterAutoplay);
             onToggleTwitterAutoplay(result.SetTwitterAutoplay);
         });
     }
-    else if(getCurrentPage() == "LinkedIn"){
+    else if (getCurrentPage() == constants.LinkedIn) {
         const key = "SetLinkedInAutoplay";
         chrome.storage.local.get(key, (result) => {
-            console.log("Set LinkedIn autoplay:",result.SetLinkedInAutoplay);
+            console.log("Set LinkedIn autoplay:", result.SetLinkedInAutoplay);
             onToggleLinkedInAutoplay(result.SetLinkedInAutoplay);
         });
     }
-    else if(getCurrentPage() == "Facebook"){
+    else if (getCurrentPage() == constants.Facebook) {
         const key = "SetFacebookAutoplay";
         chrome.storage.local.get(key, (result) => {
-            console.log("Set Facebook autoplay:",result.SetFacebookAutoplay);
+            console.log("Set Facebook autoplay:", result.SetFacebookAutoplay);
             onToggleFacebookAutoplay(result.SetFacebookAutoplay);
         });
     }
@@ -1395,15 +1381,15 @@ function setAutoPlay(){
 
 // trigger youtube autoplay blocking
 function triggerYouTubeAutoplayBlocker() {
-    if(isYouTubeVideo()){
+    if (isYouTubeVideo()) {
         console.log("triggre autoplay blocking on YouTube watch page...");
         const key = "YouTubeAutoplay";
         chrome.storage.local.get(key, (toggled) => {
-            setTimeout(() => {onYouTubeAutoPlay(toggled.YouTubeAutoplay);}, 2500);
+            setTimeout(() => { onYouTubeAutoPlay(toggled.YouTubeAutoplay); }, 2500);
         });
     }
 }
-if(currentPage === "YouTube"){
+if (currentPage === constants.YouTube) {
     document.addEventListener('yt-navigate-start', triggerYouTubeAutoplayBlocker);
     // Choose a different event depending on when you want to apply the change
     // document.addEventListener('yt-navigate-finish', process);
@@ -1412,36 +1398,36 @@ if(currentPage === "YouTube"){
     else document.addEventListener('DOMContentLoaded', triggerYouTubeAutoplayBlocker);
 }
 
-function onYouTubeAutoPlay(toggled: boolean){
-    if(!isYouTubeVideo()){
+function onYouTubeAutoPlay(toggled: boolean) {
+    if (!isYouTubeVideo()) {
         return;
     }
     var currentlyBlocked;
     const autoPlayTargetOn = $('button[aria-label="Autoplay is on"]');
     const autoPlayTargetOff = $('button[aria-label="Autoplay is off"]');
-    if(autoPlayTargetOn.length === 0 && autoPlayTargetOff.length === 0){
+    if (autoPlayTargetOn.length === 0 && autoPlayTargetOff.length === 0) {
         console.log("Cant get the youtube autoplay button. wait for .5 second and try again...");
         const key = "YouTubeAutoplay";
         chrome.storage.local.get(key, (toggled) => {
-            setTimeout(() => {onYouTubeAutoPlay(toggled.YouTubeAutoplay);}, 500);
+            setTimeout(() => { onYouTubeAutoPlay(toggled.YouTubeAutoplay); }, 500);
             return;
         });
         return;
-    }else{
-        if(autoPlayTargetOn.length > 0){
-            currentlyBlocked = false; 
+    } else {
+        if (autoPlayTargetOn.length > 0) {
+            currentlyBlocked = false;
         }
-        else{
-            currentlyBlocked = true; 
+        else {
+            currentlyBlocked = true;
         }
     }
 
-    if(toggled !== currentlyBlocked){
-        if(toggled === true){
-            console.log("Turn off autoplay on YouTube: ",autoPlayTargetOn);
+    if (toggled !== currentlyBlocked) {
+        if (toggled === true) {
+            console.log("Turn off autoplay on YouTube: ", autoPlayTargetOn);
             autoPlayTargetOn.click();
-        }else {
-            console.log("Turn on autoplay on YouTube: ",autoPlayTargetOff);
+        } else {
+            console.log("Turn on autoplay on YouTube: ", autoPlayTargetOff);
             autoPlayTargetOff.click();
         }
     } else {
@@ -1455,7 +1441,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         return;
     }
     console.log("UI wants '" + msg.body.button +
-                "' changed to '" + msg.body.state + "'.");
+        "' changed to '" + msg.body.state + "'.");
     settingToHandler[msg.body.button](msg.body.state);
 })
 
@@ -1468,7 +1454,7 @@ function run() {
         }
         onToggleEnable(result.Enable);
     });
-    if(isAutoPlaySettingPage()){
+    if (isAutoPlaySettingPage()) {
         setAutoPlay();
     }
     // if(isYouTubeVideo()){
@@ -1483,4 +1469,4 @@ function run() {
 console.log(__filename + " running.");
 run();
 
-export {};
+export { };
