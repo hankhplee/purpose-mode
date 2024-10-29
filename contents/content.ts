@@ -51,8 +51,7 @@ function showSelectors(selectors: Array<JQuery>) {
 
 function getCurrentPage(): string {
     const currentWindowURL = window.location.href;
-    if (currentWindowURL.includes("https://twitter.com") ||
-        currentWindowURL.includes("https://x.com")) {
+    if (currentWindowURL.includes("https://x.com")) {
         return constants.Twitter;
     }
     else if (currentWindowURL.includes("facebook.com")) {
@@ -70,8 +69,7 @@ function getCurrentPage(): string {
 
 function isHomePage(): boolean {
     const currentWindowURL = window.location.href;
-    if (currentWindowURL.includes("https://twitter.com/home") ||
-        currentWindowURL.includes("https://x.com/home") ||
+    if (currentWindowURL.includes("https://x.com/home") ||
         currentWindowURL === "https://www.facebook.com/" ||
         currentWindowURL === "https://www.youtube.com/" || currentWindowURL === "https://www.youtube.com/?bp=wgUCEAE%3D" ||
         currentWindowURL === "https://www.linkedin.com/feed/") {
@@ -104,7 +102,6 @@ function isYouTubeSearch(): boolean {
 function isAutoPlaySettingPage(): boolean {
     const currentWindowURL = window.location.href;
     if (currentWindowURL.includes("https://x.com/settings/autoplay") ||
-        currentWindowURL.includes("https://twitter.com/settings/autoplay") ||
         currentWindowURL.includes("https://www.linkedin.com/mypreferences/d/settings/autoplay-videos") ||
         currentWindowURL.includes("https://www.facebook.com/settings?tab=videos")
     ) {
@@ -119,8 +116,7 @@ function getContainer() {
     return new Promise((resolve) => {
         const currentWindowURL = window.location.href;
         // Twitter autoplay setting page
-        if (currentWindowURL.includes("https://twitter.com/settings/autoplay") ||
-            currentWindowURL.includes("https://x.com/settings/autoplay")) {
+        if (currentWindowURL.includes("https://x.com/settings/autoplay")) {
             const y = document;
             resolve(y);
         }
@@ -650,8 +646,7 @@ function onToggleTwitterNotif(toggled: boolean) {
 
 function onToggleTwitterFeed(toggled: boolean) {
     const currentWindow = window.location.href;
-    if (!currentWindow.includes("https://twitter.com/home") &&
-        !currentWindow.includes("https://x.com/home")) {
+    if (!currentWindow.includes("https://x.com/home")) {
         return;
     }
 

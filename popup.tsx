@@ -590,7 +590,7 @@ function IndexPopup() {
         <div>
           <ExpandableMenu
             name={constants.Twitter}
-            matchURL="https://twitter.com"
+            matchURL="https://x.com"
             Switches={TwitterSwitches}
           />
 

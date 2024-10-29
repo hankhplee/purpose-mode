@@ -33,7 +33,7 @@ function settingAutoPlay(site: string, toggled: boolean) {
     console.log("Set autopaly on", site, "to", toggled);
     if (site.includes(constants.Twitter)) {
         chrome.storage.local.set({ "SetTwitterAutoplay": toggled })
-            .then(() => chrome.tabs.create({ url: "https://twitter.com/settings/autoplay" }));
+            .then(() => chrome.tabs.create({ url: "https://x.com/settings/autoplay" }));
     }
     else if (site.includes(constants.LinkedIn)) {
         chrome.storage.local.set({ "SetLinkedInAutoplay": toggled })

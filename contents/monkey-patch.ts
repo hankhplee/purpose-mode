@@ -1,7 +1,7 @@
 import type { PlasmoCSConfig } from "plasmo"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://twitter.com/*"],
+  matches: ["https://x.com/*"],
   world: "MAIN",
 }
 
@@ -35,16 +35,21 @@ function maybePatchWinSize() {
 
   window.__defineGetter__('innerWidth', () => width);
   document.documentElement.__defineGetter__('clientWidth', () => width)
+  if (window.visualViewport) window.visualViewport.__defineGetter__('width', () => width)
+
   window.dispatchEvent(new Event('resize'));
+  if (window.visualViewport) window.visualViewport.dispatchEvent(new Event('resize'))
 }
 
 if (spoof) {
   window.addEventListener("load", maybePatchWinSize);
   window.addEventListener("resize", maybePatchWinSize);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', maybePatchWinSize)
   document.addEventListener("visibilitychange", maybePatchWinSize);
 } else {
   window.removeEventListener("load", maybePatchWinSize);
   window.removeEventListener("resize", maybePatchWinSize);
+  if (window.visualViewport) window.visualViewport.removeEventListener('resize', maybePatchWinSize)
   document.removeEventListener("visibilitychange", maybePatchWinSize);
 }
 
