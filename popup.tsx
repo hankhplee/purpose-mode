@@ -9,6 +9,7 @@ import "./css/mystyles.css";
 import yesIcon from "data-base64:~assets/yes.png";
 import noIcon from "data-base64:~assets/no.png";
 import upIcon from "data-base64:~assets/up.png";
+import setting from "data-base64:~assets/settings.png";
 import downIcon from "data-base64:~assets/down.png";
 
 function setBool(key: string, value: boolean) {
@@ -199,7 +200,7 @@ function ButtonSwitch({ label, storage_var, current_status }) {
   }
 
   return (
-    <div className="columns is-mobile">
+    <div className="columns is-mobile" style={{ marginRight: '1px'}}>
       <div id={label}
         className="column is-three-fifths">
         <span className="icon-text">
@@ -240,7 +241,7 @@ function FacebookSwitches() {
     useChromeStorageLocal(constants.FacebookDesaturate, false);
 
   return (
-    <div className="content">
+    <div className="content" style={{ marginTop: '20px', marginBottom: '20px' }}>
       <ToggleSwitch
         label="Compact layout"
         storage_var={constants.FacebookCompact}
@@ -288,7 +289,7 @@ function LinkedInSwitches() {
     useChromeStorageLocal(constants.LinkedInDesaturate, false);
 
   return (
-    <div>
+    <div className="content" style={{ marginTop: '20px', marginBottom: '20px' }}>
       <ToggleSwitch
         label="Compact Layout"
         storage_var={constants.LinkedInCompact}
@@ -338,7 +339,7 @@ function YouTubeSwitches() {
     useChromeStorageLocal(constants.YouTubeDesaturate, false);
 
   return (
-    <div>
+    <div className="content" style={{ marginTop: '20px', marginBottom: '20px' }}>
       <YouTubeCompactLayoutToggleSwitch
         label="Compact layout"
         storage_var={constants.YouTubeCompact}
@@ -395,7 +396,7 @@ function TwitterSwitches() {
     useChromeStorageLocal(constants.TwitterDesaturate, false);
 
   return (
-    <div>
+    <div className="content" style={{ marginTop: '20px', marginBottom: '20px' }}>
       <ToggleSwitch
         label="Compact layout"
         storage_var={constants.TwitterCompact}
@@ -441,8 +442,7 @@ function AutoPlaySwitch() {
     useChromeStorageLocal(constants.YouTubeAutoplay, false);
 
   return (
-    <div>
-
+    <div className="content" style={{ marginTop: '20px', marginBottom: '20px' }}>
       <ButtonSwitch
         label={constants.Twitter}
         storage_var={constants.TwitterAutoplay}
@@ -492,13 +492,18 @@ function ExpandableMenu({ name, matchURL, Switches }) {
     setExpanded,
   } = useCollapse();
 
+  var isSetting = false;
+  if (matchURL === "setting"){
+    isSetting = true;
+  }
+
   useEffect(() => {
     const fetchURL = async () => {
       const url = await getTabURL();
-      if (matchURL === "") {
+      if (matchURL === "setting") {
         setExpanded(false);
       }
-      else if (url !== undefined && url.includes(matchURL)) {
+      else if (url.includes(matchURL)) {
         setExpanded(true);
       }
     }
@@ -506,37 +511,49 @@ function ExpandableMenu({ name, matchURL, Switches }) {
   }, []);
 
   return (
-    <div className="collapsible">
-      <div className="card">
-        <div className="header card-header" {...getToggleProps({
-          onClick: () => setExpanded((prevExpanded) => !prevExpanded),
-        })}>
-          {isExpanded ?
-            <p className="card-header-title">{name}
-              <span className="icon">
-                <img src={upIcon}
-                  style={{
-                    width: "10px",
-                    height: "10px"
-                  }}></img>
-              </span>
-            </p>
-            :
-            <p className="card-header-title">{name}
-              <span className="icon">
-                <img src={downIcon}
-                  style={{
-                    width: "10px",
-                    height: "10px"
-                  }}></img>
-              </span>
-            </p>
-          }
-        </div>
+    <div className="card">
+      <header className="card-header" {...getToggleProps({
+        onClick: () => setExpanded((prevExpanded) => !prevExpanded),
+      })}>
+        { isExpanded ?
+          <p className="card-header-title">
+            <div hidden = {!isSetting}>
+              <img
+                className="image is-16x16"
+                src={setting}>
+              </img>
+            </div>
+            {name}
+            <span className="icon">
+              <img src={upIcon}
+              style={{
+                width: "10px",
+                height: "10px"
+              }}></img>
+            </span>
+          </p>
+          :
+          <p className="card-header-title">
+            <div hidden = {!isSetting}>
+              <img
+                className="image is-16x16"
+                src={setting}>
+              </img>
+            </div>
+            {name} 
+            <span className="icon">
+              <img src={downIcon}
+              style={{
+                width: "10px",
+                height: "10px"
+              }}></img>
+            </span>
+          </p>
+        }
+      </header>
 
-        <div className="card-content" {...getCollapseProps()}>
-          <Switches />
-        </div>
+      <div className="card-content" {...getCollapseProps()}>
+        <Switches />
       </div>
     </div>
   )
@@ -551,33 +568,14 @@ function IndexPopup() {
         padding: 16,
         width: "300px"
       }}>
-      <div id="hero">
-        <div>
-          <div className="has-text-right">
-            <div id="dropdown_setting" className="dropdown is-right">
-              <div className="dropdown-menu" id="dropdown-menu" role="menu">
-                <div className="dropdown-content has-text-centered">
-                  <div className="dropdown-item">
-                    <p className="heading">ID</p>
-                    <p id="userId">user id</p>
-                  </div>
-                  <div className="dropdown-item">
-                    <button className="button is-small" id="test_notification">Test notification</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="block">
-        <ExpandableMenu
+    <div className="block">  
+      <ExpandableMenu
           name="Block autoplay setting"
-          matchURL=""
+          matchURL="setting"
           Switches={AutoPlaySwitch}
-        />
-      </div>
+          />
+    </div>
 
       <GlobalSwitch
         label={constants.ExtName}
