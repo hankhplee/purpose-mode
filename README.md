@@ -7,6 +7,7 @@ that allows you to browse social media websites with purpose,
 free from distractions. Purpose Mode supports four popular social media websites: 
 X/Twitter, Facebook, LinkedIn, and YouTube.
 
+<img width="100%" src='https://github.com/hankhplee/gifs/blob/main/Purpose%20Mode%20overview.gif?raw=true'>
 
 ### Demo Video
 <a href="https://www.youtube.com/watch?v=AWY8HQ_z_-c&ab_channel=HankLee">Purpose Mode Video Demo</a>
