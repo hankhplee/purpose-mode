@@ -25,6 +25,7 @@ settingToHandler[constants.FacebookNotif] = onToggleFacebookNotif;
 settingToHandler[constants.FacebookFeed] = onToggleFacebookFeed;
 settingToHandler[constants.FacebookDesaturate] = onToggleFacebookDesaturate;
 
+settingToHandler[constants.YouTubeAutoplay] = onYouTubeAutoPlay;
 settingToHandler[constants.YouTubeCompact] = onToggleYouTubeCompact;
 settingToHandler[constants.YouTubeComments] = onToggleYouTubeComments;
 settingToHandler[constants.YouTubeInfinite] = onToggleYouTubeInfinite;
