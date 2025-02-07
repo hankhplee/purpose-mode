@@ -15,18 +15,34 @@ X/Twitter, Facebook, LinkedIn, and YouTube.
 
 
 ## Installation
-Run the following:
+### Option 1: Install the Pre-Built Extension (Recommended)
+[Click here](https://docs.google.com/document/d/1l6dxr0Ry2kj-7svdgO4RCIFF2GMbh0LyS04udKI4jXE/edit?usp=sharing) for step-by-step instructions on downloading and installing the pre-built extension.
+
+### Option 2: Option 2: Build and Install from Source
+If you want to modify the code or prefer to build the extension yourself, follow these steps:
+
+1. Install Dependencies
 ```bash
 pnpm install
 # or
 npm install
 ```
-
+2. Build the Extension
 ```bash
 pnpm build
 # or
 npm run build
 ```
+This command creates a ./build/chrome-mv3-prod directory.
+
+3. Load the Extension
+    1. Navigate to ```chrome://extensions``` in your browser.
+    2. Enable **Developer mode** (usually in the top-right corner).
+    3. Click **Load unpacked** (top-left corner).
+    4. Select the ```chrome-mv3-prod``` folder you just built.
+
+4. All Set!
+        You should now see Purpose Mode in your list of extensions. Pin it to your browser toolbar to access it quickly.
 
 This should create the directory ./build/chrome-mv3-prod.
 Next, go to your browser's extension page
