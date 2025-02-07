@@ -41,16 +41,7 @@ This command creates a ./build/chrome-mv3-prod directory.
     3. Click **Load unpacked** (top-left corner).
     4. Select the ```chrome-mv3-prod``` folder you just built.
 
-4. All Set!
-        You should now see Purpose Mode in your list of extensions. Pin it to your browser toolbar to access it quickly.
-
-This should create the directory ./build/chrome-mv3-prod.
-Next, go to your browser's extension page
-(open chrome://extensions),
-activate "Developer mode" in the top right corner,
-and click on "Load unpacked" in the top left corner.
-Select the directory "chrome-mv3-prod" that you just built.
-That's it!
+4. All Set! You should now see Purpose Mode in your list of extensions. Pin it to your browser toolbar to access it quickly.
 
 ## Development
 
